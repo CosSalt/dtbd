@@ -77,7 +77,8 @@ export default {
     },
     initAllData () {
       let data = [
-        {name: 'ID',
+        {
+          name: 'ID',
           key: 'id',
           bind: {
             placeholder: '请输入以字母 _ $ 开头的ID'
@@ -86,8 +87,19 @@ export default {
             reg: /^[a-zA-Z_$][a-zA-Z_$\d]*$/,
             err: '只能以字母 _ $ 开头, 后面可包含数字',
             required: true
-          }},
-        {name: '文字',
+          }
+        },{
+          name: '选择值',
+          key: 'label',
+          type: 'bind',
+          bind: {
+            placeholder: '必填'
+          },
+          test: {
+            required: true
+          }
+        },{
+          name: '文字',
           key: 'text',
           test: {
             required: true
@@ -96,11 +108,10 @@ export default {
           }},
         // {name: '后文字', key: 'afterText'},
         {name: '宽度', key: 'width'},
-        {name: '选中值', key: 'label'},
         {name: '大小',
           key: 'size',
           component: 'el-select',
-          type: 'param',
+          type: 'bind',
           child: {
             component: 'el-option',
             data: [

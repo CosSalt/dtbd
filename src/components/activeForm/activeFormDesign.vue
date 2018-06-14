@@ -6,7 +6,7 @@
         <template v-for='item in formItemTypes'>
           <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item.type, $event)'>
             <label v-if='item.text'>{{item.text}}</label>
-            <component :is="item.component" v-bind='item.param' class='component-style' size='mini'>{{item.afterText}}</component>
+            <component :is="item.component" v-bind='item.bind' :formData='item' class='component-style' size='mini'>{{item.afterText}}</component>
           </li>
         </template>
       </ul>
@@ -141,7 +141,6 @@ export default {
         return
       }
       const newData = defaultsDeep(this.designData[index], confData)
-      console.log(newData)
       this.designData.splice(index, 1, newData)
     }
   }
@@ -184,8 +183,8 @@ export default {
     cursor: pointer;
   }
   .component-style{
-    max-width: 150px;
-    max-height: 100%;
+    // max-width: 150px;
+    // max-height: 100%;
   }
   .component-row{
     &:hover{

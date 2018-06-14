@@ -4,11 +4,14 @@ let componentsConf = [
   {
     type: 'radio',
     name: '单选框',
-    component: 'el-radio',
-    multi: true,
-    multiData: null,
+    component: 'formRadio',
+    // multi: true,
+    bind: { // 使用v-bind的属性
+      label: 'a'
+    },
     // afterText: '备选项',
-    text: '备选项'
+    text: '备选项',
+    multiConf: [{bind:{label: 'b'}, text:'备选项2'}] // 同一级多行配置
   }, {
     type: 'checkbox',
     name: '多选框',
@@ -21,7 +24,7 @@ let componentsConf = [
     name: '输入框',
     component: 'el-input',
     text: '输入框：',
-    param: {
+    bind: {
       placeholder: '请输入内容'
     }
   }, {
@@ -33,7 +36,7 @@ let componentsConf = [
     type: 'select',
     name: '选择器',
     component: 'el-select',
-    param: {
+    bind: {
       placeholder: '请输入内容'
     },
     disabled: true
@@ -66,7 +69,7 @@ let componentsConf = [
     type: 'dateTimePicker',
     name: '日期时间选择器',
     component: 'el-date-picker',
-    param: {
+    bind: {
       type: 'datetime'
     },
     disabled: true
@@ -96,7 +99,7 @@ let componentsConf = [
 const defProps = {
   // data: {},
   multi: false, // 多行,如radio,checkbox
-  param: {
+  bind: {
     size: 'mini'
   }
 }

@@ -2,7 +2,7 @@
   <div class='active-form-layout'>
     <div class='form-content'>
       <ul>
-        <template v-for='(item, index) in layout'>
+        <template v-for='(item, index) in theLayoutData'>
           <li :key='item.type + index' class='active-form-row'
             :draggable='isDraggable'
             @dragstart='dragstart(index, $event)'
@@ -10,8 +10,16 @@
             @drop='drop'
             @click='defComponent(index, item.type)'
           >
-            <label v-if='item.text'>{{item.text}}</label>
-            <component :is="item.component" v-bind='item.param' class='component-style'>{{item.afterText}}</component>
+            <!-- <label v-if='item.text'>{{item.text}}</label> -->
+            <component :is="item.component" v-model='formModel[item.id]' :formData='item' v-bind='item.bind' class='component-style'>{{item.afterText}}</component>
+            
+            <template v-if='item.multi === true && item.multiConf && item.multiConf.length > 0'>
+              <template v-for='(multiItem, index) in item.multiConf'>
+                <label v-if='multiItem.text' :key='"label"+index'>{{multiItem.text}}</label>
+                <component :is="item.component" v-model='formModel[item.id]' v-bind='multiItem.bind || {}' class='component-style' :key='"component" + index'>{{multiItem.afterText}}</component>
+              </template>
+            </template>
+
           </li>
         </template>
       </ul>
@@ -32,26 +40,28 @@ export default {
       default: -1
     },
     layout: {
-      default: () => {
-        return {
-          columns: 2,
-          data: [
-            {x: 1, type: '123'},
-            {x: 2},
-            {x: 3},
-            {x: 4}
-          ]
-        }
-      }
+      type: Array,
+      required: true
     }
   },
   data () {
     return {
       dragStartIndex: -1,
-      formItemTypes: componentsConf
+      formItemTypes: componentsConf,
+      formModel: {},
     }
   },
   computed: {
+    theLayoutData () {
+      const data = this.layout.map(item => {
+        return Object.assign({}, item)
+      })
+      data.forEach((item, index) => {
+        item.id = this.tempId(item.id, index)
+      })
+      this.initformModel(data)
+      return data
+    },
     theLayout () {
       const defaultData = {
         columns: 2,
@@ -74,9 +84,20 @@ export default {
         res[resIndex].push(theItem)
       })
       return res
-    }
+    },
   },
   methods: {
+    tempId (id, index) {
+      return id || ("$_temp_id_" + index) // 临时 ID
+    },
+    initformModel (data) {
+      const formRes = {}
+      data.forEach(item => {
+        formRes[item.id] = null
+      })
+      this.formModel = formRes
+      window.aa = formRes
+    },
     dragstart (index) {
       this.dragStartIndex = index
       // e.dataTransfer.setData('index', index) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
