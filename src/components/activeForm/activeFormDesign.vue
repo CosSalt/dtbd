@@ -5,8 +5,7 @@
       <ul>
         <template v-for='item in formItemTypes'>
           <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item.type, $event)'>
-            <label v-if='item.text'>{{item.text}}</label>
-            <component :is="item.component" v-bind='item.bind' :formData='item' class='component-style' size='mini'>{{item.afterText}}</component>
+            <component :is="item.component" v-bind='item.bind' :formData='item' class='component-design-style' size='mini' />
           </li>
         </template>
       </ul>
@@ -182,9 +181,14 @@ export default {
     padding: 5px 0;
     cursor: pointer;
   }
-  .component-style{
-    // max-width: 150px;
-    // max-height: 100%;
+  .component-design-style{
+    max-width: 100%;
+    .component-label {
+      width:29%;
+    }
+    .component-content{
+      width: 70%;
+    }
   }
   .component-row{
     &:hover{

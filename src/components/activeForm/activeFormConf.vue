@@ -70,7 +70,6 @@ export default {
         const type = item.type
         let val = type ? (confData[type] ? confData[type][key] : null) : confData[key]
         val = val && item.parse === true ? JSON.stringify(val) : val // 需要解析的
-        console.log(key,val)
         res[key] = val
       })
       this.confModel = res
@@ -182,14 +181,12 @@ export default {
           err = theData.name + ': ' + err
           break
         }
-        if (val != null) {
-          if (type) {
-            savedConf[type] = Object.assign({}, savedConf[type], {
-              [key]: val
-            })
-          } else {
-            savedConf[key] = theData.parse === true ? JSON.parse(val) : val
-          }
+        if (type) {
+          savedConf[type] = Object.assign({}, savedConf[type], {
+            [key]: val
+          })
+        } else {
+          savedConf[key] = (theData.parse === true && val) ? JSON.parse(val) : val
         }
       }
       if (err) {

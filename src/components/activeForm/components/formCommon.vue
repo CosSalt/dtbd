@@ -1,5 +1,8 @@
 <template>
-  <component :is="formData.component" v-model='commonVal' v-bind='formData.bind || {}' class='component-style'>{{formData.text}}</component>  
+<div>
+  <label v-if='formData.text' class='component-label'>{{formData.text}}</label>
+  <component :is="formData.baseCompoent" v-model='commonVal' v-bind='formData.bind || {}' class='component-content'/>
+</div> 
 </template>
 
 <script>

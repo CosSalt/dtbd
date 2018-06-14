@@ -35,7 +35,6 @@ export default {
         {bind, text},
         ...children
       ]
-      console.log(options)
       return options
     }
   }

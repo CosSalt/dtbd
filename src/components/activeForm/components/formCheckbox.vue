@@ -1,7 +1,7 @@
 <template>
   <div>
     <el-checkbox v-model='checkedVal' v-bind='theOptions[0].bind || {}' v-if='theOptions.length <= 1'/>
-    <el-checkbox-group v-model='checkedVal' v-else>
+    <el-checkbox-group v-model='checkedList' v-else>
       <el-checkbox v-for='(item, index) in theOptions' v-bind='item.bind || {}' :key='index' />
     </el-checkbox-group>
   </div>
@@ -19,7 +19,8 @@ export default {
   },
   data () {
     return {
-      checkedVal: this.value
+      checkedVal: this.value || '',
+      checkedList: this.value || [],
     }
   },
   computed: {
@@ -36,6 +37,9 @@ export default {
   },
   watch: {
     checkedVal (newVal) {
+      this.$emit('input', newVal)
+    },
+    checkedList (newVal) {
       this.$emit('input', newVal)
     }
   }

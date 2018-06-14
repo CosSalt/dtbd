@@ -13,12 +13,12 @@
             <!-- <label v-if='item.text'>{{item.text}}</label> -->
             <component :is="item.component" v-model='formModel[item.id]' :formData='item' v-bind='item.bind' class='component-style'>{{item.afterText}}</component>
             
-            <template v-if='item.multi === true && item.multiConf && item.multiConf.length > 0'>
+            <!-- <template v-if='item.multi === true && item.multiConf && item.multiConf.length > 0'>
               <template v-for='(multiItem, index) in item.multiConf'>
                 <label v-if='multiItem.text' :key='"label"+index'>{{multiItem.text}}</label>
                 <component :is="item.component" v-model='formModel[item.id]' v-bind='multiItem.bind || {}' class='component-style' :key='"component" + index'>{{multiItem.afterText}}</component>
               </template>
-            </template>
+            </template> -->
 
           </li>
         </template>
@@ -142,6 +142,14 @@ export default {
   }
   .form-block {
     display: inline-block;
+  }
+  .component-style {
+    .component-label {
+      width:150px;
+    }
+    .component-content{
+      width: 200px;
+    }
   }
 }
 </style>

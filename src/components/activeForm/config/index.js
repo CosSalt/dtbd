@@ -5,24 +5,24 @@ let componentsConf = [
     type: 'radio',
     name: '单选框',
     component: 'formRadio',
-    // multi: true,
     bind: { // 使用v-bind的属性
       label: 'a'
     },
-    // afterText: '备选项',
     text: '备选项',
     multiConf: [{bind:{label: 'b'}, text:'备选项2'}] // 同一级多行配置
   }, {
     type: 'checkbox',
     name: '多选框',
-    component: 'el-checkbox',
-    multi: true,
-    multiData: null,
-    text: '多选框'
+    component: 'formCheckbox',
+    bind: {
+      label: '多选框'
+    },
+    multiConf: [{bind:{label: '多选框二'}}]
   }, {
     type: 'input',
     name: '输入框',
-    component: 'el-input',
+    component: 'formCommon',
+    baseCompoent: 'el-input', // formCommon 内部会调用 baseCompoent
     text: '输入框：',
     bind: {
       placeholder: '请输入内容'
@@ -30,12 +30,14 @@ let componentsConf = [
   }, {
     type: 'inputNumber',
     name: '计数器',
-    component: 'el-input-number',
+    component: 'formCommon',
+    baseCompoent: 'el-input-number',
     text: '计数器：'
   }, {
     type: 'select',
     name: '选择器',
-    component: 'el-select',
+    component: 'formCommon',
+    baseCompoent: 'el-select',
     bind: {
       placeholder: '请输入内容'
     },
@@ -48,7 +50,8 @@ let componentsConf = [
   }, {
     type: 'switch',
     name: '开关',
-    component: 'el-switch',
+    component: 'formCommon',
+    baseCompoent: 'el-switch',
     disabled: true
   }, {
     type: 'slider',
