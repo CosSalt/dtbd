@@ -16,23 +16,21 @@ export default {
       type: Object
     }
   },
-  data () {
-    return {
-      radio: this.value
-    }
-  },
-  watch: {
-    radio (newVal) {
-      this.$emit('input', newVal)
-    }
-  },
   computed: {
+    radio: {
+      get () {
+        return this.value
+      },
+      set (newVal) {
+        this.$emit('input', newVal)
+      }
+    },
     theOptions () {
       const data = this.formData
-      const {bind, text} = data
+      const {bind = {}, text} = data
       const children = data.multiConf || []
       const options = [
-        {bind, text},
+        {...bind, text},
         ...children
       ]
       return options

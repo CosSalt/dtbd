@@ -1,15 +1,6 @@
 <template>
-  <!-- <el-select v-model="value2" placeholder="请选择">
-    <el-option
-      v-for="item in options2"
-      :key="item.value"
-      :label="item.label"
-      :value="item.value"
-      :disabled="item.disabled">
-    </el-option>
-  </el-select> -->
-  <div>
-    <label v-if='formData.text' class='component-label'>{{formData.text}}</label>
+  <div class='form-select'>
+    <label class='component-label'>{{formData.text}}</label>
     <el-select v-model='selectedVal' v-bind='formData.bind' class='component-content'>
       <el-option
         v-for="(item, index) in childrenOptions"
@@ -29,31 +20,42 @@
         type: Object
       }
     },
-    data() {
-      return {
-        selectedVal: this.value,
-        selectChildData: [],
-      }
-    },
     computed: {
+      selectedVal: {
+        get () {
+          return this.value
+        },
+        set (newVal) {
+          this.$emit('input', newVal)
+        }
+      },
       childrenOptions () {
         const children = this.selectData
         return children
       }
     },
-    watch: {
-      selectedVal (newVal) {
-        this.$emit('input', newVal)
-      }
-    },
     created () {
       const child = this.formData.childConf || []
+      const hasTip = child[0] && child[0]['disabled'] === true // 时候已经存在提示信息('不能选择')
       this.selectData = [...child]
-      this.selectData.unshift({
-        label: '请选择',
-        value: null,
-        disabled: true
-      })
+      if (!hasTip) {
+        this.selectData.unshift({
+          label: '请选择',
+          value: null,
+          disabled: true
+        })
+      }
     }
   }
 </script>
+
+<style lang="less">
+.form-select{
+  .component-label {
+    display: inline-block;
+  }
+  .component-content{
+    display: inline-block;
+  }
+}
+</style>

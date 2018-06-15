@@ -6,7 +6,7 @@ import ElementUI from 'element-ui'
 import 'element-ui/lib/theme-chalk/index.css'
 Vue.use(ElementUI)
 // 注册定制组件
-import * as fromComponents from '@/components/activeForm/config/formComponentConf'
+import * as fromComponents from '@/components/activeForm/config/formComponent'
 for(let item of Object.values(fromComponents)) {
   Vue.component(item.name, item)
 }

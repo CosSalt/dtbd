@@ -1,6 +1,6 @@
 <template>
 <div class='common-component'>
-  <label v-if='formData.text' class='component-label'>{{formData.text}}</label>
+  <label class='component-label'>{{formData.text}}</label>
   <component :is="formData.baseCompoent" v-model='commonVal' v-bind='formData.bind || {}' class='component-content'/>
 </div> 
 </template>
@@ -15,14 +15,14 @@ export default {
       type: Object
     }
   },
-  data () {
-    return {
-      commonVal: this.value
-    }
-  },
-  watch: {
-    commonVal (newVal) {
-      this.$emit('input', newVal)
+  computed: {
+    commonVal: {
+      get () {
+        return this.value
+      },
+      set (newVal) {
+        this.$emit('input', newVal)
+      }
     }
   }
 }

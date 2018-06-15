@@ -5,7 +5,7 @@
       <ul class='form-components-orgin'>
         <template v-for='item in formItemTypes'>
           <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item.type, $event)'>
-            <component :is="item.component" v-bind='item.bind' :formData='item' class='component-design-style' size='mini' />
+            <formIndex :formData='item' class='component-design-style' />
           </li>
         </template>
       </ul>
@@ -27,7 +27,7 @@
       <activeFormConf
         :show.sync='showConf'
         :index='confIndex'
-        :confData='designData[confIndex] || {}'
+        :typeData='designData[confIndex] || {}'
         @delComponent='delComponent'
         @saveComponent='saveComponent'
       />
@@ -185,15 +185,12 @@ export default {
     cursor: pointer;
   }
   .component-design-style{
-    max-width: 100%;
-    vertical-align: center;
+    width: 100%;
     .component-label {
       width:49%;
-      vertical-align: center;
     }
     .component-content{
       width: 50%;
-      vertical-align: center;
     }
   }
   .component-row{

@@ -10,7 +10,7 @@
             @drop='drop'
             @click='defComponent(index, item.type)'
           >
-            <component :is="item.component" v-model='formModel[item.id]' :formData='item' v-bind='item.bind' class='component-style' />
+            <formIndex v-model='formModel[item.id]' :formData='item' class='component-style' />
           </li>
         </template>
       </ul>
@@ -83,8 +83,10 @@ export default {
     },
     initformModel (data) {
       const formRes = {}
+      const formModel = this.formModel || {}
       data.forEach(item => {
-        formRes[item.id] = null
+        let id = item.id
+        formRes[id] = formModel[id] || null
       })
       this.formModel = formRes
       window.aa = formRes

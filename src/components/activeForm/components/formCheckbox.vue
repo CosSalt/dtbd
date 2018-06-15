@@ -17,13 +17,23 @@ export default {
       type: Object
     }
   },
-  data () {
-    return {
-      checkedVal: this.value || '',
-      checkedList: this.value || [],
-    }
-  },
   computed: {
+    checkedVal: {
+      get () {
+        return this.value
+      },
+      set (newVal) {
+        this.$emit('input', newVal)
+      }
+    },
+    checkedList: {
+      get () {
+        return this.value
+      },
+      set (newVal) {
+        this.$emit('input', newVal)
+      }
+    },
     theOptions () {
       const data = this.formData
       const {bind = {}} = data
@@ -33,14 +43,6 @@ export default {
         ...children
       ]
       return options
-    }
-  },
-  watch: {
-    checkedVal (newVal) {
-      this.$emit('input', newVal)
-    },
-    checkedList (newVal) {
-      this.$emit('input', newVal)
     }
   }
 }

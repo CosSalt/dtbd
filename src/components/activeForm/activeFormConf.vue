@@ -1,17 +1,8 @@
 <template>
-  <div class="active-form-conf" v-show='show'>
+  <div class="active-form-conf" v-if='show'>
     <ul>
-      <li v-for='item in typeData' :key='item.key' class='form-conf-li'>
-        <div v-text='item.name + ": "' class='form-conf-line' />
-        <component :is="item.component" v-model.trim='confModel[item.key]' v-bind='item.bind' class='form-conf-component' size="mini">
-          <template v-if='item.child'>
-            <component v-for='(childItem, index) in item.child.data' :key='"child" + index' v-bind='childItem' 
-              :is="item.child.component"
-              class='form-conf-component'
-              size="mini"
-            />
-          </template>
-        </component>
+      <li v-for='item in confData' :key='item.key' class='form-conf-li'>
+        <formIndex :formData='item.component' v-model.trim='confModel[item.key]' class='component-conf-style'/>
       </li>
     </ul>
     <div>
@@ -23,6 +14,7 @@
 
 <script>
 import {defaultsDeep} from '@/utils'
+import componentConf from './config/formComponentConf'
 export default {
   name: 'activeFormConf',
   props: {
@@ -31,7 +23,7 @@ export default {
       required: true,
       default: false
     },
-    confData: {
+    typeData: {
       type: Object,
       required: true
     },
@@ -48,9 +40,9 @@ export default {
     }
   },
   computed: {
-    typeData () {
+    confData () {
       const filterData = this.allData
-      // const type = this.confData.type
+      // const type = this.typeData.type
       // console.log(type)
       return filterData
     }
@@ -62,107 +54,23 @@ export default {
   },
   methods: {
     initConfModel () {
-      const res = {}
-      const confData = this.confData
+      let res = {}
       const typeData = this.typeData
-      typeData.forEach(item => {
+      const confData = this.confData
+      confData.forEach(item => {
         const key = item.key
         const type = item.type
-        let val = type ? (confData[type] ? confData[type][key] : null) : confData[key]
+        let val = type ? (typeData[type] ? typeData[type][key] : null) : typeData[key]
         val = val && item.parse === true ? JSON.stringify(val) : val // 需要解析的
         res[key] = val
       })
       this.confModel = res
     },
+    defDeep (...args){
+      return defaultsDeep(...args)
+    },
     initAllData () {
-      let data = [
-        {
-          name: 'ID',
-          key: 'id',
-          bind: {
-            placeholder: '请输入以字母 _ $ 开头的ID'
-          },
-          test: {
-            reg: /^[a-zA-Z_$][a-zA-Z_$\d]*$/,
-            err: '只能以字母 _ $ 开头, 后面可包含数字',
-            required: true
-          }
-        },{
-          name: '选择值',
-          key: 'label',
-          type: 'bind',
-          bind: {
-            placeholder: '必填'
-          },
-          test: {
-            required: true
-          }
-        },{
-          name: '文字',
-          key: 'text',
-          test: {
-            required: true
-            // reg: /\S+/,
-            // err: '不能为空'
-          }},
-        // {name: '后文字', key: 'afterText'},
-        {name: '宽度', key: 'width'},
-        {name: '大小',
-          key: 'size',
-          component: 'el-select',
-          type: 'bind',
-          child: {
-            component: 'el-option',
-            data: [
-              {label: '请选择', disabled: true, value:''},
-              {label: '大', value: 'medium'},
-              {label: '中', value: 'small'},
-              {label: '小', value: 'mini'}
-            ]
-          }
-        },
-        {
-          name: '配置',
-          key: 'multiConf',
-          parse: true, // 解析
-          bind: {
-            type: "textarea",
-            placeholder: 'JSON格式 例如:[{"label":"x","text":"测试"}]'
-          },
-          test: {
-            validator: (val) => {
-              let err = null
-              if(!val) return err
-              let res
-              try {
-                res = JSON.parse(val)
-              } catch (e) {
-                err = '数据格式不满足JSON格式要求'
-                return err
-              }
-              if (!Array.isArray(res)) {
-                err = '必须为数组'
-              } else if (res.length > 0) {
-                for (let item of res) {
-                  if (typeof item !== 'object' || item == null) {
-                    err = '数组内必须为对象'
-                    break
-                  }
-                }
-              }
-              return err
-            }
-          }
-        }
-      ]
-      const defConf = {
-        component: 'el-input',
-        bind: {}
-      }
-      data = data.map(item => {
-        return defaultsDeep(defConf, item)
-      })
-      return data
+      return componentConf
     },
     clickShow (show = false) {
       this.$emit('update:show', show)
@@ -174,11 +82,9 @@ export default {
       for (let [key, val] of Object.entries(this.confModel)) {
         const theData = allData.find(item => item.key === key) || {}
         const type = theData.type
-        if (!err) {
-          err = this.test(theData.test, val)
-        }
+        err = this.test(theData.test, val)
         if (err) {
-          err = theData.name + ': ' + err
+          err = theData.component.text + err
           break
         }
         if (type) {
@@ -232,13 +138,14 @@ export default {
     width: 100%;
     padding: 2px 0;
   }
-  .form-conf-component{
-    width: calc(100% - @componentsWidth);
-  }
-  .form-conf-line{
-    display: inline-block;
-    text-align: right;
-    width: @componentsWidth - 10px;
+  .component-conf-style{
+    width: 100%;
+    .component-label {
+      width:@componentsWidth;
+    }
+    .component-content{
+      width: calc(100% - @componentsWidth);
+    }
   }
 }
 </style>

@@ -4,7 +4,6 @@ let componentsConf = [
   {
     type: 'radio',
     name: '单选框',
-    component: 'formRadio',
     bind: { // 使用v-bind的属性
       label: 'a'
     },
@@ -13,7 +12,6 @@ let componentsConf = [
   }, {
     type: 'checkbox',
     name: '多选框',
-    component: 'formCheckbox',
     bind: {
       label: '多选框'
     },
@@ -21,8 +19,6 @@ let componentsConf = [
   }, {
     type: 'input',
     name: '输入框',
-    component: 'formCommon',
-    baseCompoent: 'el-input', // formCommon 内部会调用 baseCompoent
     text: '输入框：',
     bind: {
       placeholder: '请输入内容'
@@ -30,13 +26,10 @@ let componentsConf = [
   }, {
     type: 'inputNumber',
     name: '计数器',
-    component: 'formCommon',
-    baseCompoent: 'el-input-number',
     text: '计数器：'
   }, {
     type: 'select',
     name: '选择器',
-    component: 'formSelect',
     text: '选择器：',
     bind: {
       placeholder: '请输入内容'
@@ -51,8 +44,6 @@ let componentsConf = [
     type: 'cascader',
     name: '级联选择器',
     text: '级联选择',
-    component: 'formCommon',
-    baseCompoent: 'el-cascader',
     bind: {
       options: [{
         value: 'zhinan',
@@ -84,8 +75,6 @@ let componentsConf = [
     type: 'switch',
     name: '开关',
     text: '开关',
-    component: 'formCommon',
-    baseCompoent: 'el-switch',
     bind: {
       activeColor: '#13ce66',
       inactiveColor: '#ff4949'
@@ -93,15 +82,11 @@ let componentsConf = [
   }, {
     type: 'slider',
     name: '滑块',
-    text: '滑块',
-    component: 'formCommon',
-    baseCompoent: 'el-slider'
+    text: '滑块'
   }, {
     type: 'timePicker',
     name: '时间选择器',
     text: '时间选择器',
-    component: 'formCommon',
-    baseCompoent: 'el-time-select',
     bind: {
       placeholder: '选择时间',
       pickerOptions: {
@@ -114,48 +99,35 @@ let componentsConf = [
     type: 'datePicker',
     name: '日期选择器',
     text: '日期选择器',
-    component: 'formCommon',
-    baseCompoent: 'el-date-picker',
     bind: {
-      type: 'date',
       placeholder: '选择日期'
     }
   }, {
     type: 'dateTimePicker',
     name: '日期时间选择器',
     text: '日期时间选择器',
-    component: 'formCommon',
-    baseCompoent: 'el-date-picker',
     bind: {
-      type: 'datetime',
       placeholder: '选择时间日期'
     }
   }, {
     type: 'upload',
     nam: '上传',
-    component: 'el-upload',
     disabled: true
   }, {
     type: 'rate',
     name: '评分',
     text: '评分',
-    component: 'formCommon',
-    baseCompoent: 'el-rate',
     bind: {
       colors: ['#99A9BF', '#F7BA2A', '#FF9900']
     }
   }, {
     type: 'colorPicker',
     name: '颜色选择器',
-    text: '颜色选择器',
-    component: 'formCommon',
-    baseCompoent: 'el-color-picker'
+    text: '颜色选择器'
   }, {
     type: 'transfer',
     name: '穿梭框',
     text: '穿梭框',
-    component: 'formCommon',
-    baseCompoent: 'el-transfer',
     disabled: true
   }
 ]
