@@ -2,7 +2,7 @@
   <div>
     <el-checkbox v-model='checkedVal' v-bind='theOptions[0].bind || {}' v-if='theOptions.length <= 1'/>
     <el-checkbox-group v-model='checkedList' v-else>
-      <el-checkbox v-for='(item, index) in theOptions' v-bind='item.bind || {}' :key='index' />
+      <el-checkbox v-for='(item, index) in theOptions' v-bind='item || {}' :key='index' />
     </el-checkbox-group>
   </div>
 </template>
@@ -26,10 +26,10 @@ export default {
   computed: {
     theOptions () {
       const data = this.formData
-      const {bind, text} = data
+      const {bind = {}} = data
       const children = data.multiConf || []
       const options = [
-        {bind, text},
+        {...bind},
         ...children
       ]
       return options

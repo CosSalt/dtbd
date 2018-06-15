@@ -1,7 +1,7 @@
 <template>
   <div>
     <template v-for='(item, index) in theOptions'>
-      <el-radio v-model="radio" v-bind='item.bind || {}' :key='index'> {{item.text}} </el-radio>
+      <el-radio v-model="radio" v-bind='handleItem(item)' :key='index'> {{handleItem(item, true)}} </el-radio>
     </template>
   </div>
 </template>
@@ -36,6 +36,15 @@ export default {
         ...children
       ]
       return options
+    }
+  },
+  methods: {
+    handleItem (item = {}, returnText) {
+      const {text,...bind} = item
+      if (returnText) {
+        return text
+      }
+      return bind || {}
     }
   }
 }

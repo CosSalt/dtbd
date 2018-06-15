@@ -9,7 +9,7 @@ let componentsConf = [
       label: 'a'
     },
     text: '备选项',
-    multiConf: [{bind:{label: 'b'}, text:'备选项2'}] // 同一级多行配置
+    multiConf: [{label: 'b', text:'备选项2'}] // 同一级多行配置
   }, {
     type: 'checkbox',
     name: '多选框',
@@ -17,7 +17,7 @@ let componentsConf = [
     bind: {
       label: '多选框'
     },
-    multiConf: [{bind:{label: '多选框二'}}]
+    multiConf: [{label: '多选框二'}]
   }, {
     type: 'input',
     name: '输入框',
@@ -36,46 +36,100 @@ let componentsConf = [
   }, {
     type: 'select',
     name: '选择器',
-    component: 'formCommon',
-    baseCompoent: 'el-select',
+    component: 'formSelect',
+    text: '选择器：',
     bind: {
       placeholder: '请输入内容'
     },
-    disabled: true
+    childConf: [{
+        label:'选项1', value: '双皮奶'
+      }, {
+        label:'选项2', value: '红烧肉'
+      }
+    ]
   }, {
     type: 'cascader',
     name: '级联选择器',
-    component: 'el-cascader',
-    disabled: true
+    text: '级联选择',
+    component: 'formCommon',
+    baseCompoent: 'el-cascader',
+    bind: {
+      options: [{
+        value: 'zhinan',
+        label: '指南',
+        children: [{
+          value: 'shejiyuanze',
+          label: '设计原则',
+          children: [{
+            value: 'yizhi',
+            label: '一致'
+          }, {
+            value: 'fankui',
+            label: '反馈'
+          }]
+        }, {
+          value: 'daohang',
+          label: '导航',
+          children: [{
+            value: 'cexiangdaohang',
+            label: '侧向导航'
+          }, {
+            value: 'dingbudaohang',
+            label: '顶部导航'
+          }]
+        }]
+      }
+    ]}
   }, {
     type: 'switch',
     name: '开关',
+    text: '开关',
     component: 'formCommon',
     baseCompoent: 'el-switch',
-    disabled: true
+    bind: {
+      activeColor: '#13ce66',
+      inactiveColor: '#ff4949'
+    }
   }, {
     type: 'slider',
     name: '滑块',
-    component: 'el-slider',
-    disabled: true
+    text: '滑块',
+    component: 'formCommon',
+    baseCompoent: 'el-slider'
   }, {
     type: 'timePicker',
     name: '时间选择器',
-    component: 'el-time-select',
-    disabled: true
+    text: '时间选择器',
+    component: 'formCommon',
+    baseCompoent: 'el-time-select',
+    bind: {
+      placeholder: '选择时间',
+      pickerOptions: {
+        start: '12:30',
+        step: '01:00',
+        end: '18:30'
+      }
+    }
   }, {
     type: 'datePicker',
     name: '日期选择器',
-    component: 'el-date-picker',
-    disabled: true
+    text: '日期选择器',
+    component: 'formCommon',
+    baseCompoent: 'el-date-picker',
+    bind: {
+      type: 'date',
+      placeholder: '选择日期'
+    }
   }, {
     type: 'dateTimePicker',
     name: '日期时间选择器',
-    component: 'el-date-picker',
+    text: '日期时间选择器',
+    component: 'formCommon',
+    baseCompoent: 'el-date-picker',
     bind: {
-      type: 'datetime'
-    },
-    disabled: true
+      type: 'datetime',
+      placeholder: '选择时间日期'
+    }
   }, {
     type: 'upload',
     nam: '上传',
@@ -84,17 +138,24 @@ let componentsConf = [
   }, {
     type: 'rate',
     name: '评分',
-    component: 'el-rate',
-    disabled: true
+    text: '评分',
+    component: 'formCommon',
+    baseCompoent: 'el-rate',
+    bind: {
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900']
+    }
   }, {
     type: 'colorPicker',
     name: '颜色选择器',
-    component: 'el-color-picker',
-    disabled: true
+    text: '颜色选择器',
+    component: 'formCommon',
+    baseCompoent: 'el-color-picker'
   }, {
     type: 'transfer',
     name: '穿梭框',
-    component: 'el-transfer',
+    text: '穿梭框',
+    component: 'formCommon',
+    baseCompoent: 'el-transfer',
     disabled: true
   }
 ]

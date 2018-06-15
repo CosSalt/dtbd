@@ -2,7 +2,7 @@
   <div class='active-form-design'>
     <div class='form-components'>
       <div class='form-design-title'> 控件区 </div>
-      <ul>
+      <ul class='form-components-orgin'>
         <template v-for='item in formItemTypes'>
           <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item.type, $event)'>
             <component :is="item.component" v-bind='item.bind' :formData='item' class='component-design-style' size='mini' />
@@ -157,8 +157,11 @@ export default {
     top: 0;
     left: 0;
     width: @componentsWidth;
-    min-height: 100%;
-    overflow-y: auto;
+    height: 100%;
+    .form-components-orgin{
+      height: 100%;
+      overflow-y: auto;
+    }
   }
   .form-design-container{
     margin: 0 @componentsWidth;
@@ -171,7 +174,7 @@ export default {
     right: 0;
     width: @componentsWidth;
     min-height: 100%;
-    overflow-y: auto;
+    overflow: auto;
   }
   .form-block {
     display: inline-block;
@@ -183,11 +186,14 @@ export default {
   }
   .component-design-style{
     max-width: 100%;
+    vertical-align: center;
     .component-label {
-      width:29%;
+      width:49%;
+      vertical-align: center;
     }
     .component-content{
-      width: 70%;
+      width: 50%;
+      vertical-align: center;
     }
   }
   .component-row{

@@ -1,5 +1,5 @@
 <template>
-<div>
+<div class='common-component'>
   <label v-if='formData.text' class='component-label'>{{formData.text}}</label>
   <component :is="formData.baseCompoent" v-model='commonVal' v-bind='formData.bind || {}' class='component-content'/>
 </div> 
@@ -27,4 +27,15 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.common-component{
+  .component-label {
+    display: inline-block;
+  }
+  .component-content{
+    display: inline-block;
+  }
+}
+</style>
 
