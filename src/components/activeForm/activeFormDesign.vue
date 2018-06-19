@@ -122,9 +122,18 @@ export default {
     changePosition (from, to) { // 改变表单组件位置
       const data = this.designData
       const changeItem = data[from]
-      // 先增后删
-      data.splice(to, 0, changeItem)
-      data.splice(from, 1)
+      if (from > to) { // 从后往前拖拽
+        // 先删后增
+        data.splice(from, 1)
+        data.splice(to, 0, changeItem)
+      } else { // 从前往后拖拽
+        // 先增后删
+        data.splice(to, 0, changeItem)
+        data.splice(from, 1)
+      }
+      // const a = from > to ? 1 : 0
+      // data.splice(to, 0, changeItem)
+      // data.splice(from + a, 1)
     },
     setComponentConf (index) { // 修改表单组件配置
       // const data = this.designData
