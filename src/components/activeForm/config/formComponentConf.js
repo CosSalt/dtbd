@@ -45,7 +45,8 @@ const conf = [
         {label: '小', value: 'mini'}
       ]
     },
-    type: 'bind'
+    type: 'bind',
+    disabled: true
   }, {
     key: 'multiConf',
     parse: true, // 解析
@@ -95,4 +96,6 @@ const data = conf.map(item => {
   return defaultsDeep(defConf, item)
 })
 
-export default data
+export default data.filter(item => {
+  return item.disabled !== true
+})

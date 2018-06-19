@@ -122,8 +122,9 @@ export default {
     changePosition (from, to) { // 改变表单组件位置
       const data = this.designData
       const changeItem = data[from]
-      data.splice(from, 1)
+      // 先增后删
       data.splice(to, 0, changeItem)
+      data.splice(from, 1)
     },
     setComponentConf (index) { // 修改表单组件配置
       // const data = this.designData
