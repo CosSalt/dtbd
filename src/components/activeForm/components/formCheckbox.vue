@@ -17,11 +17,6 @@ export default {
       type: Object
     }
   },
-  data () {
-    return {
-      checkList: []
-    }
-  },
   computed: {
     checkedVal: {
       get () {

@@ -18,6 +18,7 @@
         :layout = 'designData'
         :isDraggable='true'
         :dragIndex.sync='dragIndex'
+        :confIndex='confIndex'
         @changePosition='changePosition'
         @setComponentConf='setComponentConf'
       />
@@ -130,6 +131,7 @@ export default {
       this.showConf = true
     },
     delComponent (index) { // 删除某个组件
+      this.confIndex = -1
       this.designData.splice(index, 1)
     },
     saveComponent (index, confData) { // 保存配置数据

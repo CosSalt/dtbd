@@ -39,6 +39,10 @@ export default {
     layout: {
       type: Array,
       required: true
+    },
+    confIndex: {
+      type: Number,
+      default: -1
     }
   },
   data () {
@@ -46,7 +50,6 @@ export default {
       dragStartIndex: -1,
       formItemTypes: componentsConf,
       formModel: {},
-      confIndex: -1,
       span: 12
     }
   },
@@ -146,7 +149,6 @@ export default {
       if (!this.isDraggable) {
         return
       }
-      this.confIndex = index
       this.$emit('setComponentConf', index, type)
     }
   }
