@@ -17,6 +17,11 @@ export default {
       type: Object
     }
   },
+  data () {
+    return {
+      checkList: []
+    }
+  },
   computed: {
     checkedVal: {
       get () {
@@ -28,7 +33,7 @@ export default {
     },
     checkedList: {
       get () {
-        return this.value
+        return this.value || []
       },
       set (newVal) {
         this.$emit('input', newVal)
