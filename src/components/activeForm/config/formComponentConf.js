@@ -81,6 +81,16 @@ const conf = [
         return err
       }
     }
+  }, {
+    key: 'childConf',
+    parse: true, // 解析
+    component: {
+      text: '配置',
+      bind: {
+        type: "textarea",
+        placeholder: 'JSON格式 例如:[{"label":"x","text":"测试"}]'
+      }
+    }
   }
 ]
 const defConf = {

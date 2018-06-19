@@ -15,6 +15,7 @@
 <script>
 import {defaultsDeep} from '@/utils'
 import componentConf from './config/formComponentConf'
+import typeShowConf from './config/typeShowConf'
 export default {
   name: 'activeFormConf',
   props: {
@@ -42,9 +43,11 @@ export default {
   computed: {
     confData () {
       const filterData = this.allData
-      // const type = this.typeData.type
-      // console.log(type)
-      return filterData
+      const TheType = this.typeData.type
+      const showConf = typeShowConf[TheType]
+      return filterData.filter(item => {
+        return showConf.findIndex(type => type === item.key) >= 0
+      })
     }
   },
   watch: {

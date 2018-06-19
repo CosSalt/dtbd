@@ -1,7 +1,7 @@
 <template>
   <div class='form-select'>
     <label class='component-label'>{{formData.text}}</label>
-    <el-select v-model='selectedVal' v-bind='formData.bind' class='component-content'>
+    <el-select v-model='selectedVal' v-bind='formData.bind' clearable class='component-content'>
       <el-option
         v-for="(item, index) in childrenOptions"
         v-bind='item || {}' :key='index'
