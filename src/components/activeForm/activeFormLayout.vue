@@ -1,19 +1,25 @@
 <template>
   <div class='active-form-layout'>
     <div class='form-content'>
-      <ul>
-        <template v-for='(item, index) in theLayoutData'>
-          <li :key='item.type + index' class='active-form-row'
-            :draggable='isDraggable'
-            @dragstart='dragstart(index, $event)'
-            @dragover='dragover(index, $event)'
-            @drop='drop'
-            @click='defComponent(index, item.type)'
-          >
-            <formIndex v-model='formModel[item.id]' :formData='item' class='component-style' />
-          </li>
+        <template v-for='(layoutItem, i) in theLayoutData'>
+          <el-row :key='"row" + i'>
+            <template v-for='(item, index) in layoutItem'>
+              <el-col
+                :span='item.span'
+                :key='item.type + index'
+                :draggable='isDraggable'
+                @dragstart.native='dragstart(item.index, $event)'
+                @dragover.native='dragover(item.index, $event)'
+                @drop.native='drop'
+                @click.native='defComponent(item.index, item.type)'
+                class='active-form-row'
+                :class = 'confIndex === item.index ? "component-conf" : ""'
+              >
+                <formIndex v-model='formModel[item.id]' :formData='item' class='component-style' />
+              </el-col>
+            </template>
+          </el-row>
         </template>
-      </ul>
     </div>
   </div>
 </template>
@@ -40,18 +46,40 @@ export default {
       dragStartIndex: -1,
       formItemTypes: componentsConf,
       formModel: {},
+      confIndex: -1,
+      span: 12
     }
   },
   computed: {
     theLayoutData () {
-      const data = this.layout.map(item => {
-        return Object.assign({}, item)
-      })
-      data.forEach((item, index) => {
-        item.id = this.tempId(item.id, index)
+      const DefSpan = this.span
+      const getId = this.tempId
+      let data = this.layout.map((item, index) => {
+        return Object.assign({
+          id: getId(item.id, index),
+          span: item.span || DefSpan,
+          index
+        }, item)
       })
       this.initformModel(data)
-      return data
+      // 处理布局
+      const MaxSpan = 24
+      let spanSum = 24
+      const res = []
+      data.forEach((item, index) => {
+        const span = item.span
+        spanSum += span
+        let ResMaxIndex = res.length - 1
+        if (spanSum > MaxSpan) {
+          spanSum -= 24
+          ResMaxIndex += 1
+        }
+        if (!res[ResMaxIndex]) {
+          res[ResMaxIndex] = []
+        }
+        res[ResMaxIndex].push(item)
+      })
+      return res
     },
     theLayout () {
       const defaultData = {
@@ -89,7 +117,7 @@ export default {
         formRes[id] = formModel[id] || null
       })
       this.formModel = formRes
-      window.aa = formRes
+      // window.aa = formRes
     },
     dragstart (index) {
       this.dragStartIndex = index
@@ -118,6 +146,7 @@ export default {
       if (!this.isDraggable) {
         return
       }
+      this.confIndex = index
       this.$emit('setComponentConf', index, type)
     }
   }
@@ -129,7 +158,6 @@ export default {
   width: 100%;
   height: 100%;
   .form-content{
-    background-color: grey;
     min-height: 100%;
     overflow: auto;
   }
@@ -143,6 +171,9 @@ export default {
     .component-content{
       width: 200px;
     }
+  }
+  .component-conf {
+    background-color: grey;
   }
 }
 </style>

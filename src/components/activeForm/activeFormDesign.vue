@@ -200,9 +200,10 @@ export default {
     }
   }
   .form-design-content{
-    width:100%;
+    width: 100%;
     height: 100%;
-    background-color: yellow;
+    box-sizing: border-box;
+    border: 2px solid grey;
   }
   .form-design-title {
     width: 100%;
