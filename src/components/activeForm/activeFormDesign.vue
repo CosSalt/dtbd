@@ -21,7 +21,17 @@
         :confIndex='confIndex'
         @changePosition='changePosition'
         @setComponentConf='setComponentConf'
-      />
+      >
+        <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
+          <el-button type='primary' size='mini' @click.native='saveDesign(data)'
+            v-loading.fullscreen="loading"
+            element-loading-text="拼命保存中"
+            element-loading-spinner="el-icon-loading">
+              保存
+            </el-button>
+          <el-button type='info' size='mini' @click.native='clearDesign'>清空</el-button>
+        </el-row>
+      </activeFormLayout>
     </div>
     <div class="form-design-conf">
       <div class='form-design-title'> 组件配置区 </div>
@@ -43,21 +53,6 @@ import {defaultsDeep} from '@/utils'
 export default {
   name: 'activeFormDesign',
   components: {activeFormLayout, activeFormConf},
-  props: {
-    layout: {
-      default: () => {
-        return {
-          columns: 2,
-          data: [
-            {x: 1, type: '123'},
-            {x: 2},
-            {x: 3},
-            {x: 4}
-          ]
-        }
-      }
-    }
-  },
   data () {
     return {
       formItemTypes: componentsConf,
@@ -65,32 +60,8 @@ export default {
       dragIndex: -1,
       dragType: '',
       confIndex: -1, // 配置信息的组件下标
-      showConf: false
-    }
-  },
-  computed: {
-    theLayout () {
-      const defaultData = {
-        columns: 2,
-        data: []
-      }
-      return Object.assign(defaultData, this.layout)
-    },
-    layoutData () { // 结合 columns, 数据处理
-      const columns = this.theLayout.columns
-      const data = this.theLayout.data
-      const colnumsNum = Math.ceil(data.length / columns)
-      const defaultWidth = (100 / columns) + '%'
-      const res = Array.from({length: colnumsNum}, () => [])
-      data.forEach((item, index) => {
-        const resIndex = Math.floor(index / columns)
-        const theItem = Object.assign({}, item)
-        theItem.style = Object.assign({
-          width: defaultWidth
-        }, theItem.style)
-        res[resIndex].push(theItem)
-      })
-      return res
+      showConf: false,
+      loading: false
     }
   },
   methods: {
@@ -153,6 +124,42 @@ export default {
       }
       const newData = defaultsDeep(this.designData[index], confData)
       this.designData.splice(index, 1, newData)
+    },
+    saveDesign () { // 保存设计的数据
+      this.loading = true
+      setTimeout(()=>{
+        this.saveData(this.designData)
+        this.loading = false
+      }, 2000)
+    },
+    clearDesign () { // 清空数据
+      if(window.confirm("确定要清空设计数据")){
+        this.designData = []
+      }
+    },
+    checkDesignData (data = []) {
+      const err = []
+      if (data.length <= 0) {
+        err.push("设计配置项为空,不能保存")
+      } else {
+        for(let [index, {text, id}] of data.entries()){
+          if (!id) {
+            err.push((text || "第" + (index + 1) + "个配置" ) + ": ID值为空")
+          }
+        }
+      }
+      return {
+        res: err.length < 0,
+        err
+      }
+    },
+    saveData (data = []) {
+      const {res, err = []} = this.checkDesignData(data)
+      if (!res) {
+        alert(err.join('\n'))
+        return
+      }
+      localStorage.setItem('designComponent', JSON.stringify(data))
     }
   }
 }

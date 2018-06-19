@@ -21,6 +21,7 @@
           </el-row>
         </template>
     </div>
+    <slot name='footer' :data='formModel'/>
   </div>
 </template>
 <script>
@@ -69,7 +70,7 @@ export default {
       const MaxSpan = 24
       let spanSum = 24
       const res = []
-      data.forEach((item, index) => {
+      data.forEach(item => {
         const span = item.span
         spanSum += span
         let ResMaxIndex = res.length - 1
@@ -83,30 +84,7 @@ export default {
         res[ResMaxIndex].push(item)
       })
       return res
-    },
-    theLayout () {
-      const defaultData = {
-        columns: 2,
-        data: []
-      }
-      return Object.assign(defaultData, this.layout)
-    },
-    layoutData () { // 结合 columns, 数据处理
-      const columns = this.theLayout.columns
-      const data = this.theLayout.data
-      const colnumsNum = Math.ceil(data.length / columns)
-      const defaultWidth = (100 / columns) + '%'
-      const res = Array.from({length: colnumsNum}, () => [])
-      data.forEach((item, index) => {
-        const resIndex = Math.floor(index / columns)
-        const theItem = Object.assign({}, item)
-        theItem.style = Object.assign({
-          width: defaultWidth
-        }, theItem.style)
-        res[resIndex].push(theItem)
-      })
-      return res
-    },
+    }
   },
   methods: {
     tempId (id, index) {
@@ -160,7 +138,6 @@ export default {
   width: 100%;
   height: 100%;
   .form-content{
-    min-height: 100%;
     overflow: auto;
   }
   .form-block {
