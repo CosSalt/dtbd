@@ -60,15 +60,38 @@ export default {
     }
   },
   computed: {
-    confData111: {
-      get () {
-        return this.value || [{'label': 'test-label', value: 'test-value'}]
+    requiredConf () {
+      const requiredArr = []
+      this.conf.forEach(item => {
+        if (item.required === true) {
+          requiredArr.push(item.key)
+        }
+      })
+      return requiredArr
+    }
+  },
+  watch: {
+    modelData:{
+      //handler (newVal, oldVal) {
+      handler () {
+        let data = this.modelData
+        data.length = this.predictData.length
+        data = Array.from(data)
+        const requiredConf = this.requiredConf
+        data = data.filter(item => {
+          let res = true
+          for (let key of requiredConf) {
+            if (!item[key]) {
+              res = false
+              break
+            }
+          }
+          return res
+        })
+        this.$emit('input', data)
       },
-      set (newVal) {
-        this.$emit('input', newVal)
-      }
-    },
-
+      deep: true
+    }
   },
   methods: {
     initData () {

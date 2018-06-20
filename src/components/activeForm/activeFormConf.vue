@@ -5,7 +5,8 @@
         <formIndex :formData='item.component' v-model.trim='confModel[item.key]' class='component-conf-style'/>
       </li>
     </ul>
-    <specialAttrsConf :key='index' />
+    <specialAttrsConf :key='index' v-model = 'attrConf'/>
+    <div>{{JSON.stringify(attrConf || [])}}</div>
     <div>
       <el-button type="primary" size="mini" @click='saveConf'>保存</el-button>
       <el-button type="warning" size="mini" @click='delConf'>删除</el-button>
@@ -37,6 +38,7 @@ export default {
   data () {
     return {
       allData: [],
+      attrConf: [],
       type: null,
       confModel: {}
     }
@@ -131,6 +133,7 @@ export default {
   },
   created () {
     this.allData = this.initAllData()
+    window.abc = this.attrConf
   }
 }
 </script>
