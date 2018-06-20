@@ -27,7 +27,7 @@ const showConfItems = {
     Text, Multiple, ChildConf, Disabled
   ],
   'cascader': [ // 级联选择器
-    
+    Text
   ],
   'switch': [ // 开关
     Text, 'activeValue', 'inactiveValue', Disabled // active-value: switch 打开时的值; inactive-value: switch 关闭时的值

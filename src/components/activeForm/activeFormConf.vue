@@ -5,6 +5,7 @@
         <formIndex :formData='item.component' v-model.trim='confModel[item.key]' class='component-conf-style'/>
       </li>
     </ul>
+    <specialAttrsConf />
     <div>
       <el-button type="primary" size="mini" @click='saveConf'>保存</el-button>
       <el-button type="warning" size="mini" @click='delConf'>删除</el-button>
