@@ -5,7 +5,7 @@
         <formIndex :formData='item.component' v-model.trim='confModel[item.key]' class='component-conf-style'/>
       </li>
     </ul>
-    <specialAttrsConf />
+    <specialAttrsConf :key='index' />
     <div>
       <el-button type="primary" size="mini" @click='saveConf'>保存</el-button>
       <el-button type="warning" size="mini" @click='delConf'>删除</el-button>
@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     confData () {
-      const filterData = this.allData
+      const filterData = this.allData || []
       const TheType = this.typeData.type
       const showConf = typeShowConf[TheType]
       return filterData.filter(item => {
