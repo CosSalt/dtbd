@@ -1,18 +1,30 @@
 <template>
   <div class='special-attrs-conf'>
-    <template v-for='(item, index) in predictData'>
-      <el-row :key='"row" + index'>
-        <el-col v-for='(rowItem, i) in conf' :span='rowItem.span' :key='"column" + i'>
-          <formIndex v-model='modelData[index][rowItem.key]' :formData='rowItem.component' />
-        </el-col>
-        <el-col :span="sapnHandle">
-          <div class='sapnHandle'>
-            <i class="el-icon-circle-plus-outline" @click='addNewRow(index)'></i>
-            <i class="el-icon-remove-outline" @click='removeRow(index)'></i>
-          </div>
-        </el-col>
-      </el-row>
-    </template>
+    <el-row>
+      <el-col :span="4">
+        <div>配置: </div>
+      </el-col>
+      <el-col :span="sapnHandle">
+        <div class='sapnHandle'>
+          <i class="el-icon-circle-plus-outline" @click='addNewRow()'></i>
+        </div>
+      </el-col>
+    </el-row>
+    <div class='attrs-conf-container'>
+      <template v-for='(item, index) in predictData'>
+        <el-row :key='"row" + index'>
+          <el-col :span="24" v-for='(rowItem, i) in conf' :key='"column" + i'>
+            <formIndex v-model='modelData[index][rowItem.key]' :formData='rowItem.component' />
+          </el-col>
+          <el-col :span="sapnHandle">
+            <div class='sapnHandle'>
+              <i class="el-icon-circle-plus-outline" @click='addNewRow(index)'></i>
+              <i class="el-icon-remove-outline" @click='removeRow(index)'></i>
+            </div>
+          </el-col>
+        </el-row>
+      </template>
+    </div>
   </div>
 </template>
 
@@ -23,37 +35,17 @@ export default {
   component: {formIndex},
   props: {
     value: '',
-    conf: {
-      type: Array,
-      default: () => {
-        return [
-          {
-            key: 'label',
-            component: {
-              type: 'input'
-            },
-            required: true,
-            default: ''
-          }, {
-            key: 'value',
-            component: {
-              type: 'input',
-              text: 'value'
-            },
-            required: true,
-            default: '123'
-          }
-        ]
-      }
+    formData: {
+      required: true,
+      type: Object
     },
-    confData: {
-      type: Array,
-      default: () => [{'label': 'test-label', 'value': 'test-value'}]
+    componentType: {
+      type: String
     }
   },
   data () {
     return {
-      sapnHandle: 4,
+      sapnHandle: 8,
       predictData: [],
       confKeys: [],
       modelData: {}
@@ -68,6 +60,15 @@ export default {
         }
       })
       return requiredArr
+    },
+    confData () {
+      const value = this.value || []
+      return value
+    },
+    conf () {
+      const bind = this.formData.bind || {}
+      const conf = bind.conf || {}
+      return conf[this.componentType] || []
     }
   },
   watch: {
@@ -116,7 +117,7 @@ export default {
       }
     },
     handleModle (changeIndex = -1, isAdd = true) {
-      const AmendmentNum = changeIndex === -1 ? 0 : (isAdd === true ? 1 : -1) // 修改正值
+      const AmendmentNum = isAdd === true ? 1 : -1 // 修改正值
       const modelRes = {}
       const confKeys = this.confKeys
       const predictData = this.predictData
@@ -169,6 +170,9 @@ export default {
         color: #fff;
       }
     }
+  }
+  .attrs-conf-container{
+    margin-left: 20px;
   }
 }
 </style>

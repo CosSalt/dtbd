@@ -30,20 +30,17 @@
         }
       },
       childrenOptions () {
-        const children = this.selectData
+        const child = this.formData.childConf || []
+        const hasTip = child[0] && child[0]['disabled'] === true // 时候已经存在提示信息('不能选择')
+        const children = [...child]
+        if (!hasTip) {
+          child.unshift({
+            label: '请选择',
+            value: null,
+            disabled: true
+          })
+        }
         return children
-      }
-    },
-    created () {
-      const child = this.formData.childConf || []
-      const hasTip = child[0] && child[0]['disabled'] === true // 时候已经存在提示信息('不能选择')
-      this.selectData = [...child]
-      if (!hasTip) {
-        this.selectData.unshift({
-          label: '请选择',
-          value: null,
-          disabled: true
-        })
       }
     }
   }

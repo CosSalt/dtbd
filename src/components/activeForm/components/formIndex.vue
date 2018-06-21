@@ -3,6 +3,7 @@
     :is="item.component"
     v-model='componentVal'
     :formData='item'
+    :componentType='componentType'
   />
 </template>
 
@@ -16,6 +17,9 @@ export default {
     formData: {
       required: true,
       type: Object
+    },
+    componentType: {
+      type: String
     }
   },
   computed: {

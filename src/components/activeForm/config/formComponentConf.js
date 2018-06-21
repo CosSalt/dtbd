@@ -49,29 +49,57 @@ const conf = [
     disabled: true
   }, {
     key: 'multiConf',
-    parse: true, // 解析
     component: {
+      type: 'attrsConf',
       text: '配置',
       bind: {
-        type: "textarea",
-        placeholder: 'JSON格式 例如:[{"label":"x","text":"测试"}]'
+        // type: "textarea",
+        // placeholder: 'JSON格式 例如:[{"label":"x","text":"测试"}]',
+        conf: {
+          'radio': [
+            {
+              key: 'label',
+              component: {
+                type: 'input'
+              },
+              required: true,
+            }, {
+              key: 'text',
+              component: {
+                type: 'input',
+                text: 'text'
+              },
+              required: true
+              // default: '123'
+            }
+          ],
+          'checkbox': [
+            {
+              key: 'label',
+              component: {
+                type: 'input'
+              },
+              required: true
+            }, {
+              key: 'text',
+              component: {
+                type: 'input',
+                text: 'text'
+              },
+              required: false
+            }
+          ]
+        }
       }
     },
     test: {
       validator: (val) => {
         let err = null
-        if(!val) return err
-        let res
-        try {
-          res = JSON.parse(val)
-        } catch (e) {
-          err = '数据格式不满足JSON格式要求'
-          return err
-        }
-        if (!Array.isArray(res)) {
+        if(!val) return val
+        if (!Array.isArray(val)) {
           err = '必须为数组'
-        } else if (res.length > 0) {
-          for (let item of res) {
+        } else if (val.length > 0) {
+          for (let item of val) {
             if (typeof item !== 'object' || item == null) {
               err = '数组内必须为对象'
               break
@@ -83,12 +111,28 @@ const conf = [
     }
   }, {
     key: 'childConf',
-    parse: true, // 解析
     component: {
+      type: 'attrsConf',
       text: '配置',
       bind: {
-        type: "textarea",
-        placeholder: 'JSON格式 例如:[{"label":"x","text":"测试"}]'
+        conf: {
+          'select': [
+            {
+              key: 'label',
+              component: {
+                type: 'input'
+              },
+              required: true,
+            }, {
+              key: 'value',
+              component: {
+                type: 'input',
+                text: 'value'
+              },
+              required: true
+            }
+          ]
+        }
       }
     }
   }

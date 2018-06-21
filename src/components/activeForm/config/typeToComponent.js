@@ -50,6 +50,9 @@ const components = {
   },
   'transfer': { // 穿梭框
     baseCompoent: 'el-transfer'
+  },
+  'attrsConf': {
+    component: 'specialAttrsConf'
   }
 }
 for (let item of Object.values(components)) {
