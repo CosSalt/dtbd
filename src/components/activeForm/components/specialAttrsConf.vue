@@ -12,9 +12,9 @@
     </el-row>
     <div class='attrs-conf-container'>
       <template v-for='(item, index) in predictData'>
-        <el-row :key='"row" + index'>
+        <el-row :key='"row" + index' class='attrs-conf-row'>
           <el-col :span="24" v-for='(rowItem, i) in conf' :key='"column" + i'>
-            <formIndex v-model='modelData[index][rowItem.key]' :formData='rowItem.component' />
+            <formIndex v-model='modelData[index][rowItem.key]' :formData='test(rowItem)'/>
           </el-col>
           <el-col :span="sapnHandle">
             <div class='sapnHandle'>
@@ -30,6 +30,7 @@
 
 <script>
 import formIndex from './formIndex'
+import {defaultsDeep} from '@/utils'
 export default {
   name:'specialAttrsConf',
   component: {formIndex},
@@ -95,18 +96,24 @@ export default {
     }
   },
   methods: {
+    test(rowItem) {
+      return rowItem.component
+    },
     initData () {
       const conf = this.conf
       const confLen = conf.length
       const spanMax = 24
       const spanDef = Math.floor((spanMax - this.sapnHandle) / Math.max(confLen, 1))
       const defComponentConf = {
-        type: 'input'
+        type: 'input',
+        bind: {
+          size: 'mini'
+        }
       }
       conf.forEach(item => {
         const key = item.key
         this.confKeys.push(key)
-        item.component = Object.assign({text: key}, defComponentConf, item.component)
+        item.component = defaultsDeep(defComponentConf, {text: key}, item.component)
         item.span = item.span || spanDef
       });
       const predictData = this.predictData
@@ -173,6 +180,11 @@ export default {
   }
   .attrs-conf-container{
     margin-left: 20px;
+  }
+  .attrs-conf-row {
+    border: 2px solid grey;
+    box-shadow: 0 0 10px 2px grey;
+    padding: 2px;
   }
 }
 </style>
