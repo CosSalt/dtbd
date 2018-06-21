@@ -14,7 +14,7 @@
       <template v-for='(item, index) in predictData'>
         <el-row :key='"row" + index' class='attrs-conf-row'>
           <el-col :span="24" v-for='(rowItem, i) in conf' :key='"column" + i'>
-            <formIndex v-model='modelData[index][rowItem.key]' :formData='test(rowItem)'/>
+            <formIndex v-model='modelData[index][rowItem.key]' :formData='rowItem.component'/>
           </el-col>
           <el-col :span="sapnHandle">
             <div class='sapnHandle'>
@@ -96,9 +96,6 @@ export default {
     }
   },
   methods: {
-    test(rowItem) {
-      return rowItem.component
-    },
     initData () {
       const conf = this.conf
       const confLen = conf.length
@@ -113,7 +110,7 @@ export default {
       conf.forEach(item => {
         const key = item.key
         this.confKeys.push(key)
-        item.component = defaultsDeep(defComponentConf, {text: key}, item.component)
+        item.component = defaultsDeep({text: key}, defComponentConf, item.component)
         item.span = item.span || spanDef
       });
       const predictData = this.predictData
