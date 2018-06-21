@@ -1,6 +1,8 @@
 <template>
   <div>
-    <el-checkbox v-model='checkedVal' v-bind='theOptions[0].bind || {}' v-if='theOptions.length <= 1'/>
+    <el-checkbox v-model='checkedVal' v-bind='theOptions[0].bind || {}' v-if='theOptions.length <= 1'>
+      {{theOptions[0].text || theOptions[0].label}}
+    </el-checkbox>
     <el-checkbox-group v-model='checkedList' v-else>
       <el-checkbox v-for='(item, index) in theOptions' v-bind='item || {}' :key='index' >{{item.text || item.label}}
       </el-checkbox>

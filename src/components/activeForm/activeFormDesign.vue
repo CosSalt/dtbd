@@ -49,7 +49,6 @@
 import componentsConf from './config'
 import activeFormLayout from './activeFormLayout'
 import activeFormConf from './activeFormConf.vue'
-import {defaultsDeep} from '@/utils'
 export default {
   name: 'activeFormDesign',
   components: {activeFormLayout, activeFormConf},
@@ -122,7 +121,7 @@ export default {
         alert('已存在相同的 ID,请重新设置ID')
         return
       }
-      const newData = defaultsDeep(this.designData[index], confData)
+      const newData = Object.assign(this.designData[index], confData)
       this.designData.splice(index, 1, newData)
     },
     saveDesign () { // 保存设计的数据

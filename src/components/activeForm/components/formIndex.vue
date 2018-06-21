@@ -4,6 +4,7 @@
     v-model='componentVal'
     :formData='item'
     :componentType='componentType'
+    :keyIndex='keyIndex'
   />
 </template>
 
@@ -20,7 +21,8 @@ export default {
     },
     componentType: {
       type: String
-    }
+    },
+    keyIndex: null
   },
   computed: {
     componentVal: {

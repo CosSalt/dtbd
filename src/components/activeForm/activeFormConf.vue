@@ -1,11 +1,17 @@
 <template>
   <div class="active-form-conf" v-if='show'>
     <ul>
-      <li v-for='(item, i) in confData' :key='item.key' class='form-conf-li'>
-        <formIndex :formData='item.component' :componentType='componentType' v-model.trim='confModel[item.key]' class='component-conf-style' :key='getKey(index, i)'/>
+      <li v-for='item in confData' :key='item.key' class='form-conf-li'>
+        <formIndex
+          class='component-conf-style'
+          v-model.trim='confModel[item.key]'
+          :formData='item.component'
+          :componentType='componentType'
+          :keyIndex='index'
+        />
+        <!-- :key='getKey(index, i)' -->
       </li>
     </ul>
-    <!-- <specialAttrsConf :key='index' v-model = 'attrConf'/> -->
     <div>
       <el-button type="primary" size="mini" @click='saveConf'>保存</el-button>
       <el-button type="warning" size="mini" @click='delConf'>删除</el-button>
@@ -46,7 +52,6 @@ export default {
     confData () {
       const filterData = this.allData || []
       const TheType = this.typeData.type
-      this.componentType = TheType
       const showConf = typeShowConf[TheType]
       return filterData.filter(item => {
         return showConf.findIndex(type => type === item.key) >= 0
@@ -56,6 +61,9 @@ export default {
   watch: {
     index () {
       this.initConfModel()
+    },
+    typeData (newVal) {
+      this.componentType = newVal.type
     }
   },
   methods: {

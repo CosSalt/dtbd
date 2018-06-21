@@ -35,15 +35,14 @@ export default {
   name:'specialAttrsConf',
   component: {formIndex},
   props: {
-    value: null,
+    value: '',
     formData: {
       required: true,
       type: Object
     },
     componentType: {
       type: String
-    },
-    keyIndex: null
+    }
   },
   data () {
     return {
@@ -69,25 +68,8 @@ export default {
     },
     conf () {
       const bind = this.formData.bind || {}
-      const confs = bind.conf || {}
-      let conf = confs[this.componentType] || []
-
-      const confLen = conf.length
-      const spanMax = 24
-      const spanDef = Math.floor((spanMax - this.sapnHandle) / Math.max(confLen, 1))
-      const defComponentConf = {
-        type: 'input',
-        bind: {
-          size: 'mini'
-        }
-      }
-      conf = conf.map(dataItem => {
-        let item = {...dataItem}
-        item.component = defaultsDeep({text: item.key}, defComponentConf, item.component)
-        item.span = item.span || spanDef
-        return item
-      })
-      return conf
+      const conf = bind.conf || {}
+      return conf[this.componentType] || []
     }
   },
   watch: {
@@ -111,26 +93,28 @@ export default {
         this.$emit('input', data)
       },
       deep: true
-    },
-    keyIndex: {
-      handler () {
-        const data = this.confData || []
-        this.predictData = data.map(item => {
-          return {...item}
-        })
-        this.initData()
-      },
-      immediate: true
-    },
-    conf (data=[]) {
-      data.forEach(item => {
-        this.confKeys.push(item.key)
-      })
     }
   },
   methods: {
     initData () {
-      if (this.predictData.length <= 0) {
+      const conf = this.conf
+      const confLen = conf.length
+      const spanMax = 24
+      const spanDef = Math.floor((spanMax - this.sapnHandle) / Math.max(confLen, 1))
+      const defComponentConf = {
+        type: 'input',
+        bind: {
+          size: 'mini'
+        }
+      }
+      conf.forEach(item => {
+        const key = item.key
+        this.confKeys.push(key)
+        item.component = defaultsDeep({text: key}, defComponentConf, item.component)
+        item.span = item.span || spanDef
+      });
+      const predictData = this.predictData
+      if (predictData.length <= 0) {
         this.addNewRow()
       } else {
         this.handleModle()
@@ -166,6 +150,13 @@ export default {
       this.predictData.splice(index ,1)
       this.handleModle(index, false)
     }
+  },
+  created () {
+    const data = this.confData || []
+    this.predictData = data.map(item => {
+      return {...item}
+    })
+    this.initData()
   }
 }
 </script>
