@@ -26,7 +26,7 @@ export default {
         return this.value
       },
       set (newVal) {
-        this.$emit('input', newVal)
+        this.setModelVal(newVal)
       }
     },
     checkedList: {
@@ -34,7 +34,7 @@ export default {
         return this.value || []
       },
       set (newVal) {
-        this.$emit('input', newVal)
+        this.setModelVal(newVal)
       }
     },
     theOptions () {
@@ -46,6 +46,11 @@ export default {
         ...children
       ]
       return options
+    }
+  },
+  methods: {
+    setModelVal(val){
+      this.$emit('input', val)
     }
   }
 }

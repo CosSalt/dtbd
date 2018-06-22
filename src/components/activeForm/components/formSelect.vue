@@ -1,6 +1,6 @@
 <template>
   <div class='form-select'>
-    <label class='component-label'>{{formData.text}}</label>
+    <label class='component-label' v-if='showLabel'>{{formData.text}}</label>
     <el-select v-model='selectedVal' v-bind='formData.bind' clearable class='component-content'>
       <el-option
         v-for="(item, index) in childrenOptions"
@@ -18,6 +18,10 @@
       formData: {
         required: true,
         type: Object
+      },
+      showLabel: {
+        type: Boolean,
+        default: true
       }
     },
     computed: {

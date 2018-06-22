@@ -5,6 +5,7 @@
     :formData='item'
     :componentType='componentType'
     :keyIndex='keyIndex'
+    :showLabel='showLabel'
   />
 </template>
 
@@ -21,6 +22,10 @@ export default {
     },
     componentType: {
       type: String
+    },
+    showLabel: {
+      type: Boolean,
+      default: true
     },
     keyIndex: null
   },

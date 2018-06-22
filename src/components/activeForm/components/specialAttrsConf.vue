@@ -49,7 +49,7 @@ export default {
     return {
       sapnHandle: 8,
       predictData: [],
-      confKeys: [],
+      // confKeys: [],
       modelData: {}
     }
   },
@@ -63,15 +63,10 @@ export default {
       })
       return requiredArr
     },
-    confData () {
-      const value = this.value || []
-      return value
-    },
     conf () {
       const bind = this.formData.bind || {}
       const confs = bind.conf || {}
       let conf = confs[this.componentType] || []
-
       const confLen = conf.length
       const spanMax = 24
       const spanDef = Math.floor((spanMax - this.sapnHandle) / Math.max(confLen, 1))
@@ -88,6 +83,12 @@ export default {
         return item
       })
       return conf
+    },
+    confKeys () {
+      let data = this.conf
+      return data.map(item => {
+        return item.key
+      })
     }
   },
   watch: {
@@ -114,18 +115,13 @@ export default {
     },
     keyIndex: {
       handler () {
-        const data = this.confData || []
+        const data = this.value || []
         this.predictData = data.map(item => {
           return {...item}
         })
         this.initData()
       },
       immediate: true
-    },
-    conf (data=[]) {
-      data.forEach(item => {
-        this.confKeys.push(item.key)
-      })
     }
   },
   methods: {

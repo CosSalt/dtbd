@@ -1,25 +1,36 @@
 <template>
   <div class='active-form-layout'>
     <div class='form-content'>
-        <template v-for='(layoutItem, i) in theLayoutData'>
-          <el-row :key='"row" + i'>
-            <template v-for='(item, index) in layoutItem'>
-              <el-col
-                :span='item.span'
-                :key='item.type + index'
-                :draggable='isDraggable'
-                @dragstart.native='dragstart(item.index, $event)'
-                @dragover.native='dragover(item.index, $event)'
-                @drop.native='drop'
-                @click.native='defComponent(item.index, item.type)'
-                class='active-form-row'
-                :class = 'confIndex === item.index ? "component-conf" : ""'
-              >
-                <formIndex v-model='formModel[item.id]' :formData='item' class='component-style' />
-              </el-col>
-            </template>
-          </el-row>
-        </template>
+        <el-form ref="formLayout" :model="formModel">
+          <template v-for='(layoutItem, i) in theLayoutData'>
+            <el-row :key='"row" + i'>
+              <template v-for='(item, index) in layoutItem'>
+                <el-col :span='formItemSpan' :key='item.type + "_" + index'>
+                  <el-form-item :label='item.text' :key='item.type + index' />
+                </el-col>
+                <el-col
+                  :span='item.span - formItemSpan'
+                  :key='item.type + index'
+                  :draggable='isDraggable'
+                  @dragstart.native='dragstart(item.index, $event)'
+                  @dragover.native='dragover(item.index, $event)'
+                  @drop.native='drop'
+                  @click.native='defComponent(item.index, item.type)'
+                  class='active-form-row'
+                  :class = 'confIndex === item.index ? "component-conf" : ""'
+                >
+                  <formIndex
+                    v-model='formModel[item.id]'
+                    :formData='item'
+                    class='component-style'
+                    :showLabel='showLabel'
+                  />
+                </el-col>
+                <!-- </el-form-item> -->
+              </template>
+            </el-row>
+          </template>
+        </el-form>
     </div>
     <slot name='footer' :data='formModel'/>
   </div>
@@ -51,7 +62,9 @@ export default {
       dragStartIndex: -1,
       formItemTypes: componentsConf,
       formModel: {},
-      span: 12
+      span: 12,
+      formItemSpan: 2,
+      showLabel: false
     }
   },
   computed: {
