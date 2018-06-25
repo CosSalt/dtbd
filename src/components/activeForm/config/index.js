@@ -72,7 +72,8 @@ let componentsConf = [
           }]
         }]
       }
-    ]}
+    ]},
+    disabled: true
   }, {
     type: 'switch',
     name: '开关',
@@ -84,7 +85,8 @@ let componentsConf = [
   }, {
     type: 'slider',
     name: '滑块',
-    labelText: '滑块'
+    labelText: '滑块',
+    disabled: true
   }, {
     type: 'timePicker',
     name: '时间选择器',
@@ -122,11 +124,13 @@ let componentsConf = [
     labelText: '评分',
     bind: {
       colors: ['#99A9BF', '#F7BA2A', '#FF9900']
-    }
+    },
+    disabled: true
   }, {
     type: 'colorPicker',
     name: '颜色选择器',
-    labelText: '颜色选择器'
+    labelText: '颜色选择器',
+    disabled: true
   }, {
     type: 'transfer',
     name: '穿梭框',

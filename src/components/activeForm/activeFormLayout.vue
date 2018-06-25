@@ -1,13 +1,10 @@
 <template>
   <div class='active-form-layout'>
     <div class='form-content'>
-        <el-form ref="formLayout" :model="formModel">
+        <el-form ref="formLayout" :model="formModel" :inline="true">
           <template v-for='(layoutItem, i) in theLayoutData'>
             <el-row :key='"row" + i'>
               <template v-for='(item, index) in layoutItem'>
-                <el-col :span='formItemSpan' :key='item.type + "_" + index'>
-                  <el-form-item :label='item.labelText' :key='item.type + index' />
-                </el-col>
                 <el-col
                   :span='item.span - formItemSpan'
                   :key='item.type + index'
@@ -19,12 +16,14 @@
                   class='active-form-row'
                   :class = 'confIndex === item.index ? "component-conf" : ""'
                 >
-                  <formIndex
-                    v-model='formModel[item.id]'
-                    :formData='item'
-                    class='component-style'
-                    :showLabel='showLabel'
-                  />
+                  <el-form-item label="审批人" size='mini'>
+                    <formIndex
+                      v-model='formModel[item.id]'
+                      :formData='item'
+                      class='component-style'
+                      :showLabel='showLabel'
+                    />
+                  </el-form-item>
                 </el-col>
                 <!-- </el-form-item> -->
               </template>
