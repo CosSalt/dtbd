@@ -16,31 +16,31 @@ const showConfItems = {
     Text, Label, MultiConf, Disabled
   ],
   'checkbox': [ // 多选框
-    Label, MultiConf, Disabled
+    Text, Label, MultiConf, Disabled
   ],
   'input': [ // 输入框
-    Text, Placeholder, Disabled
+    Placeholder, Disabled
   ],
   'inputNumber': [ // 计数器
-    Text, Step, Min, Max, 'precision', Disabled
+    Step, Min, Max, 'precision', Disabled
   ],
   'select': [ // 选择器
-    Text, Multiple, ChildConf, Disabled
+    Multiple, ChildConf, Disabled
   ],
   'cascader': [ // 级联选择器
-    Text
+    
   ],
   'switch': [ // 开关
-    Text, 'activeValue', 'inactiveValue', Disabled // active-value: switch 打开时的值; inactive-value: switch 关闭时的值
+    'activeValue', 'inactiveValue', Disabled // active-value: switch 打开时的值; inactive-value: switch 关闭时的值
   ],
   'slider': [ // 滑块
-    Text, Step, Min, Max, 'range', 'showInput', Disabled
+    Step, Min, Max, 'range', 'showInput', Disabled
   ],
   'timePicker': [ // 时间选择器
-    Text, Placeholder, Disabled
+    Placeholder, Disabled
   ],
   'datePicker': [ // 日期选择器
-    Text, 'format', Placeholder, Disabled
+    'format', Placeholder, Disabled
   ],
   'dateTimePicker': [ // 日期时间选择器
 
@@ -49,10 +49,10 @@ const showConfItems = {
     
   ],
   'rate': [ // 评分
-    Text, Max, 'allowHalf', Disabled
+    Max, 'allowHalf', Disabled
   ],
   'colorPicker': [ // 颜色选择器
-    Text, Disabled
+    Disabled
   ],
   'transfer': [ // 穿梭框
     

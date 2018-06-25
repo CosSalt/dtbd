@@ -55,6 +55,9 @@ export default {
     confIndex: {
       type: Number,
       default: -1
+    },
+    receiveData: {
+      type: Object
     }
   },
   data () {
@@ -78,7 +81,7 @@ export default {
           index
         }, item)
       })
-      this.initformModel(data)
+      this.handleformModel(data)
       // 处理布局
       const MaxSpan = 24
       let spanSum = 24
@@ -103,7 +106,15 @@ export default {
     tempId (id, index) {
       return id || ("$_temp_id_" + index) // 临时 ID
     },
-    initformModel (data) {
+    //init receiveData
+    initformModel(data = {}) {
+      const formRes = {}
+      for(let [key, val] of Object.entries(data)) {
+        formRes[key] = val
+      }
+      this.formModel = formRes
+    },
+    handleformModel (data) {
       const formRes = {}
       const formModel = this.formModel || {}
       data.forEach(item => {
@@ -141,6 +152,12 @@ export default {
         return
       }
       this.$emit('setComponentConf', index, type)
+    }
+  },
+  created () {
+    const receiveData = this.receiveData
+    if(receiveData && typeof receiveData === 'object') {
+      this.initformModel(receiveData)
     }
   }
 }
