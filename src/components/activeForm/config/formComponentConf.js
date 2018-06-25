@@ -156,7 +156,7 @@ const conf = [
       bind: {
         activeColor: '#13ce66',
         activeIconClass: 'el-icon-check',
-        inactiveColor: '#ff4949',
+        inactiveColor: '#c0c4cc',
         inactiveIconClass: 'el-icon-close'
       }
     }
@@ -166,11 +166,11 @@ const conf = [
     default: false,
     component: {
       type: 'switch',
-      labelText: '禁用',
+      labelText: 'disabled',
       bind: {
         activeColor: '#13ce66',
         activeIconClass: 'el-icon-check',
-        inactiveColor: '#ff4949',
+        inactiveColor: '#c0c4cc',
         inactiveIconClass: 'el-icon-close'
       }
     }

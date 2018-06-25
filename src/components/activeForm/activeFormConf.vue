@@ -177,6 +177,9 @@ export default {
     }
     .component-content{
       width: calc(100% - @componentsWidth);
+      > span > i{
+        font-weight: 600;
+      }
     }
   }
 }

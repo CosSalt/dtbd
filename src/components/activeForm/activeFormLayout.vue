@@ -1,12 +1,12 @@
 <template>
   <div class='active-form-layout'>
     <div class='form-content'>
-        <el-form ref="formLayout" :model="formModel" :inline="true">
+        <el-form ref="formLayout" :model="formModel" :inline="true" :labelPosition='labelPosition'>
           <template v-for='(layoutItem, i) in theLayoutData'>
             <el-row :key='"row" + i'>
               <template v-for='(item, index) in layoutItem'>
                 <el-col
-                  :span='item.span - formItemSpan'
+                  :span='item.span'
                   :key='item.type + index'
                   :draggable='isDraggable'
                   @dragstart.native='dragstart(item.index, $event)'
@@ -16,7 +16,7 @@
                   class='active-form-row'
                   :class = 'confIndex === item.index ? "component-conf" : ""'
                 >
-                  <el-form-item label="审批人" size='mini'>
+                  <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth'>
                     <formIndex
                       v-model='formModel[item.id]'
                       :formData='item'
@@ -65,8 +65,10 @@ export default {
       formItemTypes: componentsConf,
       formModel: {},
       span: 12,
-      formItemSpan: 2,
-      showLabel: false
+      // formItemSpan: 2,
+      showLabel: false,
+      labelWidth: '120px',
+      labelPosition: 'left'
     }
   },
   computed: {
@@ -168,6 +170,9 @@ export default {
   height: 100%;
   .form-content{
     overflow: auto;
+    .active-form-row {
+      padding: 0;
+    }
   }
   .form-block {
     display: inline-block;
