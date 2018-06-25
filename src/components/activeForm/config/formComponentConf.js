@@ -3,7 +3,7 @@ const conf = [
   {
     key: 'id',
     component: {
-      text: 'ID: ',
+      labelText: 'ID: ',
       bind: {
         placeholder: '请输入以字母 _ $ 开头的ID'
       }
@@ -14,9 +14,20 @@ const conf = [
       required: true
     }
   }, {
+    key: 'labelText',
+    component: {
+      labelText: 'LabelText: ',
+      bind: {
+        placeholder: '提示文字'
+      }
+    },
+    test: {
+      required: true
+    }
+  },{
     key: 'text',
     component: {
-      text: 'text: ',
+      labelText: 'text: ',
       bind: {
         placeholder: '文字'
       }
@@ -25,7 +36,7 @@ const conf = [
     key: 'label',
     type: 'bind', // type 是用来表示层级的,如type: 'bind'表示最后保存数据时,要保存在对象的bind属性上
     component: {
-      text: 'label: ',
+      labelText: 'label: ',
       bind: {
         placeholder: '必填'
       }
@@ -37,7 +48,7 @@ const conf = [
     key: 'size',
     component: {
       type: 'select',
-      text: '大小: ',
+      labelText: '大小: ',
       childConf: [
         {label: '请选择', disabled: true, value:''},
         {label: '大', value: 'medium'},
@@ -51,7 +62,7 @@ const conf = [
     key: 'multiConf',
     component: {
       type: 'attrsConf',
-      text: '配置',
+      labelText: '配置',
       bind: {
         // type: "textarea",
         // placeholder: 'JSON格式 例如:[{"label":"x","text":"测试"}]',
@@ -113,7 +124,7 @@ const conf = [
     key: 'childConf',
     component: {
       type: 'attrsConf',
-      text: '配置',
+      labelText: '配置',
       bind: {
         conf: {
           'select': [
@@ -127,7 +138,7 @@ const conf = [
               key: 'value',
               component: {
                 type: 'input',
-                text: 'value'
+                labelText: 'value'
               },
               required: true
             }

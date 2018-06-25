@@ -8,10 +8,12 @@ let componentsConf = [
       label: 'a'
     },
     text: '备选项',
+    labelText: '单选: ',
     multiConf: [{label: 'b', text:'备选项2'}] // 同一级多行配置
   }, {
     type: 'checkbox',
     name: '多选框',
+    labelText: '多选: ',
     bind: {
       label: '多选框'
     },
@@ -19,18 +21,18 @@ let componentsConf = [
   }, {
     type: 'input',
     name: '输入框',
-    text: '输入框：',
+    labelText: '输入框：',
     bind: {
       placeholder: '请输入内容'
     }
   }, {
     type: 'inputNumber',
     name: '计数器',
-    text: '计数器：'
+    labelText: '计数器：'
   }, {
     type: 'select',
     name: '选择器',
-    text: '选择器：',
+    labelText: '选择器：',
     bind: {
       placeholder: '请输入内容'
     },
@@ -43,7 +45,7 @@ let componentsConf = [
   }, {
     type: 'cascader',
     name: '级联选择器',
-    text: '级联选择',
+    labelText: '级联选择',
     bind: {
       options: [{
         value: 'zhinan',
@@ -74,7 +76,7 @@ let componentsConf = [
   }, {
     type: 'switch',
     name: '开关',
-    text: '开关',
+    labelText: '开关',
     bind: {
       activeColor: '#13ce66',
       inactiveColor: '#ff4949'
@@ -82,11 +84,11 @@ let componentsConf = [
   }, {
     type: 'slider',
     name: '滑块',
-    text: '滑块'
+    labelText: '滑块'
   }, {
     type: 'timePicker',
     name: '时间选择器',
-    text: '时间选择器',
+    labelText: '时间选择器',
     bind: {
       placeholder: '选择时间',
       pickerOptions: {
@@ -98,36 +100,37 @@ let componentsConf = [
   }, {
     type: 'datePicker',
     name: '日期选择器',
-    text: '日期选择器',
+    labelText: '日期选择器',
     bind: {
       placeholder: '选择日期'
     }
   }, {
     type: 'dateTimePicker',
     name: '日期时间选择器',
-    text: '日期时间选择器',
+    labelText: '日期时间选择器',
     bind: {
       placeholder: '选择时间日期'
     }
   }, {
     type: 'upload',
-    nam: '上传',
+    name: '上传',
+    labelText: '文件上传',
     disabled: true
   }, {
     type: 'rate',
     name: '评分',
-    text: '评分',
+    labelText: '评分',
     bind: {
       colors: ['#99A9BF', '#F7BA2A', '#FF9900']
     }
   }, {
     type: 'colorPicker',
     name: '颜色选择器',
-    text: '颜色选择器'
+    labelText: '颜色选择器'
   }, {
     type: 'transfer',
     name: '穿梭框',
-    text: '穿梭框',
+    labelText: '穿梭框',
     disabled: true
   }
 ]

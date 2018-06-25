@@ -78,7 +78,7 @@ export default {
       }
       conf = conf.map(dataItem => {
         let item = {...dataItem}
-        item.component = defaultsDeep({text: item.key}, defComponentConf, item.component)
+        item.component = defaultsDeep({labelText: item.key}, defComponentConf, item.component)
         item.span = item.span || spanDef
         return item
       })

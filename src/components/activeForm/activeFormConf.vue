@@ -98,7 +98,7 @@ export default {
         const type = theData.type
         err = this.test(theData.test, val)
         if (err) {
-          err = theData.component.text + err
+          err = theData.component.labelText + err
           break
         }
         if (type) {

@@ -6,7 +6,7 @@
             <el-row :key='"row" + i'>
               <template v-for='(item, index) in layoutItem'>
                 <el-col :span='formItemSpan' :key='item.type + "_" + index'>
-                  <el-form-item :label='item.text' :key='item.type + index' />
+                  <el-form-item :label='item.labelText' :key='item.type + index' />
                 </el-col>
                 <el-col
                   :span='item.span - formItemSpan'

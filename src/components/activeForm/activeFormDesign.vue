@@ -46,6 +46,7 @@
   </div>
 </template>
 <script>
+import {defaultsDeep} from '@/utils'
 import componentsConf from './config'
 import activeFormLayout from './activeFormLayout'
 import activeFormConf from './activeFormConf.vue'
@@ -82,10 +83,11 @@ export default {
       if (!type) return
       const item = this.formItemTypes.find(item => item.type === type)
       if (!item) return
+      const newItem = defaultsDeep({}, item)
       if (this.dragIndex >= 0) {
-        this.designData.splice(this.dragIndex + 1, 0, item)
+        this.designData.splice(this.dragIndex + 1, 0, newItem)
       } else {
-        this.designData.push(item)
+        this.designData.push(newItem)
       }
       this.dragType = ''
     },

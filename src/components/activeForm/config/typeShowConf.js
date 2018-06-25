@@ -9,6 +9,7 @@ const Multiple = 'multiple' // 多选
 const Step = 'step'
 const Min = 'min'
 const Max = 'max'
+const LabelText = 'labelText'
 // const Type = 'type'
 const showConfItems = {
   'radio': [ // 单选框
@@ -60,13 +61,16 @@ const showConfItems = {
 for (let [key, item] of Object.entries(showConfItems)) {
   if (item) {
     if (item.findIndex(val => val === ID) < 0){
-      item.unshift(ID)
+      item.unshift(ID, LabelText)
+    } else {
+      item.unshift(LabelText)
     }
     if(item.findIndex(val => val === Disabled) < 0) {
       item.push(Disabled)
     }
   } else {
-    showConfItems[key] = [ID, 'text', Disabled]
+    showConfItems[key] = [ID, LabelText, Disabled]
   }
 }
+
 export default showConfItems
