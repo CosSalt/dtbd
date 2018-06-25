@@ -116,14 +116,24 @@ export default {
       this.confIndex = -1
       this.designData.splice(index, 1)
     },
-    saveComponent (index, confData) { // 保存配置数据
+    saveComponent (index, confData = {}) { // 保存配置数据
       const id = confData.id
       const theIndex = this.designData.findIndex((item, i) => item.id === id && i !== index)
       if (theIndex >= 0) {
         alert('已存在相同的 ID,请重新设置ID')
         return
       }
-      const newData = Object.assign(this.designData[index], confData)
+      // const newData = Object.assign(this.designData[index], confData)
+      window.defaultsDeep = defaultsDeep
+      let newData = defaultsDeep(this.designData[index], confData)
+      const isArray = Array.isArray
+      const assignObj = {}
+      for (let [key, val] of Object.entries(newData)) {
+        if (isArray(val)) {
+          assignObj[key] = confData[key]
+        }
+      }
+      newData = Object.assign(newData, assignObj)
       this.designData.splice(index, 1, newData)
     },
     saveDesign () { // 保存设计的数据

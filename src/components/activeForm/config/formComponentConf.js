@@ -149,6 +149,7 @@ const conf = [
   }, {
     key: 'multiple',
     default: false,
+    type: 'bind',
     component: {
       type: 'switch',
       labelText: '多行',
@@ -161,6 +162,7 @@ const conf = [
     }
   }, {
     key: 'disabled',
+    type: 'bind',
     default: false,
     component: {
       type: 'switch',

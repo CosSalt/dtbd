@@ -54,9 +54,6 @@ export default {
       const TheType = this.typeData.type
       const showConf = typeShowConf[TheType]
       let data = []
-      // data = allData.filter(item => {
-      //   return showConf.findIndex(type => type === item.key) >= 0
-      // })
       showConf.forEach(type => {
         let item = allData.find(item => item.key === type)
         if (item) {
