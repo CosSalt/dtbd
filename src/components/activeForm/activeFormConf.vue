@@ -50,16 +50,25 @@ export default {
   },
   computed: {
     confData () {
-      const filterData = this.allData || []
+      const allData = this.allData || []
       const TheType = this.typeData.type
       const showConf = typeShowConf[TheType]
-      return filterData.filter(item => {
-        return showConf.findIndex(type => type === item.key) >= 0
+      let data = []
+      // data = allData.filter(item => {
+      //   return showConf.findIndex(type => type === item.key) >= 0
+      // })
+      showConf.forEach(type => {
+        let item = allData.find(item => item.key === type)
+        if (item) {
+          data.push(item)
+        }
       })
+      return data
     }
   },
   watch: {
     index () {
+      this.confModel = {}
       this.initConfModel()
     },
     typeData (newVal) {
@@ -71,10 +80,18 @@ export default {
       let res = {}
       const typeData = this.typeData
       const confData = this.confData
+      const confModel = this.confModel || {}
       confData.forEach(item => {
         const key = item.key
         const type = item.type
-        let val = type ? (typeData[type] ? typeData[type][key] : null) : typeData[key]
+        let val = type && typeData[type] ? typeData[type][key] : undefined
+        if (val === undefined) {
+          let defaultVal = typeData[key]
+          if (defaultVal === undefined) {
+            defaultVal = confModel[key] !== undefined ? confModel[key] : (item.default !== undefined ? item.default : null)
+          }
+          val = defaultVal
+        }
         val = val && item.parse === true ? JSON.stringify(val) : val // 需要解析的
         res[key] = val
       })
@@ -139,7 +156,7 @@ export default {
       this.clickShow()
     },
     getKey (rowIndex , columnIndex) {
-      return "row" + rowIndex + "_column" + columnIndex
+      return "row_" + rowIndex + "_column_" + columnIndex
     }
   },
   created () {

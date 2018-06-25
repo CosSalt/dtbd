@@ -146,6 +146,32 @@ const conf = [
         }
       }
     }
+  }, {
+    key: 'multiple',
+    default: false,
+    component: {
+      type: 'switch',
+      labelText: '多行',
+      bind: {
+        activeColor: '#13ce66',
+        activeIconClass: 'el-icon-check',
+        inactiveColor: '#ff4949',
+        inactiveIconClass: 'el-icon-close'
+      }
+    }
+  }, {
+    key: 'disabled',
+    default: false,
+    component: {
+      type: 'switch',
+      labelText: '禁用',
+      bind: {
+        activeColor: '#13ce66',
+        activeIconClass: 'el-icon-check',
+        inactiveColor: '#ff4949',
+        inactiveIconClass: 'el-icon-close'
+      }
+    }
   }
 ]
 const defConf = {
