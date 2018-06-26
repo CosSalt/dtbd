@@ -116,6 +116,7 @@ export default {
     keyIndex: {
       handler () {
         const data = this.value || []
+        this.modelData = {}
         this.predictData = data.map(item => {
           return {...item}
         })

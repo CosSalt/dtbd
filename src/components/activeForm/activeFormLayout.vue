@@ -123,7 +123,6 @@ export default {
         formRes[id] = formModel[id] || null
       })
       this.formModel = formRes
-      window.aa = formRes
     },
     dragstart (index) {
       this.dragStartIndex = index

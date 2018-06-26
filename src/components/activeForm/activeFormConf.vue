@@ -12,10 +12,23 @@
         <!-- :key='getKey(index, i)' -->
       </li>
     </ul>
-    <div>
+
+        <!-- <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
+          <el-button type='primary' size='mini' @click.native='saveDesign(data)'
+            v-loading.fullscreen="loading"
+            element-loading-text="拼命保存中"
+            element-loading-spinner="el-icon-loading">
+              保存
+            </el-button>
+          <el-button type='info' size='mini' @click.native='clearDesign'>清空</el-button>
+        </el-row> -->
+
+
+
+    <el-row style='text-align:center;'>
       <el-button type="primary" size="mini" @click='saveConf'>保存</el-button>
       <el-button type="warning" size="mini" @click='delConf'>删除</el-button>
-    </div>
+    </el-row>
   </div>
 </template>
 
@@ -92,6 +105,7 @@ export default {
         val = val && item.parse === true ? JSON.stringify(val) : val // 需要解析的
         res[key] = val
       })
+      window.res = res
       this.confModel = res
     },
     defDeep (...args){
@@ -158,7 +172,6 @@ export default {
   },
   created () {
     this.allData = this.initAllData()
-    window.abc = this.attrConf
   }
 }
 </script>
