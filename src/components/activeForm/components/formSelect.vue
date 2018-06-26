@@ -14,7 +14,7 @@
   export default {
     name: 'formSelect',
     props: {
-      value: '',
+      value: null,
       formData: {
         required: true,
         type: Object
@@ -25,9 +25,20 @@
       }
     },
     computed: {
+      theValue () {
+        const {bind:{multiple}} = this.formData
+        const value = this.value
+        let newVal
+        if(multiple) {
+          newVal = Array.isArray(value) ? value : []
+        } else {
+          newVal = value === undefined ? null : value
+        }
+        return newVal
+      },
       selectedVal: {
         get () {
-          return this.value
+          return this.theValue
         },
         set (newVal) {
           this.$emit('input', newVal)
@@ -35,16 +46,6 @@
       },
       childrenOptions () {
         const child = this.formData.childConf || []
-        // const hasTip = child[0] && child[0]['disabled'] === true // 时候已经存在提示信息('不能选择')
-        // const children = [...child]
-        // if (!hasTip) {
-        //   child.unshift({
-        //     label: '请选择',
-        //     value: null,
-        //     disabled: true
-        //   })
-        // }
-        // return children
         return [...child]
       }
     }

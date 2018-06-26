@@ -124,7 +124,6 @@ export default {
         return
       }
       // const newData = Object.assign(this.designData[index], confData)
-      window.defaultsDeep = defaultsDeep
       let newData = defaultsDeep(this.designData[index], confData)
       const isArray = Array.isArray
       const assignObj = {}
@@ -212,7 +211,6 @@ export default {
   .active-form-row{
     margin: 0;
     padding: 5px 0;
-    cursor: pointer;
   }
   .component-design-style{
     width: 100%;

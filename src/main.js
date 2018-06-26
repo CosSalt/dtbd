@@ -11,6 +11,13 @@ for(let item of Object.values(fromComponents)) {
   Vue.component(item.name, item)
 }
 Vue.config.productionTip = false
+const isDev = process.env.NODE_ENV === 'production'
+if (isDev) {
+  Vue.config.errorHandler = (err, vm, info) => { // eslint-disable-line
+    console.error('err:\n', err) // eslint-disable-line
+    console.error('info:\n', info) // eslint-disable-line
+  }
+}
 new Vue({
   render: h => h(App),
   router,

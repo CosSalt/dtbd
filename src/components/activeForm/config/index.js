@@ -80,7 +80,8 @@ let componentsConf = [
     labelText: '开关',
     bind: {
       activeColor: '#13ce66',
-      inactiveColor: '#ff4949'
+      // inactiveColor: '#ff4949',
+      inactiveColor: '#c0c4cc'
     }
   }, {
     type: 'slider',
