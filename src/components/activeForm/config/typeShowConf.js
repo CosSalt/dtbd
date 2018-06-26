@@ -10,6 +10,8 @@ const Step = 'step'
 const Min = 'min'
 const Max = 'max'
 const LabelText = 'labelText'
+const Action = 'action' // 异步获取数据 Api
+const RelationIds = 'relationIds' // 异步获取数据关联ID
 // const Type = 'type'
 const showConfItems = {
   'radio': [ // 单选框
@@ -25,7 +27,7 @@ const showConfItems = {
     Step, Min, Max, 'precision', Disabled
   ],
   'select': [ // 选择器
-    Multiple, ChildConf, Disabled
+    Multiple, ChildConf, Action, RelationIds, Disabled
   ],
   'cascader': [ // 级联选择器
     

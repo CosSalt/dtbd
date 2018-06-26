@@ -51,6 +51,10 @@ export default {
     index: {
       type: Number,
       required: true
+    },
+    allKeys: {
+      type: Array,
+      required: true
     }
   },
   data () {
@@ -65,15 +69,38 @@ export default {
     confData () {
       const allData = this.allData || []
       const TheType = this.typeData.type
-      const showConf = typeShowConf[TheType]
+      const showConf = typeShowConf[TheType] || []
       let data = []
       showConf.forEach(type => {
         let item = allData.find(item => item.key === type)
         if (item) {
+          if (item.key === 'relationIds') {
+            const cdata = item.component
+            if (cdata) {
+              item.component = Object.assign(cdata, {
+                childConf: this.relationAllKeys
+              })
+            }
+          }
           data.push(item)
         }
       })
       return data
+    },
+    selfId () {
+      return this.typeData.id
+    },
+    relationAllKeys () {
+      const selfId = this.selfId
+      const keys = this.allKeys.filter(key => {
+        return key !== selfId
+      })
+      return keys.map(key => {
+        return {
+          label: key,
+          value: key
+        }
+      })
     }
   },
   watch: {
@@ -105,7 +132,6 @@ export default {
         val = val && item.parse === true ? JSON.stringify(val) : val // 需要解析的
         res[key] = val
       })
-      window.res = res
       this.confModel = res
     },
     defDeep (...args){

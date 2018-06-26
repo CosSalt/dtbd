@@ -38,6 +38,7 @@
       <activeFormConf
         :show.sync='showConf'
         :index='confIndex'
+        :allKeys='allKeys'
         :typeData='designData[confIndex] || {}'
         @delComponent='delComponent'
         @saveComponent='saveComponent'
@@ -62,6 +63,17 @@ export default {
       confIndex: -1, // 配置信息的组件下标
       showConf: false,
       loading: false
+    }
+  },
+  computed: {
+    allKeys () {
+      const data = this.designData
+      const keysArr = data.filter(item => {
+        return !!item.id
+      })
+      return keysArr.map(item => {
+        return item.id
+      })
     }
   },
   methods: {
@@ -114,7 +126,8 @@ export default {
     },
     delComponent (index) { // 删除某个组件
       this.confIndex = -1
-      this.designData.splice(index, 1)
+      const [delData] = this.designData.splice(index, 1)
+      this.afterDelConf(delData.id)
     },
     saveComponent (index, confData = {}) { // 保存配置数据
       const id = confData.id
@@ -133,14 +146,51 @@ export default {
         }
       }
       newData = Object.assign(newData, assignObj)
-      this.designData.splice(index, 1, newData)
+      const [oldData] = this.designData.splice(index, 1, newData)
+      this.afterSaveConf(oldData.id, newData.id)
     },
     saveDesign () { // 保存设计的数据
       this.loading = true
+      this.beforeSaveDesign()
       setTimeout(()=>{
         this.saveData(this.designData)
         this.loading = false
       }, 2000)
+    },
+    beforeSaveDesign () { // 删除无效的关联ID
+      const allKeys = this.allKeys
+      this.designData.forEach(item => {
+        const relationIds = item.relationIds
+        if (relationIds && relationIds.length > 0) {
+          item.relationIds = relationIds.filter(theKey => {
+            return allKeys.findIndex(key => key === theKey) >= 0
+          })
+        }
+      })
+    },
+    afterDelConf (id) { // 某个组件被删除后
+      if(!id) return
+      this.designData.forEach(item => {
+        const relationIds = item.relationIds
+        if (relationIds && relationIds.length > 0) {
+          const index = relationIds.findIndex(key => key === id)
+          if (index >=0) {
+            relationIds.splice(index, 1)
+          }
+        }
+      })
+    },
+    afterSaveConf (oldId, newId) { // ID修改后进行替换
+      if(!oldId || !newId) return
+      this.designData.forEach(item => {
+        const relationIds = item.relationIds
+        if (relationIds && relationIds.length > 0) {
+          const index = relationIds.findIndex(key => key === oldId)
+          if (index >=0) {
+            relationIds[index] = newId
+          }
+        }
+      })
     },
     clearDesign () { // 清空数据
       if(window.confirm("确定要清空设计数据")){

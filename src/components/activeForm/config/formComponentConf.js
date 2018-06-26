@@ -174,6 +174,26 @@ const conf = [
         inactiveIconClass: 'el-icon-close'
       }
     }
+  }, {
+    key: 'action',
+    component: {
+      labelText: 'action',
+      bind: {
+        placeholder: 'url,异步加载数据,如/api/abc'
+      }
+    }
+  }, {
+    key: 'relationIds',
+    component: {
+      type: 'select',
+      labelText: '关联ID',
+      bind: {
+        multiple: true
+      },
+      childConf: [{
+        // label:'请先设置ID', value: 'null', disabled: true
+      }]
+    }
   }
 ]
 const defConf = {
