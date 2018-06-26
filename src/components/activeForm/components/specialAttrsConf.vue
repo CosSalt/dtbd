@@ -4,27 +4,35 @@
       <el-col :span="4">
         <div>配置: </div>
       </el-col>
-      <el-col :span="sapnHandle">
-        <div class='sapnHandle'>
+      <el-col :span="spanHandle">
+        <div class='spanHandle'>
           <i class="el-icon-circle-plus-outline" @click='addNewRow()'></i>
         </div>
       </el-col>
+      <el-col :span="24 - 4 - spanHandle" style='text-align:right;' class='show-attrs-conf'>
+        <i :class='{"show-attrs-conf-i": isShowAttrsConf}'
+          class='el-icon-arrow-left'
+          @click='showAtrrsConf()'
+        />
+      </el-col>
     </el-row>
-    <div class='attrs-conf-container'>
-      <template v-for='(item, index) in predictData'>
-        <el-row :key='"row" + index' class='attrs-conf-row'>
-          <el-col :span="24" v-for='(rowItem, i) in conf' :key='"column" + i'>
-            <formIndex v-model='modelData[index][rowItem.key]' :formData='rowItem.component'/>
-          </el-col>
-          <el-col :span="sapnHandle">
-            <div class='sapnHandle'>
-              <i class="el-icon-circle-plus-outline" @click='addNewRow(index)'></i>
-              <i class="el-icon-remove-outline" @click='removeRow(index)'></i>
-            </div>
-          </el-col>
-        </el-row>
-      </template>
-    </div>
+    <transition name="attrs-fade">
+      <div class='attrs-conf-container' v-show='isShowAttrsConf'>
+        <template v-for='(item, index) in predictData'>
+          <el-row :key='"row" + index' class='attrs-conf-row'>
+            <el-col :span="24" v-for='(rowItem, i) in conf' :key='"column" + i'>
+              <formIndex v-model='modelData[index][rowItem.key]' :formData='rowItem.component'/>
+            </el-col>
+            <el-col :span="spanHandle">
+              <div class='spanHandle'>
+                <i class="el-icon-circle-plus-outline" @click='addNewRow(index)'></i>
+                <i class="el-icon-remove-outline" @click='removeRow(index)'></i>
+              </div>
+            </el-col>
+          </el-row>
+        </template>
+      </div>
+    </transition>
   </div>
 </template>
 
@@ -47,10 +55,10 @@ export default {
   },
   data () {
     return {
-      sapnHandle: 8,
+      spanHandle: 8,
       predictData: [],
-      // confKeys: [],
-      modelData: {}
+      modelData: {},
+      isShowAttrsConf: false
     }
   },
   computed: {
@@ -69,7 +77,7 @@ export default {
       let conf = confs[this.componentType] || []
       const confLen = conf.length
       const spanMax = 24
-      const spanDef = Math.floor((spanMax - this.sapnHandle) / Math.max(confLen, 1))
+      const spanDef = Math.floor((spanMax - this.spanHandle) / Math.max(confLen, 1))
       const defComponentConf = {
         type: 'input',
         bind: {
@@ -93,7 +101,6 @@ export default {
   },
   watch: {
     modelData:{
-      //handler (newVal, oldVal) {
       handler () {
         let data = this.modelData
         data.length = this.predictData.length
@@ -115,6 +122,7 @@ export default {
     },
     keyIndex: {
       handler () {
+        this.showAtrrsConf(true)
         const data = this.value || []
         this.modelData = {}
         this.predictData = data.map(item => {
@@ -126,6 +134,9 @@ export default {
     }
   },
   methods: {
+    showAtrrsConf (isShow= !this.isShowAttrsConf) {
+      this.isShowAttrsConf = isShow
+    },
     initData () {
       if (this.predictData.length <= 0) {
         this.addNewRow()
@@ -151,6 +162,7 @@ export default {
       this.modelData = modelRes
     },
     addNewRow (index = -1) {
+      this.showAtrrsConf(true)
       const newRow = {}
       this.conf.forEach(item => {
         const key = item.key
@@ -169,7 +181,7 @@ export default {
 
 <style lang="less">
 .special-attrs-conf{
-  .sapnHandle{
+  .spanHandle{
     i{
       display: inline-block;
       padding: 3px;
@@ -188,6 +200,21 @@ export default {
     border: 2px solid grey;
     box-shadow: 0 0 10px 2px grey;
     padding: 2px;
+  }
+  .show-attrs-conf{
+    i{
+      cursor: pointer;
+      transition: all 1s;
+    }
+    .show-attrs-conf-i{
+      transform: rotate(-90deg)
+    }
+  }
+  .attrs-fade-enter-active, .attrs-fade-leave-active {
+    transition: opacity 1s;
+  }
+  .attrs-fade-enter, .attrs-fade-leave-to{
+    opacity: 0;
   }
 }
 </style>
