@@ -167,6 +167,14 @@ export default {
         alert(err)
         return
       }
+      const bind = savedConf.bind || {}
+      let allowCreate = bind.allowCreate
+      const createObj = {
+        allowCreate,
+        filterable: allowCreate,
+        defaultFirstOption: allowCreate
+      }
+      savedConf.bind = Object.assign({}, savedConf.bind, createObj)
       this.$emit('saveComponent', this.index, savedConf)
     },
     test (test, val) {

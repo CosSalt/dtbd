@@ -163,6 +163,20 @@ const conf = [
       }
     }
   }, {
+    key: 'allowCreate',
+    default: false,
+    type: 'bind',
+    component: {
+      type: 'switch',
+      labelText: '允许新增',
+      bind: {
+        activeColor: '#13ce66',
+        activeIconClass: 'el-icon-check',
+        inactiveColor: '#c0c4cc',
+        inactiveIconClass: 'el-icon-close'
+      }
+    }
+  }, {
     key: 'disabled',
     type: 'bind',
     default: false,

@@ -1,7 +1,7 @@
 <template>
   <div class='form-select'>
     <label class='component-label' v-if='showLabel'>{{formData.labelText}}</label>
-    <el-select v-model='selectedVal' v-bind='formData.bind' clearable class='component-content' :loading="loading" @focus.self='selectFocus'>
+    <el-select v-model='selectedVal' v-bind='theFormBind' clearable class='component-content' :loading="loading" @focus.self='selectFocus'>
       <el-option
         v-for="(item, index) in optionData"
         v-bind='item || {}' :key='item.value || index'
@@ -50,15 +50,11 @@
           this.$emit('input', newVal)
         }
       },
-      theformBind () {
+      theFormBind () {
         return this.formData.bind || {}
       },
-      formBind () {
-        let {action, ...bind} = this.theformBind // eslint-disable-line
-        return bind
-      },
       formAction () {
-        const {action} = this.theformBind
+        const {action} = this.theFormBind
         return action
       }
     },

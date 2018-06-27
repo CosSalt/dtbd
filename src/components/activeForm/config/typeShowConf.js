@@ -6,6 +6,7 @@ const Placeholder = 'placeholder'
 const MultiConf = 'multiConf' // 多行
 const ChildConf = 'childConf' // 子项
 const Multiple = 'multiple' // 多选
+const AllowCreate = 'allowCreate' // 允许新增
 const Step = 'step'
 const Min = 'min'
 const Max = 'max'
@@ -16,10 +17,10 @@ const Rules = 'rules' // 校验规则
 // const Type = 'type'
 const showConfItems = {
   'radio': [ // 单选框
-    Text, Label, MultiConf, Disabled
+    Text, Label, Disabled, MultiConf
   ],
   'checkbox': [ // 多选框
-    Text, Label, MultiConf, Disabled
+    Text, Label, Disabled, MultiConf
   ],
   'input': [ // 输入框
     Placeholder, Disabled
@@ -28,7 +29,7 @@ const showConfItems = {
     Step, Min, Max, 'precision', Disabled
   ],
   'select': [ // 选择器
-    Multiple, ChildConf, Action, RelationIds, Disabled
+    Multiple, Action, RelationIds, Disabled, AllowCreate, ChildConf
   ],
   'cascader': [ // 级联选择器
     
