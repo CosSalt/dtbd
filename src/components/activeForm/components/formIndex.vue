@@ -6,6 +6,7 @@
     :componentType='componentType'
     :keyIndex='keyIndex'
     :showLabel='showLabel'
+    @getAction= 'getAction'
   />
 </template>
 
@@ -45,6 +46,14 @@ export default {
         alert(type + '组件错误, 请检查')
       }
       return defaultsDeep(this.formData, component)
+    }
+  },
+  methods: {
+    // blur (e) {
+    //   console.log('blur:', e)
+    // }
+    getAction (...args) {
+      this.$emit('getAction',...args)
     }
   }
 }

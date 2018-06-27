@@ -15,7 +15,7 @@
         @dragover.native='dragover'
         @drop.native='drop'
         class='form-design-content'
-        :layout = 'designData'
+        :layout.sync = 'designData'
         :isDraggable='true'
         :dragIndex.sync='dragIndex'
         :confIndex='confIndex'

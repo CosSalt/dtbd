@@ -181,7 +181,8 @@ const conf = [
       bind: {
         placeholder: 'url,异步加载数据,如/api/abc'
       }
-    }
+    },
+    type: 'bind'
   }, {
     key: 'relationIds',
     component: {

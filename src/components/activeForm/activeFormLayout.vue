@@ -22,6 +22,7 @@
                       :formData='item'
                       class='component-style'
                       :showLabel='showLabel'
+                      @getAction='getAction'
                     />
                   </el-form-item>
                 </el-col>
@@ -152,6 +153,37 @@ export default {
         return
       }
       this.$emit('setComponentConf', index, type)
+    },
+    getAction ([actionParam, reqOrg]) {
+      // const index = this.confIndex
+      const reqId = reqOrg.id
+      const {action, position} = actionParam
+      let relationIds = reqOrg.relationIds || []
+      relationIds = [...relationIds]
+      relationIds.push(reqId)
+      const theModel = this.formModel || {}
+      const param = {}
+      relationIds.forEach(key => {
+        param[key] = theModel[key]
+      })
+      this.$http.post(action, param).then(data => {
+        // console.log('data', data)
+        data = data || []
+        return data
+      }).catch(err => {
+        console.log('err', err) // eslint-disable-line
+        const data = []
+        return data
+      }).then(data => {
+        setTimeout(() => {
+          const newLayout = [...this.layout]
+          const confIndex = this.confIndex
+          newLayout[confIndex] = Object.assign({}, newLayout[confIndex], {
+            [position]: data
+          })
+          this.$emit('update:layout', newLayout)
+        }, 2000)
+      })
     }
   },
   created () {
