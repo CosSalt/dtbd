@@ -2,7 +2,7 @@
   <div class='special-attrs-conf'>
     <el-row>
       <el-col :span="4">
-        <div>配置: </div>
+        <div v-text='formData.labelText || "配置"'/>
       </el-col>
       <el-col :span="spanHandle">
         <div class='spanHandle'>
@@ -20,10 +20,10 @@
       <div class='attrs-conf-container' v-show='isShowAttrsConf'>
         <template v-for='(item, index) in predictData'>
           <el-row :key='"row" + index' class='attrs-conf-row'>
-            <el-col :span="24" v-for='(rowItem, i) in conf' :key='"column" + i'>
+            <el-col :span="24" v-for='(rowItem, i) in conf' :key='"column" + i' class='attrs-conf-col'>
               <formIndex v-model='modelData[index][rowItem.key]' :formData='rowItem.component'/>
             </el-col>
-            <el-col :span="spanHandle">
+            <el-col :span="spanHandle" class='attrs-conf-col'>
               <div class='spanHandle'>
                 <i class="el-icon-circle-plus-outline" @click='addNewRow(index)'></i>
                 <i class="el-icon-remove-outline" @click='removeRow(index)'></i>
@@ -86,7 +86,7 @@ export default {
       }
       conf = conf.map(dataItem => {
         let item = {...dataItem}
-        item.component = defaultsDeep({labelText: item.key}, defComponentConf, item.component)
+        item.component = defaultsDeep({...defComponentConf, labelText: item.key}, item.component)
         item.span = item.span || spanDef
         return item
       })
@@ -150,6 +150,7 @@ export default {
       const confKeys = this.confKeys
       const predictData = this.predictData
       const oldModelData = this.modelData
+      const conf = this.conf
       for (let [index, item] of predictData.entries()) {
         modelRes[index] = {}
         const keyIndex = changeIndex + AmendmentNum
@@ -174,6 +175,10 @@ export default {
     removeRow (index) {
       this.predictData.splice(index ,1)
       this.handleModle(index, false)
+    },
+    test (a) {
+      // console.log('a', a)
+      return a
     }
   }
 }
@@ -200,6 +205,9 @@ export default {
     border: 2px solid grey;
     box-shadow: 0 0 10px 2px grey;
     padding: 2px;
+    .attrs-conf-col{
+      padding: 2px;
+    }
   }
   .show-attrs-conf{
     i{

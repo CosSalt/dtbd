@@ -50,10 +50,6 @@
           this.$emit('input', newVal)
         }
       },
-      // childrenOptions () {
-      //   const child = this.formData.childConf || []
-      //   return [...child]
-      // },
       theformBind () {
         return this.formData.bind || {}
       },
@@ -78,7 +74,6 @@
     },
     methods:{
       selectFocus () {
-        // console.log('start')
         const url = this.formAction
         if (url) {
           this.setLoading(true)

@@ -12,6 +12,7 @@ const Max = 'max'
 const LabelText = 'labelText'
 const Action = 'action' // 异步获取数据 Api
 const RelationIds = 'relationIds' // 异步获取数据关联ID
+const Rules = 'rules' // 校验规则
 // const Type = 'type'
 const showConfItems = {
   'radio': [ // 单选框
@@ -70,8 +71,11 @@ for (let [key, item] of Object.entries(showConfItems)) {
     if(item.findIndex(val => val === Disabled) < 0) {
       item.push(Disabled)
     }
+    if(item.findIndex(val => val === Rules) < 0) {
+      item.push(Rules)
+    }
   } else {
-    showConfItems[key] = [ID, LabelText, Disabled]
+    showConfItems[key] = [ID, LabelText, Disabled, Rules]
   }
 }
 

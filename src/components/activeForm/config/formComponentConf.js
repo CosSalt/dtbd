@@ -1,4 +1,6 @@
 import {defaultsDeep} from '@/utils'
+import rulesConf from './rulesConf'
+
 const conf = [
   {
     key: 'id',
@@ -194,6 +196,32 @@ const conf = [
       childConf: [{
         // label:'请先设置ID', value: 'null', disabled: true
       }]
+    }
+  }, {
+    key: 'rules',
+    component: {
+      type: 'attrsConf',
+      labelText: '校验',
+      bind: {
+        conf: rulesConf
+      }
+    },
+    test: {
+      validator: (val) => {
+        let err = null
+        if(!val) return val
+        if (!Array.isArray(val)) {
+          err = '必须为数组'
+        } else if (val.length > 0) {
+          for (let item of val) {
+            if (typeof item !== 'object' || item == null) {
+              err = '数组内必须为对象'
+              break
+            }
+          }
+        }
+        return err
+      }
     }
   }
 ]

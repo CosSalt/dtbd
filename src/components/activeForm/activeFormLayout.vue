@@ -1,7 +1,11 @@
 <template>
   <div class='active-form-layout'>
     <div class='form-content'>
-        <el-form ref="formLayout" :model="formModel" :inline="true" :labelPosition='labelPosition'>
+        <el-form ref="formLayout"
+          :model="formModel"
+          :inline="true"
+          :labelPosition='labelPosition'
+        >
           <template v-for='(layoutItem, i) in theLayoutData'>
             <el-row :key='"row" + i'>
               <template v-for='(item, index) in layoutItem'>
@@ -16,7 +20,7 @@
                   class='active-form-row'
                   :class = 'confIndex === item.index ? "component-conf" : ""'
                 >
-                  <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth'>
+                  <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' :rules="formRules[item.id]">
                     <formIndex
                       v-model='formModel[item.id]'
                       :formData='item'
@@ -102,6 +106,18 @@ export default {
         res[ResMaxIndex].push(item)
       })
       return res
+    },
+    formRules () {
+      const rules = {}
+      this.layout.forEach(item => {
+        let id = item.id
+        let itemRules = item.rules
+        if(id && Array.isArray(itemRules) && itemRules.length > 0) {
+          rules[id] = itemRules
+        }
+      })
+      window.x = rules
+      return rules
     }
   },
   methods: {
@@ -167,7 +183,6 @@ export default {
         param[key] = theModel[key]
       })
       this.$http.post(action, param).then(data => {
-        // console.log('data', data)
         data = data || []
         return data
       }).catch(err => {
