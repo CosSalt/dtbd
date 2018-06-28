@@ -25,6 +25,9 @@ const showConfItems = {
   'input': [ // 输入框
     Placeholder, Disabled
   ],
+  'inputArea': [ // 文本框
+    Placeholder, Disabled
+  ],
   'inputNumber': [ // 计数器
     Step, Min, Max, 'precision', Disabled
   ],

@@ -9,6 +9,10 @@ const components = {
     // component: 'formCommon',
     baseCompoent: 'el-input' // formCommon 内部会调用 baseCompoent
   },
+  'inputArea': { // 文本框
+    // component: 'formCommon',
+    baseCompoent: 'el-input' // formCommon 内部会调用 baseCompoent
+  },
   'inputNumber': { // 计数器
     baseCompoent: 'el-input-number'
   },

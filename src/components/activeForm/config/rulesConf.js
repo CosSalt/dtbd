@@ -1,5 +1,3 @@
-// import {defaultsDeep} from '@/utils'
-
 const required = () => ({ // 是否必填
   key: 'required',
   default: false,
@@ -71,6 +69,9 @@ let componentsRules = {
 
   ],
   input: [ // 输入框
+
+  ],
+  inputArea: [ // 文本框
 
   ],
   inputNumber: [ // 计数器

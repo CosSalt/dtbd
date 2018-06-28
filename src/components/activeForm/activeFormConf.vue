@@ -12,7 +12,10 @@
       </li>
     </ul>
     <el-row style='text-align:center;'>
-      <el-button type="primary" size="mini" @click='saveConf'>保存</el-button>
+      <el-button type="primary" size="mini" @click='saveConf'
+        element-loading-text="保存中"
+        element-loading-spinner="el-icon-loading"
+      >保存</el-button>
       <el-button type="warning" size="mini" @click='delConf'>删除</el-button>
     </el-row>
   </div>

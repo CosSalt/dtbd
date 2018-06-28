@@ -26,6 +26,14 @@ let componentsConf = [
       placeholder: '请输入内容'
     }
   }, {
+    type: 'inputArea',
+    name: '文本框',
+    labelText: '文本框：',
+    bind: {
+      type: 'textarea',
+      placeholder: '请文本内容'
+    }
+  }, {
     type: 'inputNumber',
     name: '计数器',
     labelText: '计数器：'
