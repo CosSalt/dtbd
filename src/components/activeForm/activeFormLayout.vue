@@ -8,10 +8,10 @@
         >
           <template v-for='(layoutItem, i) in theLayoutData'>
             <el-row :key='"row" + i'>
-              <template v-for='(item, index) in layoutItem'>
+              <template v-for='item in layoutItem'>
                 <el-col
                   :span='item.span'
-                  :key='item.type + index'
+                  :key='item.id'
                   :draggable='isDraggable'
                   @dragstart.native='dragstart(item.index, $event)'
                   @dragover.native='dragover(item.index, $event)'

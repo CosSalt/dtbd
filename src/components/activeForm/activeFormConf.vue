@@ -9,22 +9,8 @@
           :componentType='componentType'
           :keyIndex='index'
         />
-        <!-- :key='getKey(index, i)' -->
       </li>
     </ul>
-
-        <!-- <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
-          <el-button type='primary' size='mini' @click.native='saveDesign(data)'
-            v-loading.fullscreen="loading"
-            element-loading-text="拼命保存中"
-            element-loading-spinner="el-icon-loading">
-              保存
-            </el-button>
-          <el-button type='info' size='mini' @click.native='clearDesign'>清空</el-button>
-        </el-row> -->
-
-
-
     <el-row style='text-align:center;'>
       <el-button type="primary" size="mini" @click='saveConf'>保存</el-button>
       <el-button type="warning" size="mini" @click='delConf'>删除</el-button>
@@ -108,7 +94,7 @@ export default {
       this.confModel = {}
       this.initConfModel()
     },
-    typeData (newVal) {
+    typeData (newVal = {}) {
       this.componentType = newVal.type
     }
   },

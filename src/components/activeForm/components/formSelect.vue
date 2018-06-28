@@ -33,12 +33,13 @@
     computed: {
       theValue () {
         const {bind:{multiple}} = this.formData
-        const value = this.value
+        // console.log('this.formData', this.formData)
+        const val = this.value
         let newVal
         if(multiple) {
-          newVal = Array.isArray(value) ? value : []
+          newVal = Array.isArray(val) ? val : []
         } else {
-          newVal = value === undefined ? null : value
+          newVal = val === undefined ? null : val
         }
         return newVal
       },
