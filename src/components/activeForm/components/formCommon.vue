@@ -1,6 +1,6 @@
 <template>
 <div class='common-component'>
-  <label class='component-label' v-if='showLabel'>{{formData.labelText}}</label>
+  <label class='component-label' v-if='showLabel'><label v-if='formData.test' style='color:red;'>*</label>{{formData.labelText}}</label>
   <component :is="formData.baseCompoent" v-model='commonVal' v-bind='getBind(formData)' class='component-content'/>
 </div> 
 </template>
@@ -42,7 +42,7 @@ export default {
   .component-label {
     display: inline-block;
   }
-  .component-content{
+  .component-content {
     display: inline-block;
   }
 }

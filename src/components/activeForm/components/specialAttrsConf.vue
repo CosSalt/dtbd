@@ -6,7 +6,7 @@
       </el-col>
       <el-col :span="spanHandle">
         <div class='spanHandle'>
-          <i class="el-icon-circle-plus-outline" @click='addNewRow()'></i>
+          <i class="el-icon-circle-plus-outline" @click='addNewRow()' title='新增'></i>
         </div>
       </el-col>
       <el-col :span="24 - 4 - spanHandle" style='text-align:right;' class='show-attrs-conf'>
@@ -25,8 +25,8 @@
             </el-col>
             <el-col :span="spanHandle" class='attrs-conf-col'>
               <div class='spanHandle'>
-                <i class="el-icon-circle-plus-outline" @click='addNewRow(index)'></i>
-                <i class="el-icon-remove-outline" @click='removeRow(index)'></i>
+                <i class="el-icon-circle-plus-outline" @click='addNewRow(index)' title='新增'></i>
+                <i class="el-icon-remove-outline" @click='removeRow(index)' title='删除'></i>
               </div>
             </el-col>
           </el-row>
