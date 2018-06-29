@@ -13,14 +13,12 @@
     </ul>
     <el-row style='text-align:center;'>
       <el-button type="primary" size="mini" @click='saveConf'
-        element-loading-text="保存中..."
         :loading="confSaveLoading"
         element-loading-spinner="el-icon-loading"
       >
         保存
       </el-button>
       <el-button type="warning" size="mini" @click='delConf'
-        element-loading-text="删除中..."
         :loading="confDelLoading"
         element-loading-spinner="el-icon-loading"
       >
@@ -36,6 +34,9 @@ import componentConf from './config/formComponentConf'
 import typeShowConf from './config/typeShowConf'
 export default {
   name: 'activeFormConf',
+  beforeCreate () {
+    this.$allData = componentConf
+  },
   props: {
     show: {
       type: Boolean,
@@ -140,7 +141,7 @@ export default {
       this.$emit('update:show', show)
     },
     saveConf () {
-      this.setSaveLoading(true)
+      // this.setSaveLoading(true)
       const allData = this.$allData
       let err = null
       const savedConf = {}
@@ -209,9 +210,6 @@ export default {
     getKey (rowIndex , columnIndex) {
       return "row_" + rowIndex + "_column_" + columnIndex
     }
-  },
-  beforeCreate () {
-    this.$allData = componentConf
   }
 }
 </script>

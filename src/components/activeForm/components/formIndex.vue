@@ -49,9 +49,6 @@ export default {
     }
   },
   methods: {
-    // blur (e) {
-    //   console.log('blur:', e)
-    // }
     getAction (...args) {
       this.$emit('getAction',...args)
     }

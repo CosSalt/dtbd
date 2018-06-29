@@ -15,7 +15,7 @@
                   :draggable='isDraggable'
                   @dragstart.native='dragstart(item.index, $event)'
                   @dragover.native='dragover(item.index, $event)'
-                  @drop.native='drop'
+                  @drop.native.stop='drop'
                   @click.native='defComponent(item.index, item.type)'
                   class='active-form-row'
                   :class = 'confIndex === item.index ? "component-conf" : ""'
@@ -30,7 +30,6 @@
                     />
                   </el-form-item>
                 </el-col>
-                <!-- </el-form-item> -->
               </template>
             </el-row>
           </template>
@@ -41,6 +40,7 @@
 </template>
 <script>
 import componentsConf from './config'
+import { getTempId } from '@/utils'
 export default {
   name: 'activeFormLayout',
   props: {
@@ -122,7 +122,7 @@ export default {
   },
   methods: {
     tempId (id, index) {
-      return id || ("$_temp_id_" + index) // 临时 ID
+      return id || getTempId(index, 'layout') // 临时 ID
     },
     //init receiveData
     initformModel(data = {}) {

@@ -4,7 +4,7 @@
       <div class='form-design-title'> 控件区 </div>
       <ul class='form-components-orgin'>
         <template v-for='item in $formItemTypes'>
-          <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item.type, $event)'>
+          <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item)'>
             <formIndex :formData='item' class='component-design-style' />
           </li>
         </template>
@@ -61,7 +61,7 @@ export default {
     return {
       designData: [],
       dragIndex: -1,
-      dragType: '',
+      dragItem: '',
       confIndex: -1, // 配置信息的组件下标
       showConf: false,
       loading: false
@@ -79,10 +79,10 @@ export default {
     }
   },
   methods: {
-    dragstart (type) {
+    dragstart (componentItem) {
       this.dragIndex = -1
       // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
-      this.dragType = type
+      this.dragItem = componentItem
     },
     dragover (e) {
       // ondragover 事件规定在何处放置被拖动的数据
@@ -93,9 +93,7 @@ export default {
     drop (e) {
       // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
       e.preventDefault()
-      const type = this.dragType
-      if (!type) return
-      const item = this.$formItemTypes.find(item => item.type === type)
+      const item = this.dragItem
       if (!item) return
       const newItem = defaultsDeep({}, item)
       if (this.dragIndex >= 0) {
@@ -103,7 +101,7 @@ export default {
       } else {
         this.designData.push(newItem)
       }
-      this.dragType = ''
+      this.dragItem = ''
     },
     changePosition (from, to) { // 改变表单组件位置
       const data = this.designData
