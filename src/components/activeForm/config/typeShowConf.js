@@ -1,3 +1,4 @@
+import { allComponentTypes } from './typeToComponent'
 const ID = 'id'
 const Text = 'text'
 const Label = 'label'
@@ -65,7 +66,9 @@ const showConfItems = {
     
   ]
 }
-for (let [key, item] of Object.entries(showConfItems)) {
+
+for (let key of allComponentTypes) {
+  let item = showConfItems[key]
   if (item) {
     if (item.findIndex(val => val === ID) < 0){
       item.unshift(ID, LabelText)

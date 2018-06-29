@@ -5,6 +5,7 @@ const required = () => ({ // 是否必填
     type: 'switch'
   }
 })
+import { allComponentTypes } from './typeToComponent'
 
 const message = () =>({ // 提示信息
   key: 'message',
@@ -112,9 +113,16 @@ let componentsRules = {
   ]
 }
 
-
-for(let item of Object.values(componentsRules)) {
-  item.push(message(), required(), trigger())
+const defRulesSet = () => {
+  return [
+    message(), required(), trigger()
+  ]
 }
+
+allComponentTypes.forEach(key => {
+  let item = componentsRules[key] || []
+  item.push(...defRulesSet())
+  componentsRules[key] = item
+})
 
 export default componentsRules

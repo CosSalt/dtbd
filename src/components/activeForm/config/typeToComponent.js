@@ -58,9 +58,14 @@ const components = {
     component: 'specialAttrsConf'
   }
 }
-for (let item of Object.values(components)) {
+const allTypes = []
+for (let [key, item] of Object.entries(components)) {
+  allTypes.push(key)
   if (!item.component) {
     item.component = 'formCommon'
   }
+}
+export {
+  allTypes as allComponentTypes
 }
 export default components
