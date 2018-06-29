@@ -13,9 +13,11 @@ const message = () =>({ // 提示信息
     type: 'inputArea',
     bind: {
       placeholder: '请输入错误提示信息'
+    },
+    rules: {
+      required: true
     }
-  },
-  required: true
+  }
 })
 
 const trigger = () => ({ //触发类型
@@ -27,9 +29,11 @@ const trigger = () => ({ //触发类型
       { label:'选择触发器类型', value: 'null', disabled: true},
       { label:'blur', value: 'blur'},
       { label:'change', value: 'change'}
-    ]
-  },
-  required: true
+    ],
+    rules: {
+      required: true
+    }
+  }
 })
 
 const min = () => ({

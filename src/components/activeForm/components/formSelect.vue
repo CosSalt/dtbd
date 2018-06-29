@@ -1,6 +1,6 @@
 <template>
   <div class='form-select'>
-    <label class='component-label' v-if='showLabel'><label v-if='formData.required' style='color:red;'>*</label>{{formData.labelText}}</label>
+    <label class='component-label' v-if='showLabel'><label v-if='formData.rules' style='color:red;'>*</label>{{formData.labelText}}</label>
     <el-select v-model='selectedVal' v-bind='theFormBind' clearable class='component-content' :loading="loading" @focus.self='selectFocus'>
       <el-option
         v-for="(item, index) in optionData"
@@ -33,7 +33,6 @@
     computed: {
       theValue () {
         const {bind:{multiple}} = this.formData
-        // console.log('this.formData', this.formData)
         const val = this.value
         let newVal
         if(multiple) {

@@ -8,12 +8,12 @@ const conf = [
       labelText: 'ID: ',
       bind: {
         placeholder: '请输入以字母 _ $ 开头的ID'
+      },
+      rules: {
+        reg: /^[a-zA-Z_$][a-zA-Z_$\d]*$/,
+        err: '只能以字母 _ $ 开头, 后面可包含数字',
+        required: true
       }
-    },
-    test: {
-      reg: /^[a-zA-Z_$][a-zA-Z_$\d]*$/,
-      err: '只能以字母 _ $ 开头, 后面可包含数字',
-      required: true
     }
   }, {
     key: 'labelText',
@@ -21,10 +21,10 @@ const conf = [
       labelText: 'LabelText: ',
       bind: {
         placeholder: '提示文字'
+      },
+      rules: {
+        required: true
       }
-    },
-    test: {
-      required: true
     }
   },{
     key: 'text',
@@ -41,10 +41,10 @@ const conf = [
       labelText: 'label: ',
       bind: {
         placeholder: '必填'
+      },
+      rules: {
+        required: true
       }
-    },
-    test: {
-      required: true
     }
   }, {
     key: 'size',
@@ -73,16 +73,20 @@ const conf = [
             {
               key: 'label',
               component: {
-                type: 'input'
-              },
-              required: true,
+                type: 'input',
+                rules: {
+                  required: true
+                }
+              }
             }, {
               key: 'text',
               component: {
                 type: 'input',
-                text: 'text'
+                text: 'text',
+                rules: {
+                  required: true
+                }
               },
-              required: true
               // default: '123'
             }
           ],
@@ -90,36 +94,40 @@ const conf = [
             {
               key: 'label',
               component: {
-                type: 'input'
-              },
-              required: true
+                type: 'input',
+                rules: {
+                  required: true
+                }
+              }
             }, {
               key: 'text',
               component: {
                 type: 'input',
-                text: 'text'
-              },
-              required: false
+                text: 'text',
+                rules: {
+                  required: true
+                }
+              }
             }
           ]
         }
-      }
-    },
-    test: {
-      validator: (val) => {
-        let err = null
-        if(!val) return val
-        if (!Array.isArray(val)) {
-          err = '必须为数组'
-        } else if (val.length > 0) {
-          for (let item of val) {
-            if (typeof item !== 'object' || item == null) {
-              err = '数组内必须为对象'
-              break
+      },
+      rules: {
+        validator: (val) => {
+          let err = null
+          if(!val) return val
+          if (!Array.isArray(val)) {
+            err = '必须为数组'
+          } else if (val.length > 0) {
+            for (let item of val) {
+              if (typeof item !== 'object' || item == null) {
+                err = '数组内必须为对象'
+                break
+              }
             }
           }
+          return err
         }
-        return err
       }
     }
   }, {
@@ -135,14 +143,18 @@ const conf = [
               component: {
                 type: 'input'
               },
-              required: true,
+              rules: {
+                required: true
+              }
             }, {
               key: 'value',
               component: {
                 type: 'input',
                 labelText: 'value'
               },
-              required: true
+              rules: {
+                required: true
+              }
             }
           ]
         }
@@ -218,23 +230,23 @@ const conf = [
       labelText: '校验',
       bind: {
         conf: rulesConf
-      }
-    },
-    test: {
-      validator: (val) => {
-        let err = null
-        if(!val) return val
-        if (!Array.isArray(val)) {
-          err = '必须为数组'
-        } else if (val.length > 0) {
-          for (let item of val) {
-            if (typeof item !== 'object' || item == null) {
-              err = '数组内必须为对象'
-              break
+      },
+      rules: {
+        validator: (val) => {
+          let err = null
+          if(!val) return val
+          if (!Array.isArray(val)) {
+            err = '必须为数组'
+          } else if (val.length > 0) {
+            for (let item of val) {
+              if (typeof item !== 'object' || item == null) {
+                err = '数组内必须为对象'
+                break
+              }
             }
           }
+          return err
         }
-        return err
       }
     }
   }

@@ -37,12 +37,9 @@
 </template>
 
 <script>
-// import formIndex from './formIndex'
 import {defaultsDeep} from '@/utils'
-import componentsConf from '../config'
 export default {
   name:'specialAttrsConf',
-  // component: {formIndex},
   props: {
     value: null,
     formData: {
@@ -88,9 +85,7 @@ export default {
       conf = conf.map(dataItem => {
         let item = {...dataItem}
         let itemComponent = item.component || {}
-        let type = itemComponent.type
-        let indexComponent = componentsConf.find(item => type === item.type)
-        item.component = defaultsDeep(itemComponent, {...defComponentConf, labelText: item.key}, indexComponent)
+        item.component = defaultsDeep({...defComponentConf, labelText: item.key}, itemComponent)
         item.span = item.span || spanDef
         return item
       })

@@ -13,6 +13,7 @@
 <script>
 import {defaultsDeep} from '@/utils'
 import typeToComponent from '../config/typeToComponent.js'
+import componentsConf from '../config'
 export default {
   name: 'formIndex',
   props:{
@@ -42,10 +43,11 @@ export default {
     item () {
       const type = this.formData.type
       const component = typeToComponent[type]
+      const componentConf = componentsConf.find(item => type === item.type)
       if (!component) {
         alert(type + '组件错误, 请检查')
       }
-      return defaultsDeep(this.formData, component)
+      return defaultsDeep(defaultsDeep(component, componentConf), this.formData)
     }
   },
   methods: {

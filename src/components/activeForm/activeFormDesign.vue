@@ -94,6 +94,7 @@ export default {
       // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
       e.preventDefault()
       const item = this.dragItem
+      this.dragItem = ''
       if (!item) return
       const newItem = defaultsDeep({}, item)
       if (this.dragIndex >= 0) {
@@ -101,7 +102,6 @@ export default {
       } else {
         this.designData.push(newItem)
       }
-      this.dragItem = ''
     },
     changePosition (from, to) { // 改变表单组件位置
       const data = this.designData

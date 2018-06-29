@@ -1,6 +1,6 @@
 <template>
 <div class='common-component'>
-  <label class='component-label' v-if='showLabel'><label v-if='formData.test' style='color:red;'>*</label>{{formData.labelText}}</label>
+  <label class='component-label' v-if='showLabel'><label v-if='formData.rules' style='color:red;'>*</label>{{formData.labelText}}</label>
   <el-cascader v-model='commonVal' v-bind='getBind(formData)' class='component-content'/>
 </div> 
 </template>

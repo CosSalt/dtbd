@@ -148,7 +148,7 @@ export default {
       for (let [key, val] of Object.entries(this.confModel)) {
         const theData = allData.find(item => item.key === key) || {}
         const type = theData.type
-        err = this.test(theData.test, val)
+        err = this.test(theData.component, val)
         if (err) {
           err = theData.component.labelText + err
           break
@@ -182,7 +182,8 @@ export default {
     setDelLoading(loading = false) {
       this.confDelLoading = loading
     },
-    test (test, val) {
+    test (component, val) {
+      const test = component.rules
       let err = null
       if (test) {
         if (test.required === true) {
@@ -197,6 +198,24 @@ export default {
         }
         if(!err && test.validator) {
           err = test.validator(val)
+        }
+      }
+      // if(!err) {
+      //   err = this.confTest(component, val)
+      // }
+      return err
+    },
+    confTest (component, valArr = []) {
+      let err = null
+      if(component.bind && component.bind.conf) {
+        const childrenComponent = component.bind.conf[this.componentType]
+        if(!Array.isArray(valArr) || valArr.length <= 0 ) return null
+        for (let childComponent of childrenComponent) {
+          for(let item of valArr) {
+            err = this.test(childComponent, item[childComponent.key])
+            if(err) break
+          }
+          if(err) break
         }
       }
       return err
