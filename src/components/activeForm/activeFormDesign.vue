@@ -208,14 +208,11 @@ export default {
           }
         }
       }
-      return {
-        res: err.length < 0,
-        err
-      }
+      return err
     },
     saveData (data = []) {
-      const {res, err = []} = this.checkDesignData(data)
-      if (!res) {
+      const err = this.checkDesignData(data)
+      if (err.length > 0) {
         alert(err.join('\n'))
         return
       }
