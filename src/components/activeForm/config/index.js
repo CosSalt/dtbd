@@ -31,7 +31,7 @@ let componentsConf = [
     labelText: '文本框：',
     bind: {
       type: 'textarea',
-      placeholder: '请文本内容'
+      placeholder: '请输入文本内容'
     }
   }, {
     type: 'inputNumber',
@@ -113,14 +113,16 @@ let componentsConf = [
     name: '日期选择器',
     labelText: '日期选择器',
     bind: {
-      placeholder: '选择日期'
+      placeholder: '选择日期',
+      type: 'date'
     }
   }, {
     type: 'dateTimePicker',
     name: '日期时间选择器',
     labelText: '日期时间选择器',
     bind: {
-      placeholder: '选择时间日期'
+      placeholder: '选择时间日期',
+      type: 'datetime'
     }
   }, {
     type: 'upload',
@@ -157,7 +159,7 @@ const defProps = {
 }
 
 componentsConf = componentsConf.map(item => {
-  return defaultsDeep(defProps, item)
+  return defaultsDeep(item, defProps)
 })
 
 export default componentsConf.filter(item => item.disabled !== true)

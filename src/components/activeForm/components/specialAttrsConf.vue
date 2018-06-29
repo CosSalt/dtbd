@@ -37,11 +37,12 @@
 </template>
 
 <script>
-import formIndex from './formIndex'
+// import formIndex from './formIndex'
 import {defaultsDeep} from '@/utils'
+import componentsConf from '../config'
 export default {
   name:'specialAttrsConf',
-  component: {formIndex},
+  // component: {formIndex},
   props: {
     value: null,
     formData: {
@@ -86,7 +87,10 @@ export default {
       }
       conf = conf.map(dataItem => {
         let item = {...dataItem}
-        item.component = defaultsDeep({...defComponentConf, labelText: item.key}, item.component)
+        let itemComponent = item.component || {}
+        let type = itemComponent.type
+        let indexComponent = componentsConf.find(item => type === item.type)
+        item.component = defaultsDeep(itemComponent, {...defComponentConf, labelText: item.key, ...indexComponent})
         item.span = item.span || spanDef
         return item
       })
@@ -150,7 +154,7 @@ export default {
       const confKeys = this.confKeys
       const predictData = this.predictData
       const oldModelData = this.modelData
-      const conf = this.conf
+      // const conf = this.conf
       for (let [index, item] of predictData.entries()) {
         modelRes[index] = {}
         const keyIndex = changeIndex + AmendmentNum

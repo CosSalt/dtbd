@@ -31,16 +31,10 @@ const components = {
     baseCompoent: 'el-time-select'
   },
   'datePicker': { // 日期选择器
-    bind: {
-      type: 'date'
-    },
     baseCompoent: 'el-date-picker'
   },
   'dateTimePicker': { // 日期时间选择器
     baseCompoent: 'el-date-picker',
-    bind: {
-      type: 'datetime'
-    }
   },
   'upload': { // 上传
     baseCompoent: 'el-upload'

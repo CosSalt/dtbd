@@ -10,10 +10,9 @@ import { allComponentTypes } from './typeToComponent'
 const message = () =>({ // 提示信息
   key: 'message',
   component: {
-    type: 'input',
+    type: 'inputArea',
     bind: {
-      placeholder: '请输入错误提示信息',
-      type: 'textarea'
+      placeholder: '请输入错误提示信息'
     }
   },
   required: true
