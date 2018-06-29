@@ -80,8 +80,7 @@ let componentsConf = [
           }]
         }]
       }
-    ]},
-    disabled: true
+    ]}
   }, {
     type: 'switch',
     name: '开关',
@@ -151,15 +150,14 @@ let componentsConf = [
 ]
 // 默认的属性
 const defProps = {
-  // data: {},
-  multi: false, // 多行,如radio,checkbox
+  type: 'input',
   bind: {
     size: 'mini'
   }
 }
 
 componentsConf = componentsConf.map(item => {
-  return defaultsDeep(item, defProps)
+  return defaultsDeep(defProps, item)
 })
 
 export default componentsConf.filter(item => item.disabled !== true)

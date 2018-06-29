@@ -4,7 +4,8 @@ import formCommon from '../components/formCommon.vue'
 import formSelect from '../components/formSelect.vue'
 import formIndex from '../components/formIndex'
 import specialAttrsConf from '../components/specialAttrsConf'
+import formCascader from '../components/formCascader'
 
 export {
-  formRadio, formCheckbox, formCommon, formSelect, formIndex, specialAttrsConf
+  formRadio, formCheckbox, formCommon, formSelect, formIndex, specialAttrsConf, formCascader
 }

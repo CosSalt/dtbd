@@ -15,7 +15,7 @@
                   :draggable='isDraggable'
                   @dragstart.native='dragstart(item.index, $event)'
                   @dragover.native='dragover(item.index, $event)'
-                  @drop.native.stop='drop'
+                  @drop.native='drop'
                   @click.native='defComponent(item.index, item.type)'
                   class='active-form-row'
                   :class = 'confIndex === item.index ? "component-conf" : ""'

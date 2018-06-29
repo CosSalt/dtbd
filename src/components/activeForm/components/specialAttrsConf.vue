@@ -90,7 +90,7 @@ export default {
         let itemComponent = item.component || {}
         let type = itemComponent.type
         let indexComponent = componentsConf.find(item => type === item.type)
-        item.component = defaultsDeep(itemComponent, {...defComponentConf, labelText: item.key, ...indexComponent})
+        item.component = defaultsDeep(itemComponent, {...defComponentConf, labelText: item.key}, indexComponent)
         item.span = item.span || spanDef
         return item
       })
