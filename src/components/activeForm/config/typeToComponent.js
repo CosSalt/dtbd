@@ -19,7 +19,7 @@ const components = {
     component: 'formSelect'
   },
   'cascader': { // 级联选择器
-    baseCompoent: 'el-cascader'
+    component: 'formCascader'
   },
   'switch': { // 开关
     baseCompoent: 'el-switch'
