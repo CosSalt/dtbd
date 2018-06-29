@@ -57,7 +57,6 @@ export default {
   },
   data () {
     return {
-      allData: [],
       attrConf: [],
       componentType: null,
       confModel: {},
@@ -67,7 +66,7 @@ export default {
   },
   computed: {
     confData () {
-      const allData = this.allData || []
+      const allData = this.$allData
       const TheType = this.typeData.type
       const showConf = typeShowConf[TheType] || []
       let data = []
@@ -137,15 +136,12 @@ export default {
     defDeep (...args){
       return defaultsDeep(...args)
     },
-    initAllData () {
-      return componentConf
-    },
     clickShow (show = false) {
       this.$emit('update:show', show)
     },
     saveConf () {
       this.setSaveLoading(true)
-      const allData = this.allData
+      const allData = this.$allData
       let err = null
       const savedConf = {}
       for (let [key, val] of Object.entries(this.confModel)) {
@@ -214,8 +210,8 @@ export default {
       return "row_" + rowIndex + "_column_" + columnIndex
     }
   },
-  created () {
-    this.allData = this.initAllData()
+  beforeCreate () {
+    this.$allData = componentConf
   }
 }
 </script>

@@ -3,7 +3,7 @@
     <div class='form-components'>
       <div class='form-design-title'> 控件区 </div>
       <ul class='form-components-orgin'>
-        <template v-for='item in formItemTypes'>
+        <template v-for='item in $formItemTypes'>
           <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item.type, $event)'>
             <formIndex :formData='item' class='component-design-style' />
           </li>
@@ -54,9 +54,11 @@ import activeFormConf from './activeFormConf.vue'
 export default {
   name: 'activeFormDesign',
   components: {activeFormLayout, activeFormConf},
+  beforeCreate () {
+    this.$formItemTypes = componentsConf
+  },
   data () {
     return {
-      formItemTypes: componentsConf,
       designData: [],
       dragIndex: -1,
       dragType: '',
@@ -93,7 +95,7 @@ export default {
       e.preventDefault()
       const type = this.dragType
       if (!type) return
-      const item = this.formItemTypes.find(item => item.type === type)
+      const item = this.$formItemTypes.find(item => item.type === type)
       if (!item) return
       const newItem = defaultsDeep({}, item)
       if (this.dragIndex >= 0) {
