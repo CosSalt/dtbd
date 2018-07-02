@@ -1,7 +1,7 @@
 <template>
   <div class='active-form-design'>
     <div class='form-components'>
-      <div class='form-design-head'> 控件区0000000000000 </div>
+      <div class='form-design-head'> 控件区</div>
       <div>
         <template v-for='(designItem, index) in designs'>
           <div class='form-design-class' :key='designItem.id' v-if='designItem.components && designItem.components.length > 0'>
@@ -40,16 +40,6 @@
             </div>
           </div>
         </template>
-      </div>
-      <div class='form-design-head' v-if='false'> 控件区 </div>
-      <div v-if='false'>
-        <ul class='form-components-orgin'>
-          <template v-for='item in $formItemTypes'>
-            <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item)'>
-              <formIndex :formData='item' class='component-design-style' />
-            </li>
-          </template>
-        </ul>
       </div>
     </div>
     <div class='form-design-container'>
