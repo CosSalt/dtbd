@@ -49,11 +49,12 @@
 <script>
 import {defaultsDeep} from '@/utils'
 import componentsConf from './config'
-import activeFormLayout from './activeFormLayout'
-import activeFormConf from './activeFormConf.vue'
+// import activeFormLayout from './activeFormLayout'
+import activeFormConf from './activeFormConf'
 export default {
   name: 'activeFormDesign',
-  components: {activeFormLayout, activeFormConf},
+  // components: {activeFormLayout, activeFormConf},
+  components: {activeFormConf},
   beforeCreate () {
     this.$formItemTypes = componentsConf
   },

@@ -182,7 +182,7 @@ export default {
     setDelLoading(loading = false) {
       this.confDelLoading = loading
     },
-    test (component, val) {
+    test (component, val) { // 校验
       const test = component.rules
       let err = null
       if (test) {

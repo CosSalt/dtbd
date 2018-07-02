@@ -6,6 +6,8 @@ import formIndex from '../components/formIndex'
 import specialAttrsConf from '../components/specialAttrsConf'
 import formCascader from '../components/formCascader'
 
+import activeFormLayout from '../activeFormLayout'
+
 export {
-  formRadio, formCheckbox, formCommon, formSelect, formIndex, specialAttrsConf, formCascader
+  formRadio, formCheckbox, formCommon, formSelect, formIndex, specialAttrsConf, formCascader, activeFormLayout
 }

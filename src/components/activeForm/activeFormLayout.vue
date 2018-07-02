@@ -199,6 +199,13 @@ export default {
           this.$emit('update:layout', newLayout)
         }, 2000)
       })
+    },
+    clearModel () {
+      const emptyModel = {}
+      for (let key of Object.keys(this.formModel)) {
+        emptyModel[key] = null
+      }
+      this.formModel = emptyModel
     }
   },
   created () {
