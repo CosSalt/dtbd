@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class='form-design-container'>
+    <div class='form-demo-container'>
       <activeFormLayout
         :layout = 'layout'
         :isDraggable='false'
@@ -50,7 +50,10 @@ export default {
 </script>
 
 <style lang="less">
-
+.form-demo-container {
+  width: 50%;
+  border: 1px solid grey;
+}
 </style>
 
 

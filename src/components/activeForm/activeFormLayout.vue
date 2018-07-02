@@ -48,7 +48,7 @@ export default {
       type: Boolean,
       default: false
     },
-    dragIndex: {
+    dragToIndex: {
       type: Number,
       default: -1
     },
@@ -150,7 +150,7 @@ export default {
       // 默认地，无法将数据/元素放置到其他元素中。如果需要设置允许放置，我们必须阻止对元素的默认处理方式
       // 这要通过调用 ondragover 事件的 event.preventDefault() 方法
       if (this.isDraggable) {
-        this.$emit('update:dragIndex', index)
+        this.$emit('update:dragToIndex', index)
         e.preventDefault()
       }
     },
@@ -158,7 +158,7 @@ export default {
       // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
       e.preventDefault()
       const fromIndex = this.dragStartIndex
-      const toIndex = this.dragIndex + 1
+      const toIndex = this.dragToIndex + 1
       if (fromIndex >= 0 && fromIndex !== toIndex) {
         this.$emit('changePosition', fromIndex, toIndex)
       }

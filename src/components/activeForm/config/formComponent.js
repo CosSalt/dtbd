@@ -5,9 +5,9 @@ import formSelect from '../components/formSelect.vue'
 import formIndex from '../components/formIndex'
 import specialAttrsConf from '../components/specialAttrsConf'
 import formCascader from '../components/formCascader'
-
+import formDesignTable from '../components/formDesignTable'
 import activeFormLayout from '../activeFormLayout'
 
 export {
-  formRadio, formCheckbox, formCommon, formSelect, formIndex, specialAttrsConf, formCascader, activeFormLayout
+  formRadio, formCheckbox, formCommon, formSelect, formIndex, specialAttrsConf, formCascader, formDesignTable, activeFormLayout
 }

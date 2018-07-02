@@ -1,14 +1,56 @@
 <template>
   <div class='active-form-design'>
     <div class='form-components'>
-      <div class='form-design-title'> 控件区 </div>
-      <ul class='form-components-orgin'>
-        <template v-for='item in $formItemTypes'>
-          <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item)'>
-            <formIndex :formData='item' class='component-design-style' />
-          </li>
+      <div class='form-design-head'> 控件区0000000000000 </div>
+      <div>
+        <template v-for='(designItem, index) in designs'>
+          <div class='form-design-class' :key='designItem.id' v-if='designItem.components && designItem.components.length > 0'>
+            <el-row class='form-design-title'>
+              <el-col :span='20'>
+                <span v-text='designItem.name'></span>
+              </el-col>
+              <el-col :span='4'>
+                <i
+                  :class = '{"design-show": designIndex === index}'
+                  class='el-icon-arrow-left'
+                  @click='designIndex = designIndex === index ? -1 : index'
+                />
+              </el-col>
+            </el-row>
+            <div v-if='designItem.id === "tableDesign"' class='form-design-table' v-show='designIndex === index'>
+              <template>
+                <template v-for='(tblItem, index) in designItem.components'>
+                  <formDesignTable 
+                    :tblData='tblItem'
+                    :draggable='tableDragIndex.indexOf(index) < 0'
+                    @dragstart.native='dragstart(tblItem, index , true)'
+                    :key='tblItem.id'
+                  />
+                </template>
+              </template>
+            </div>
+            <div v-else class='form-design-base' v-show='designIndex === index'>
+              <ul :class='designItem.className'>
+                <template v-for='item in designItem.components'>
+                  <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item)'>
+                    <formIndex :formData='item' class='component-design-style' />
+                  </li>
+                </template>
+              </ul>
+            </div>
+          </div>
         </template>
-      </ul>
+      </div>
+      <div class='form-design-head' v-if='false'> 控件区 </div>
+      <div v-if='false'>
+        <ul class='form-components-orgin'>
+          <template v-for='item in $formItemTypes'>
+            <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item)'>
+              <formIndex :formData='item' class='component-design-style' />
+            </li>
+          </template>
+        </ul>
+      </div>
     </div>
     <div class='form-design-container'>
       <activeFormLayout
@@ -17,7 +59,7 @@
         class='form-design-content'
         :layout.sync = 'designData'
         :isDraggable='true'
-        :dragIndex.sync='dragIndex'
+        :dragToIndex.sync='dragToIndex'
         :confIndex='confIndex'
         @changePosition='changePosition'
         @setComponentConf='setComponentConf'
@@ -34,7 +76,7 @@
       </activeFormLayout>
     </div>
     <div class="form-design-conf">
-      <div class='form-design-title'> 组件配置区 </div>
+      <div class='form-design-head'> 组件配置区 </div>
       <activeFormConf
         :show.sync='showConf'
         :index='confIndex'
@@ -55,17 +97,18 @@ export default {
   name: 'activeFormDesign',
   // components: {activeFormLayout, activeFormConf},
   components: {activeFormConf},
-  beforeCreate () {
-    this.$formItemTypes = componentsConf
-  },
   data () {
     return {
       designData: [],
-      dragIndex: -1,
+      dragToIndex: -1,
       dragItem: '',
       confIndex: -1, // 配置信息的组件下标
       showConf: false,
-      loading: false
+      loading: false,
+      designIndex: 0,
+      designs: [],
+      isTableDrag: false,
+      tableDragIndex: [] // 已经拖拽过的表格
     }
   },
   computed: {
@@ -80,8 +123,12 @@ export default {
     }
   },
   methods: {
-    dragstart (componentItem) {
-      this.dragIndex = -1
+    dragstart (componentItem, index, isTableDrag = false) {
+      if (isTableDrag) {
+        this.tableDragIndex.push(index)
+      }
+      this.isTableDrag = isTableDrag
+      this.dragToIndex = -1
       // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
       this.dragItem = componentItem
     },
@@ -97,11 +144,25 @@ export default {
       const item = this.dragItem
       this.dragItem = ''
       if (!item) return
-      const newItem = defaultsDeep({}, item)
-      if (this.dragIndex >= 0) {
-        this.designData.splice(this.dragIndex + 1, 0, newItem)
+      const itemArr = []
+      const getNewItem = (theItem) => defaultsDeep({}, theItem)
+      if (this.isTableDrag) {
+        const dragItems = item.data
+        if(!Array.isArray(dragItems) || dragItems.length <= 0) return
+        for(let tblItem of dragItems.values()) {
+          let a = getNewItem(tblItem)
+          itemArr.push(a)
+        }
       } else {
-        this.designData.push(newItem)
+        itemArr.push(getNewItem(item))
+      }
+      this.dropHandle (this.dragToIndex, itemArr)
+    },
+    dropHandle (dragToIndex, newItemArr = []) {
+      if (dragToIndex >= 0) {
+        this.designData.splice(dragToIndex + 1, 0, ...newItemArr)
+      } else {
+        this.designData.push(...newItemArr)
       }
     },
     changePosition (from, to) { // 改变表单组件位置
@@ -218,7 +279,53 @@ export default {
         return
       }
       localStorage.setItem('designComponent', JSON.stringify(data))
+    },
+    initTblDesign (){
+      const demo = [
+        {
+          name: '测试',
+          id: 'test',
+          data: [
+            {type:'input', id: 'a', labelText:'1'},
+            {type:'select', id: 'b', labelText:'2'},
+            {type:'inputArea', id: 'c', labelText:'3'},
+            {type:'input', id: 'd', labelText:'4'}
+          ]
+        }, {
+          name: '测试ddd',
+          id: 'testddd',
+          data: [
+            {type:'input', id: 'ad', labelText:'1d'},
+            {type:'select', id: 'bd', labelText:'2d'},
+            {type:'inputArea', id: 'cd', labelText:'3d'},
+            {type:'input', id: 'dd', labelText:'4d'}
+          ]
+        }
+      ]
+      const TblDesignData = demo
+      return Promise.resolve(TblDesignData)
     }
+  },
+  created () {
+    this.$formItemTypes = componentsConf
+    const baseDesign = {
+      components: componentsConf,
+      id: 'baseDesign',
+      name: '基础控件区',
+      className: 'form-components-orgin'
+    }
+    this.designs.push(baseDesign)
+    this.initTblDesign().then(data => {
+      if(data) {
+        const tableDesign = {
+          components: data,
+          id: 'tableDesign',
+          name: '表格控件区',
+          className: 'form-components-orgin'
+        }
+        this.designs.push(tableDesign)
+      }
+    })
   }
 }
 </script>
@@ -238,6 +345,9 @@ export default {
     .form-components-orgin{
       height: 100%;
       overflow-y: auto;
+    }
+    .form-tble-orgin, .form-components-orgin {
+      border: 1px solid grey;
     }
   }
   .form-design-container{
@@ -281,12 +391,24 @@ export default {
     box-sizing: border-box;
     border: 2px solid grey;
   }
-  .form-design-title {
+  .form-design-head {
     width: 100%;
     height: 30px;
     line-height: 30px;
     text-align: center;
     background-color: rgb(230, 204, 204);
+  }
+  .form-design-class {
+    i{
+      cursor: pointer;
+      transition: all .5s;
+    }
+    .design-show{
+      transform: rotate(-90deg);
+    }
+  }
+  .form-design-hide {
+    display: none;
   }
 }
 </style>

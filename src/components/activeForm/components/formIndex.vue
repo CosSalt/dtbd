@@ -31,6 +31,11 @@ export default {
     },
     keyIndex: null
   },
+  data () {
+    return {
+      hasAlert: false
+    }
+  },
   computed: {
     componentVal: {
       get () {
@@ -45,7 +50,12 @@ export default {
       const component = typeToComponent[type]
       const componentConf = componentsConf.find(item => type === item.type)
       if (!component) {
-        alert(type + '组件错误, 请检查')
+        const msg = type + '组件错误, 请检查'
+        if (this.hasAlert) {
+          alert(msg)
+        } else {
+          console.error(msg) // eslint-disable-line
+        }
       }
       return defaultsDeep(defaultsDeep(component, componentConf), this.formData)
     }
