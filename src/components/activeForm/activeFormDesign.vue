@@ -22,7 +22,7 @@
                 <template v-for='(tblItem, index) in designItem.components'>
                   <formDesignTable 
                     :tblData='tblItem'
-                    :draggable='tableDragIndex.indexOf(index) < 0'
+                    :draggable='true'
                     @dragstart.native='dragstart(tblItem, index , true)'
                     :key='tblItem.id'
                   />
@@ -81,11 +81,9 @@
 <script>
 import {defaultsDeep} from '@/utils'
 import componentsConf from './config'
-// import activeFormLayout from './activeFormLayout'
 import activeFormConf from './activeFormConf'
 export default {
   name: 'activeFormDesign',
-  // components: {activeFormLayout, activeFormConf},
   components: {activeFormConf},
   data () {
     return {
@@ -98,7 +96,6 @@ export default {
       designIndex: 0,
       designs: [],
       isTableDrag: false,
-      tableDragIndex: [] // 已经拖拽过的表格
     }
   },
   computed: {
@@ -114,9 +111,6 @@ export default {
   },
   methods: {
     dragstart (componentItem, index, isTableDrag = false) {
-      if (isTableDrag) {
-        this.tableDragIndex.push(index)
-      }
       this.isTableDrag = isTableDrag
       this.dragToIndex = -1
       // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
@@ -139,9 +133,21 @@ export default {
       if (this.isTableDrag) {
         const dragItems = item.data
         if(!Array.isArray(dragItems) || dragItems.length <= 0) return
+        let sameIds = []
         for(let tblItem of dragItems.values()) {
-          let a = getNewItem(tblItem)
-          itemArr.push(a)
+          const tblNewItem = getNewItem(tblItem)
+          const tblItemId = tblNewItem.id
+          if (tblItemId) {
+            if(this.designData.findIndex(item => tblItemId === item.id) >= 0){
+              sameIds.push(tblItemId)
+            }
+          }
+          itemArr.push(tblNewItem)
+        }
+        if(sameIds.length > 0) {
+          const errMsg = sameIds.map(id => ('已存在相同的ID:"'+ id +'"'))
+          alert (errMsg.join('\n'))
+          return
         }
       } else {
         itemArr.push(getNewItem(item))
@@ -181,11 +187,14 @@ export default {
       const [delData] = this.designData.splice(index, 1)
       this.afterDelConf(delData.id)
     },
+    getSameIndex (id, index) {
+      return this.designData.findIndex((item, i) => item.id === id && i !== index)
+    },
     saveComponent (index, confData = {}) { // 保存配置数据
       const id = confData.id
-      const theIndex = this.designData.findIndex((item, i) => item.id === id && i !== index)
+      const theIndex = this.getSameIndex(id, index)
       if (theIndex >= 0) {
-        alert('已存在相同的 ID,请重新设置ID')
+        alert('已存在相同的 ID:"'+ id +'",请重新设置ID')
         return
       }
       // const newData = Object.assign(this.designData[index], confData)
@@ -254,9 +263,13 @@ export default {
       if (data.length <= 0) {
         err.push("设计配置项为空,不能保存")
       } else {
-        for(let [index, {text, id}] of data.entries()){
+        const errMsg = (msg, index) => (msg || "第" + (index + 1) + "个配置")
+        for(let [index, {labelText, id}] of data.entries()){
           if (!id) {
-            err.push((text || "第" + (index + 1) + "个配置" ) + ": ID值为空")
+            err.push(errMsg(labelText, index) + ": ID值为空")
+          } else {
+            const sameIndex = this.getSameIndex(id, index)
+            if(sameIndex > index) err.push('"' + errMsg(labelText, index) + '"与"' + errMsg(data[sameIndex].labelText, sameIndex) + '"具有相同的ID值,请修改')
           }
         }
       }
