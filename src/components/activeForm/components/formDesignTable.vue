@@ -1,10 +1,10 @@
 <template>
   <div class='form-design-table'>
     <div class='design-table-cell'>
-      <div class='design-table-title' title='拖拽区'>
+      <div class='design-table-title' @click='showDetail=!showDetail' title='点击显示/隐藏详情'>
         {{theData.name}}
       </div>
-      <div class='design-table-container'>
+      <div class='design-table-container' v-show='showDetail'>
         <table>
           <thead>
             <tr>
@@ -45,7 +45,7 @@ export default {
   },
   data () {
     return {
-
+      showDetail: false
     }
   },
   computed: {
@@ -62,8 +62,7 @@ export default {
   .design-table-cell {
     user-select: none;
     border: 1px solid #e6e6e6;
-    margin-left: 20px;
-    margin-top: 5px;
+    margin: 15px 4px 0 20px;
     box-shadow: 0 0 2px 2px #e6e6e6;
   }
   .design-table-title{
