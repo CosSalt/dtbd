@@ -1,7 +1,11 @@
 <template>
   <div class='active-form-design'>
     <div class='form-components'>
-      <div class='form-design-head'> 控件区</div>
+      <activeFormComponents 
+        :designs ='designs'
+        @dragStart = 'dragStart1'
+      />
+      <!-- <div class='form-design-head'> 控件区</div>
       <div>
         <template v-for='(designItem, index) in designs'>
           <div class='form-design-class' :key='designItem.id' v-if='designItem.components && designItem.components.length > 0'>
@@ -40,12 +44,12 @@
             </div>
           </div>
         </template>
-      </div>
+      </div> -->
     </div>
     <div class='form-design-container'>
       <activeFormLayout
         @dragover.native='dragover'
-        @drop.native='drop'
+        @drop.native='drop1'
         class='form-design-content'
         :layout.sync = 'designData'
         :isDraggable='true'
@@ -81,15 +85,17 @@
 <script>
 import {defaultsDeep} from '@/utils'
 import componentsConf from './config'
+import activeFormComponents from './activeFormComponents'
 import activeFormConf from './activeFormConf'
 export default {
   name: 'activeFormDesign',
-  components: {activeFormConf},
+  components: {activeFormConf, activeFormComponents},
   data () {
     return {
       designData: [],
       dragToIndex: -1,
       dragItem: '',
+      dragItems: '',
       confIndex: -1, // 配置信息的组件下标
       showConf: false,
       loading: false,
@@ -110,6 +116,11 @@ export default {
     }
   },
   methods: {
+    dragStart1 (dragItems) {
+      this.dragToIndex = -1
+      // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
+      this.dragItems = dragItems
+    },
     dragstart (componentItem, index, isTableDrag = false) {
       this.isTableDrag = isTableDrag
       this.dragToIndex = -1
@@ -121,6 +132,28 @@ export default {
       // 默认地，无法将数据/元素放置到其他元素中。如果需要设置允许放置，我们必须阻止对元素的默认处理方式
       // 这要通过调用 ondragover 事件的 event.preventDefault() 方法
       e.preventDefault()
+    },
+    drop1 (e) {
+      e.preventDefault()
+      const items = this.dragItems
+      this.dragItem = ''
+      if (!items) return
+      let sameIdMsgs = []
+      items.forEach(item => {
+        const id = item.id
+        if (id) {
+          let sameIndex = this.designData.findIndex(dataItem => id === dataItem.id) + 1
+          if (sameIndex > 0) {
+            sameIdMsgs.push('已存在相同的ID:"'+ id +'",在第 ' + sameIndex +' 项')
+          }
+        }
+      })
+      if(sameIdMsgs.length > 0) {
+        alert (sameIdMsgs.join('\n'))
+        return
+      } else {
+        this.dropHandle (this.dragToIndex, items)
+      }
     },
     drop (e) {
       // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
@@ -314,6 +347,7 @@ export default {
     const baseDesign = {
       components: componentsConf,
       id: 'baseDesign',
+      type: 'base',
       name: '基础控件区',
       className: 'form-components-orgin'
     }
@@ -323,10 +357,11 @@ export default {
         const tableDesign = {
           components: data,
           id: 'tableDesign',
+          type: 'table',
           name: '表格控件区',
           className: 'form-components-orgin'
         }
-        this.designs.push(tableDesign)
+        this.designs.unshift(tableDesign)
       }
     })
   }
@@ -399,7 +434,7 @@ export default {
     height: 30px;
     line-height: 30px;
     text-align: center;
-    background-color: rgb(230, 204, 204);
+    background-color: #e6cccc;
   }
   .form-design-class {
     i{

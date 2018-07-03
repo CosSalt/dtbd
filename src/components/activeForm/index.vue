@@ -1,7 +1,11 @@
 <template>
   <div class='form-index'>
-    <h1 style='text-align:center;'>表单设计器</h1>
-    <activeFormDesign/>
+    <div class='form-index-title'>
+      <h1 style='text-align:center;margin:0;'>表单设计器</h1>
+    </div>
+    <div class='form-index-container'>
+      <activeFormDesign/>
+    </div>
   </div>
 </template>
 
@@ -13,8 +17,16 @@ export default {
 }
 </script>
 
-<style>
+<style lang="less">
+@titleHeight: 80px;
 .form-index{
   height: 100%;
+  .form-index-title{
+    height: @titleHeight;
+    overflow: hidden;
+  }
+  .form-index-container{
+    height: calc(100% - @titleHeight);
+  }
 }
 </style>
