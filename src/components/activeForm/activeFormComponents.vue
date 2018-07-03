@@ -46,7 +46,7 @@
 
 <script>
 import {defaultsDeep} from '@/utils'
-import componentsConf from './config'
+// import componentsConf from './config'
 export default {
   name: 'activeFormComponents',
   props: {
@@ -65,7 +65,7 @@ export default {
       // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
       const handleFn = this.$dragTypeHandle[type]
       if (!handleFn) {
-        console.error('无法处理 type 为"'+ type + '"的类型')
+        console.error('无法处理 type 为"'+ type + '"的类型') // eslint-disable-line
       } else {
         const dragComponentArr = handleFn(componentItem)
         this.$emit('dragStart', dragComponentArr)

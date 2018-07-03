@@ -3,53 +3,13 @@
     <div class='form-components'>
       <activeFormComponents 
         :designs ='designs'
-        @dragStart = 'dragStart1'
+        @dragStart = 'dragStart'
       />
-      <!-- <div class='form-design-head'> 控件区</div>
-      <div>
-        <template v-for='(designItem, index) in designs'>
-          <div class='form-design-class' :key='designItem.id' v-if='designItem.components && designItem.components.length > 0'>
-            <el-row class='form-design-title'>
-              <el-col :span='20'>
-                <span v-text='designItem.name'></span>
-              </el-col>
-              <el-col :span='4'>
-                <i
-                  :class = '{"design-show": designIndex === index}'
-                  class='el-icon-arrow-left'
-                  @click='designIndex = designIndex === index ? -1 : index'
-                />
-              </el-col>
-            </el-row>
-            <div v-if='designItem.id === "tableDesign"' class='form-design-table' v-show='designIndex === index'>
-              <template>
-                <template v-for='(tblItem, index) in designItem.components'>
-                  <formDesignTable 
-                    :tblData='tblItem'
-                    :draggable='true'
-                    @dragstart.native='dragstart(tblItem, index , true)'
-                    :key='tblItem.id'
-                  />
-                </template>
-              </template>
-            </div>
-            <div v-else class='form-design-base' v-show='designIndex === index'>
-              <ul :class='designItem.className'>
-                <template v-for='item in designItem.components'>
-                  <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragstart(item)'>
-                    <formIndex :formData='item' class='component-design-style' />
-                  </li>
-                </template>
-              </ul>
-            </div>
-          </div>
-        </template>
-      </div> -->
     </div>
     <div class='form-design-container'>
       <activeFormLayout
         @dragover.native='dragover'
-        @drop.native='drop1'
+        @drop.native='drop'
         class='form-design-content'
         :layout.sync = 'designData'
         :isDraggable='true'
@@ -116,16 +76,10 @@ export default {
     }
   },
   methods: {
-    dragStart1 (dragItems) {
+    dragStart (dragItems) {
       this.dragToIndex = -1
       // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
       this.dragItems = dragItems
-    },
-    dragstart (componentItem, index, isTableDrag = false) {
-      this.isTableDrag = isTableDrag
-      this.dragToIndex = -1
-      // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
-      this.dragItem = componentItem
     },
     dragover (e) {
       // ondragover 事件规定在何处放置被拖动的数据
@@ -133,7 +87,8 @@ export default {
       // 这要通过调用 ondragover 事件的 event.preventDefault() 方法
       e.preventDefault()
     },
-    drop1 (e) {
+    drop (e) {
+      // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
       e.preventDefault()
       const items = this.dragItems
       this.dragItem = ''
@@ -152,46 +107,12 @@ export default {
         alert (sameIdMsgs.join('\n'))
         return
       } else {
-        this.dropHandle (this.dragToIndex, items)
-      }
-    },
-    drop (e) {
-      // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
-      e.preventDefault()
-      const item = this.dragItem
-      this.dragItem = ''
-      if (!item) return
-      const itemArr = []
-      const getNewItem = (theItem) => defaultsDeep({}, theItem)
-      if (this.isTableDrag) {
-        const dragItems = item.data
-        if(!Array.isArray(dragItems) || dragItems.length <= 0) return
-        let sameIds = []
-        for(let tblItem of dragItems.values()) {
-          const tblNewItem = getNewItem(tblItem)
-          const tblItemId = tblNewItem.id
-          if (tblItemId) {
-            if(this.designData.findIndex(item => tblItemId === item.id) >= 0){
-              sameIds.push(tblItemId)
-            }
-          }
-          itemArr.push(tblNewItem)
+        const dragToIndex = this.dragToIndex + 1
+        if (dragToIndex > 0) {
+          this.designData.splice(dragToIndex, 0, ...items)
+        } else {
+          this.designData.push(...items)
         }
-        if(sameIds.length > 0) {
-          const errMsg = sameIds.map(id => ('已存在相同的ID:"'+ id +'"'))
-          alert (errMsg.join('\n'))
-          return
-        }
-      } else {
-        itemArr.push(getNewItem(item))
-      }
-      this.dropHandle (this.dragToIndex, itemArr)
-    },
-    dropHandle (dragToIndex, newItemArr = []) {
-      if (dragToIndex >= 0) {
-        this.designData.splice(dragToIndex + 1, 0, ...newItemArr)
-      } else {
-        this.designData.push(...newItemArr)
       }
     },
     changePosition (from, to) { // 改变表单组件位置
