@@ -1,6 +1,7 @@
 <template>
   <div class='active-form-design'>
     <div class='form-components'>
+      <div class='form-design-head'>控件区</div>
       <activeFormComponents 
         :designs ='designs'
         @dragStart = 'dragStart'
@@ -322,28 +323,6 @@ export default {
     min-height: 100%;
     overflow: auto;
   }
-  .form-block {
-    display: inline-block;
-  }
-  .active-form-row{
-    margin: 0;
-    padding: 5px 0;
-  }
-  .component-design-style{
-    width: 100%;
-    .component-label {
-      width:49%;
-    }
-    .component-content{
-      width: 50%;
-    }
-  }
-  .component-row{
-    &:hover{
-      background-color: #409eff;
-      color: #fff;
-    }
-  }
   .form-design-content{
     width: 100%;
     height: 100%;
@@ -356,18 +335,6 @@ export default {
     line-height: 30px;
     text-align: center;
     background-color: #e6cccc;
-  }
-  .form-design-class {
-    i{
-      cursor: pointer;
-      transition: all .5s;
-    }
-    .design-show{
-      transform: rotate(-90deg);
-    }
-  }
-  .form-design-hide {
-    display: none;
   }
 }
 </style>

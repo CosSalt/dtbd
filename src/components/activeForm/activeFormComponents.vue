@@ -1,46 +1,43 @@
 <template>
-<div class='form-components'>
-  <div class='form-design-head'> 控件区</div>
-  <div>
-    <template v-for='(designItem, index) in designs'>
-      <div class='form-design-class' :key='designItem.id' v-if='designItem.components && designItem.components.length > 0'>
-        <el-row class='form-design-title'>
-          <el-col :span='20'>
-            <span v-text='designItem.name'></span>
-          </el-col>
-          <el-col :span='4'>
-            <i
-              :class = '{"design-show": designIndex === index}'
-              class='el-icon-arrow-left'
-              @click='designIndex = designIndex === index ? -1 : index'
+<div class='active-form-components'>
+  <template v-for='(designItem, index) in designs'>
+    <div class='form-design-class' :key='designItem.id' v-if='designItem.components && designItem.components.length > 0'>
+      <el-row class='form-design-title'>
+        <el-col :span='20'>
+          <span v-text='designItem.name'></span>
+        </el-col>
+        <el-col :span='4'>
+          <i
+            :class = '{"design-show": designIndex === index}'
+            class='el-icon-arrow-left'
+            @click='designIndex = designIndex === index ? -1 : index'
+          />
+        </el-col>
+      </el-row>
+      <!-- <div v-if='designItem.id === "tableDesign"' class='form-design-table' v-show='designIndex === index'> -->
+      <div v-if='designItem.type === "table"' class='form-design-table'>
+        <template>
+          <template v-for='tblItem in designItem.components'>
+            <formDesignTable 
+              :tblData='tblItem'
+              :draggable='true'
+              @dragstart.native='dragStart(tblItem, designItem.type)'
+              :key='tblItem.id'
             />
-          </el-col>
-        </el-row>
-        <!-- <div v-if='designItem.id === "tableDesign"' class='form-design-table' v-show='designIndex === index'> -->
-        <div v-if='designItem.type === "table"' class='form-design-table'>
-          <template>
-            <template v-for='tblItem in designItem.components'>
-              <formDesignTable 
-                :tblData='tblItem'
-                :draggable='true'
-                @dragstart.native='dragStart(tblItem, designItem.type)'
-                :key='tblItem.id'
-              />
-            </template>
           </template>
-        </div>
-        <div v-else class='form-design-base' v-show='designIndex === index'>
-          <ul :class='designItem.className'>
-            <template v-for='item in designItem.components'>
-              <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragStart(item, designItem.type)'>
-                <formIndex :formData='item' class='component-design-style' />
-              </li>
-            </template>
-          </ul>
-        </div>
+        </template>
       </div>
-    </template>
-  </div>
+      <div v-else class='form-design-base' v-show='designIndex === index'>
+        <ul :class='designItem.className'>
+          <template v-for='item in designItem.components'>
+            <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragStart(item, designItem.type)'>
+              <formIndex :formData='item' class='component-design-style' />
+            </li>
+          </template>
+        </ul>
+      </div>
+    </div>
+  </template>
 </div>
 </template>
 
@@ -97,17 +94,51 @@ export default {
 </script>
 
 <style lang="less">
-  .form-components {
-    width: 100%;
+.active-form-components {
+  width: 100%;
+  height: 100%;
+  .active-form-components-orgin{
     height: 100%;
-    .form-components-orgin{
-      height: 100%;
-      overflow-y: auto;
+    overflow-y: auto;
+  }
+  .form-tble-orgin, .active-form-components-orgin {
+    border: 1px solid grey;
+  }
+  .form-design-class {
+    i{
+      cursor: pointer;
+      transition: all .5s;
     }
-    .form-tble-orgin, .form-components-orgin {
-      border: 1px solid grey;
+    .design-show{
+      transform: rotate(-90deg);
     }
   }
+  .form-design-hide {
+    display: none;
+  }
+    .form-block {
+    display: inline-block;
+  }
+  .active-form-row{
+    margin: 0;
+    padding: 5px 0;
+  }
+  .component-design-style{
+    width: 100%;
+    .component-label {
+      width:49%;
+    }
+    .component-content{
+      width: 50%;
+    }
+  }
+  .component-row{
+    &:hover{
+      background-color: #409eff;
+      color: #fff;
+    }
+  }
+}
 </style>
 
 
