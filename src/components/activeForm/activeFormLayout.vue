@@ -222,7 +222,6 @@ export default {
   width: 100%;
   height: 100%;
   .form-content{
-    overflow: auto;
     .active-form-row {
       padding: 0;
     }

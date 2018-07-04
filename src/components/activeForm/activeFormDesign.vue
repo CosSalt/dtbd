@@ -1,10 +1,11 @@
 <template>
   <div class='active-form-design'>
     <div class='form-components'>
-      <div class='form-design-head'>控件区</div>
+      <div class='form-side-head'>控件区</div>
       <activeFormComponents 
         :designs ='designs'
         @dragStart = 'dragStart'
+        class='active-side-container'
       />
     </div>
     <div class='form-design-container'>
@@ -31,8 +32,9 @@
       </activeFormLayout>
     </div>
     <div class="form-design-conf">
-      <div class='form-design-head'> 组件配置区 </div>
+      <div class='form-side-head'> 组件配置区 </div>
       <activeFormConf
+        class='active-side-container'
         :show.sync='showConf'
         :index='confIndex'
         :allKeys='allKeys'
@@ -292,6 +294,7 @@ export default {
 
 <style lang="less">
 @componentsWidth:250px;
+@formSideHead: 30px;
 .active-form-design {
   width: 100%;
   height: 100%;
@@ -320,21 +323,26 @@ export default {
     top: 0;
     right: 0;
     width: @componentsWidth;
-    min-height: 100%;
+    height: 100%;
     overflow: auto;
   }
   .form-design-content{
     width: 100%;
     height: 100%;
     box-sizing: border-box;
+    overflow: auto;
     border: 2px solid grey;
   }
-  .form-design-head {
+  .form-side-head {
     width: 100%;
-    height: 30px;
-    line-height: 30px;
+    height: @formSideHead;
+    line-height: @formSideHead;
     text-align: center;
     background-color: #e6cccc;
+  }
+  .active-side-container {
+    height: calc(100% - @formSideHead);
+    overflow: auto;
   }
 }
 </style>

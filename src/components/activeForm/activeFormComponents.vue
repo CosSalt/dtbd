@@ -14,8 +14,7 @@
           />
         </el-col>
       </el-row>
-      <!-- <div v-if='designItem.id === "tableDesign"' class='form-design-table' v-show='designIndex === index'> -->
-      <div v-if='designItem.type === "table"' class='form-design-table'>
+      <div v-if='designItem.id === "tableDesign"' class='form-design-table' v-show='designIndex === index'>
         <template>
           <template v-for='tblItem in designItem.components'>
             <formDesignTable 
