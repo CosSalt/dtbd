@@ -14,27 +14,31 @@
           />
         </el-col>
       </el-row>
-      <div v-if='designItem.id === "tableDesign"' class='form-design-table' v-show='designIndex === index'>
-        <template>
-          <template v-for='tblItem in designItem.components'>
-            <formDesignTable 
-              :tblData='tblItem'
-              :draggable='true'
-              @dragstart.native='dragStart(tblItem, designItem.type)'
-              :key='tblItem.id'
-            />
+      <transition name="block">
+        <div v-if='designItem.id === "tableDesign"' class='form-design-table' v-show='designIndex === index'>
+          <template>
+            <template v-for='tblItem in designItem.components'>
+              <formDesignTable 
+                :tblData='tblItem'
+                :draggable='true'
+                @dragstart.native='dragStart(tblItem, designItem.type)'
+                :key='tblItem.id'
+              />
+            </template>
           </template>
+        </div>
+        <template v-else >
+          <div class='form-design-base' v-if='designIndex === index'>
+            <ul :class='designItem.className'>
+              <template v-for='item in designItem.components'>
+                <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragStart(item, designItem.type)'>
+                  <formIndex :formData='item' class='component-design-style' />
+                </li>
+              </template>
+            </ul>
+          </div>
         </template>
-      </div>
-      <div v-else class='form-design-base' v-show='designIndex === index'>
-        <ul :class='designItem.className'>
-          <template v-for='item in designItem.components'>
-            <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragStart(item, designItem.type)'>
-              <formIndex :formData='item' class='component-design-style' />
-            </li>
-          </template>
-        </ul>
-      </div>
+      </transition>
     </div>
   </template>
 </div>
@@ -110,6 +114,12 @@ export default {
     }
     .design-show{
       transform: rotate(-90deg);
+    }
+    .block-enter-active, .block-leave-active {
+      transition: all .5s;
+    }
+    .block-enter, .block-leave-to{
+      opacity: 0;
     }
   }
   .form-design-hide {

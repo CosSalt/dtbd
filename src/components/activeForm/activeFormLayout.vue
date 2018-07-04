@@ -116,7 +116,6 @@ export default {
           rules[id] = itemRules
         }
       })
-      window.x = rules
       return rules
     }
   },
