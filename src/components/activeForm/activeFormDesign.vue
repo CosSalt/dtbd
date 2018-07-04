@@ -57,7 +57,7 @@ export default {
     return {
       designData: [],
       dragToIndex: -1,
-      dragItem: '',
+      dragItems: '',
       dragItems: '',
       confIndex: -1, // 配置信息的组件下标
       showConf: false,
@@ -94,7 +94,7 @@ export default {
       // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
       e.preventDefault()
       const items = this.dragItems
-      this.dragItem = ''
+      this.dragItems = ''
       if (!items) return
       let sameIdMsgs = []
       items.forEach(item => {
@@ -118,7 +118,9 @@ export default {
         }
       }
     },
-    changePosition (from, to) { // 改变表单组件位置
+    changePosition (from, to) { // 改变表单组件位置  
+      this.dragItems = '' // 处理拖动了控件而又未拖拽进布局区的情况
+      if (from < 0 || from === to) return
       const data = this.designData
       const changeItem = data[from]
       if (from > to) { // 从后往前拖拽

@@ -159,9 +159,7 @@ export default {
       e.preventDefault()
       const fromIndex = this.dragStartIndex
       const toIndex = this.dragToIndex + 1
-      if (fromIndex >= 0 && fromIndex !== toIndex) {
-        this.$emit('changePosition', fromIndex, toIndex)
-      }
+      this.$emit('changePosition', fromIndex, toIndex)
       this.dragStartIndex = -1
     },
     defComponent (index, type) {
