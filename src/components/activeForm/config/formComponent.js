@@ -10,8 +10,11 @@ import activeFormLayout from '../activeFormLayout'
 
 // navigation
 import navigationTabs from '../components/navigationTabs'
+// 公共的
+import commonIndex from '../components/commonIndex'
 
 export {
   navigationTabs,
+  commonIndex,
   formRadio, formCheckbox, formCommon, formSelect, formIndex, specialAttrsConf, formCascader, formDesignTable, activeFormLayout
 }

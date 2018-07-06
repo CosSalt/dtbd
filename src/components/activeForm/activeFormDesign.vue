@@ -11,7 +11,7 @@
     <div class='form-design-container'>
       <activeFormLayout
         @dragover.native='dragover'
-        @drop.native='drop'
+        @drop.self.native='drop'
         class='form-design-content'
         :layout.sync = 'designData'
         :isDraggable='true'
@@ -96,15 +96,32 @@ export default {
       const dragToIndex = this.dragToIndex + 1
       this.addDragData(dragToIndex)
     },
-    addDragData (dragToIndex) {
+    addDragData (dragToIndex, {name, type, tagsDragToIndex = -1} = {}) {
       const items = this.dragItems
       this.dragItems = ''
+      debugger
       if (!items) return
+      if (type === 'tabs') {
+        if(!name) return
+        const origal = this.designData[dragToIndex - 1]
+        const childConf = (origal && origal['childConf']) || []
+        origal['childConf'] = childConf
+        const confItem = childConf.find(item => name === item.name)
+        if (confItem) {
+          const itemComponents = confItem.components || []
+          confItem.components = itemComponents
+          this.handleDragData(items, tagsDragToIndex, itemComponents)
+        }
+      } else {
+        this.handleDragData(items, dragToIndex, this.designData)
+      }
+    },
+    handleDragData (items, dragToIndex, origal = []) {
       let sameIdMsgs = []
       items.forEach(item => {
         const id = item.id
         if (id) {
-          let sameIndex = this.designData.findIndex(dataItem => id === dataItem.id) + 1
+          let sameIndex = origal.findIndex(dataItem => id === dataItem.id) + 1
           if (sameIndex > 0) {
             sameIdMsgs.push('已存在相同的ID:"'+ id +'",在第 ' + sameIndex +' 项')
           }
@@ -115,9 +132,9 @@ export default {
         return
       } else {
         if (dragToIndex > 0) {
-          this.designData.splice(dragToIndex, 0, ...items)
+          origal.splice(dragToIndex, 0, ...items)
         } else {
-          this.designData.push(...items)
+          origal.push(...items)
         }
       }
     },

@@ -150,15 +150,23 @@ let componentsConf = [
     type: 'tabs',
     name: '标签页',
     span: 24,
+    notFormItem: true,
     bind: {
       
     },
     childConf: [{
-        label:'选项1', value: '双皮奶'
+        label:'选项1', name: 'id1'
       }, {
-        label:'选项2', value: '红烧肉'
+        label:'选项2', name: 'id2'
       }
     ]
+  }, {
+    type: 'rate',
+    name: '评分',
+    labelText: '评分',
+    bind: {
+      colors: ['#99A9BF', '#F7BA2A', '#FF9900']
+    }
   }
 ]
 // 默认的属性

@@ -9,27 +9,52 @@
           <template v-for='(layoutItem, i) in theLayoutData'>
             <el-row :key='"row" + i'>
               <template v-for='item in layoutItem'>
-                <el-col
-                  :span='item.span'
-                  :key='item.id'
-                  :draggable='isDraggable'
-                  @dragstart.native='dragstart(item.index, $event)'
-                  @dragover.native='dragover(item.index, $event)'
-                  @drop.native='drop'
-                  @click.native='defComponent(item.index, item.type)'
-                  class='active-form-row'
-                  :class = 'confIndex === item.index ? "component-conf" : ""'
-                >
-                  <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' :rules="formRules[item.id]" class='abc-test'>
-                    <formIndex
-                      v-model='formModel[item.id]'
-                      :formData='item'
-                      class='component-style'
-                      :showLabel='showLabel'
-                      @getAction='getAction'
-                    />
-                  </el-form-item>
-                </el-col>
+                <template v-if='item.notFormItem'>
+                  <el-col
+                    class='active-form-row'
+                    :class = 'confIndex === item.index ? "component-conf" : ""'
+                    :span='item.span'
+                    :key='item.id'
+                  >
+                    <div>
+                      <commonIndex
+                        class='component-style'
+                        v-model='formModel[item.id]'
+                        :formData='item'
+                        :isDraggable='isDraggable'
+                        :keyIndex='item.index'
+                        :draggable='isDraggable'
+                        @drop.self='dropSpecial'
+                        @click.native='defComponent(item.index, item.type)'
+                        @dragstart.native='dragstart(item.index, $event)'
+                        @dragover.native='dragover(item.index, $event)'
+                      />
+                    </div>
+                  </el-col>
+                </template>
+                <template v-else>
+                  <el-col
+                    :span='item.span'
+                    :key='item.id'
+                    :draggable='isDraggable'
+                    @dragstart.native='dragstart(item.index, $event)'
+                    @dragover.native='dragover(item.index, $event)'
+                    @click.native='defComponent(item.index, item.type)'
+                    @drop.prevent.native='drop'
+                    class='active-form-row'
+                    :class = 'confIndex === item.index ? "component-conf" : ""'
+                  >
+                    <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' :rules="formRules[item.id]">
+                      <formIndex
+                        v-model='formModel[item.id]'
+                        :formData='item'
+                        class='component-style'
+                        :showLabel='showLabel'
+                        @getAction='getAction'
+                      />
+                    </el-form-item>
+                  </el-col>
+                </template>
               </template>
             </el-row>
           </template>
@@ -153,17 +178,20 @@ export default {
         e.preventDefault()
       }
     },
-    drop (e) {
+    drop (e, ...args) {
       // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
       e.preventDefault()
       const fromIndex = this.dragStartIndex
       const toIndex = this.dragToIndex + 1
       if(fromIndex < 0) {
-        this.$emit('addDragData', toIndex)
+        this.$emit('addDragData', toIndex, ...args)
       } else {
         this.$emit('changePosition', fromIndex, toIndex)
       }
       this.dragStartIndex = -1
+    },
+    dropSpecial ({e, ...args} = {}) {
+      this.drop(e, args)
     },
     defComponent (index, type) {
       if (!this.isDraggable) {
