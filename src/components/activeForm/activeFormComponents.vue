@@ -15,7 +15,7 @@
         </el-col>
       </el-row>
       <transition name="block">
-        <div v-if='designItem.id === "tableDesign"' class='form-design-table' v-show='designIndex === index'>
+        <div v-if='designItem.type === "table"' class='form-design-table' v-show='designIndex === index'>
           <template>
             <template v-for='tblItem in designItem.components'>
               <formDesignTable 
@@ -27,7 +27,7 @@
             </template>
           </template>
         </div>
-        <template v-else >
+        <template v-else>
           <div class='form-design-base' v-if='designIndex === index'>
             <ul :class='designItem.className'>
               <template v-for='item in designItem.components'>
@@ -36,7 +36,7 @@
                 </li>
               </template>
             </ul>
-          </div>
+          </div>  
         </template>
       </transition>
     </div>

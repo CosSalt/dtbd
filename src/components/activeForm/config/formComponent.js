@@ -8,6 +8,10 @@ import formCascader from '../components/formCascader'
 import formDesignTable from '../components/formDesignTable'
 import activeFormLayout from '../activeFormLayout'
 
+// navigation
+import navigationTabs from '../components/navigationTabs'
+
 export {
+  navigationTabs,
   formRadio, formCheckbox, formCommon, formSelect, formIndex, specialAttrsConf, formCascader, formDesignTable, activeFormLayout
 }

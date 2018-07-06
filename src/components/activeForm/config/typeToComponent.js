@@ -50,6 +50,9 @@ const components = {
   },
   'attrsConf': {
     component: 'specialAttrsConf'
+  },
+  'tabs': {
+    component: 'navigationTabs'
   }
 }
 const allTypes = []

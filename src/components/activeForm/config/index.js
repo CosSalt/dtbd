@@ -146,6 +146,19 @@ let componentsConf = [
     name: '穿梭框',
     labelText: '穿梭框',
     disabled: true
+  }, {
+    type: 'tabs',
+    name: '标签页',
+    span: 24,
+    bind: {
+      
+    },
+    childConf: [{
+        label:'选项1', value: '双皮奶'
+      }, {
+        label:'选项2', value: '红烧肉'
+      }
+    ]
   }
 ]
 // 默认的属性

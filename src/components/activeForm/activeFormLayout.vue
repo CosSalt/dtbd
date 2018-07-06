@@ -20,7 +20,7 @@
                   class='active-form-row'
                   :class = 'confIndex === item.index ? "component-conf" : ""'
                 >
-                  <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' :rules="formRules[item.id]">
+                  <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' :rules="formRules[item.id]" class='abc-test'>
                     <formIndex
                       v-model='formModel[item.id]'
                       :formData='item'
@@ -158,7 +158,11 @@ export default {
       e.preventDefault()
       const fromIndex = this.dragStartIndex
       const toIndex = this.dragToIndex + 1
-      this.$emit('changePosition', fromIndex, toIndex)
+      if(fromIndex < 0) {
+        this.$emit('addDragData', toIndex)
+      } else {
+        this.$emit('changePosition', fromIndex, toIndex)
+      }
       this.dragStartIndex = -1
     },
     defComponent (index, type) {

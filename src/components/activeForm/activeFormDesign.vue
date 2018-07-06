@@ -19,6 +19,7 @@
         :confIndex='confIndex'
         @changePosition='changePosition'
         @setComponentConf='setComponentConf'
+        @addDragData='addDragData'
       >
         <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
           <el-button type='primary' size='mini' @click.native='saveDesign(data)'
@@ -58,7 +59,6 @@ export default {
       designData: [],
       dragToIndex: -1,
       dragItems: '',
-      dragItems: '',
       confIndex: -1, // 配置信息的组件下标
       showConf: false,
       loading: false,
@@ -93,6 +93,10 @@ export default {
     drop (e) {
       // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
       e.preventDefault()
+      const dragToIndex = this.dragToIndex + 1
+      this.addDragData(dragToIndex)
+    },
+    addDragData (dragToIndex) {
       const items = this.dragItems
       this.dragItems = ''
       if (!items) return
@@ -110,7 +114,6 @@ export default {
         alert (sameIdMsgs.join('\n'))
         return
       } else {
-        const dragToIndex = this.dragToIndex + 1
         if (dragToIndex > 0) {
           this.designData.splice(dragToIndex, 0, ...items)
         } else {
@@ -118,7 +121,7 @@ export default {
         }
       }
     },
-    changePosition (from, to) { // 改变表单组件位置  
+    changePosition (from, to) { // 改变表单组件位置
       this.dragItems = '' // 处理拖动了控件而又未拖拽进布局区的情况
       if (from < 0 || from === to) return
       const data = this.designData
