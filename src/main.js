@@ -12,6 +12,8 @@ import * as fromComponents from '@/components/activeForm/config/formComponent'
 for(let item of Object.values(fromComponents)) {
   Vue.component(item.name, item)
 }
+Vue.prototype.$eventBus = new Vue()
+
 Vue.config.productionTip = false
 const isDev = process.env.NODE_ENV === 'production'
 if (isDev) {

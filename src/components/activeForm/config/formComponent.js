@@ -6,7 +6,7 @@ import formIndex from '../components/formIndex'
 import specialAttrsConf from '../components/specialAttrsConf'
 import formCascader from '../components/formCascader'
 import formDesignTable from '../components/formDesignTable'
-import activeFormLayout from '../activeFormLayout'
+import formLayout from '../components/formLayout'
 import formDesignLayout from '../components/formDesignLayout'
 
 // navigation
@@ -17,6 +17,6 @@ import commonIndex from '../components/commonIndex'
 export {
   navigationTabs,
   commonIndex,
-  formRadio, formCheckbox, formCommon, formSelect, formIndex, specialAttrsConf, formCascader, formDesignTable, activeFormLayout,
+  formRadio, formCheckbox, formCommon, formSelect, formIndex, specialAttrsConf, formCascader, formDesignTable, formLayout,
   formDesignLayout
 }

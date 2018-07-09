@@ -155,9 +155,9 @@ let componentsConf = [
       
     },
     childConf: [{
-        label:'选项1', name: 'id1'
+        label:'选项1', name: 'id1', components: []
       }, {
-        label:'选项2', name: 'id2'
+        label:'选项2', name: 'id2', components: []
       }
     ]
   }, {

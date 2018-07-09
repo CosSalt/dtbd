@@ -25,7 +25,7 @@
                         :keyIndex='item.index'
                         :draggable='isDraggable'
                         @drop.self='dropSpecial'
-                        @click.native='defComponent(item.index, item.type)'
+                        @defComponent='defComponentSpecial'
                         @dragstart.native='dragstart(item.index, $event)'
                         @dragover.native='dragover(item.index, $event)'
                       />
@@ -64,10 +64,10 @@
   </div>
 </template>
 <script>
-import componentsConf from './config'
+import componentsConf from '../config'
 import { getTempId } from '@/utils'
 export default {
-  name: 'activeFormLayout',
+  name: 'formLayout',
   props: {
     isDraggable: {
       type: Boolean,
@@ -193,11 +193,12 @@ export default {
     dropSpecial ({e, ...args} = {}) {
       this.drop(e, args)
     },
-    defComponent (index, type) {
-      if (!this.isDraggable) {
-        return
-      }
-      this.$emit('setComponentConf', index, type)
+    defComponent (index, type, name) {
+      if (!this.isDraggable) return
+      this.$emit('setComponentConf', {index, type, name})
+    },
+    defComponentSpecial({index, type, name}) {
+      this.defComponent(index, type, name)
     },
     getAction ([actionParam, reqOrg]) {
       // const index = this.confIndex

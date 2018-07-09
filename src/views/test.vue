@@ -1,7 +1,7 @@
 <template>
   <div>
     <div class='form-demo-container'>
-      <activeFormLayout
+      <formLayout
         :layout = 'layout'
         :isDraggable='false'
         :receiveData = 'formData'
@@ -16,7 +16,7 @@
             </el-button>
           <el-button type='info' size='mini' @click.native='clearFormData'>清空</el-button>
         </el-row>
-      </activeFormLayout>
+      </formLayout>
     </div>
   </div>
 </template>

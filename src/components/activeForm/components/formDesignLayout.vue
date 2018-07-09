@@ -1,8 +1,8 @@
 <template>
   <div class='form-design-layout'>
-    <activeFormLayout
+    <formLayout
       @dragover.native='dragover'
-      @drop.self.native='drop'
+      @drop.native='drop'
       class='form-design-content'
       :layout.sync = 'theLayout'
       :isDraggable='true'
@@ -12,8 +12,10 @@
       @setComponentConf='setComponentConf'
       @addDragData='addDragData'
     >
-      <slot slot='footer' style='text-align:center;' slot-scope="{ data }" :data='data' />
-    </activeFormLayout>
+      <template slot='footer' slot-scope="{ data }">
+        <slot name='footer' :data='data' />
+      </template>
+    </formLayout>
   </div>
 </template>
 
@@ -27,13 +29,13 @@ export default {
       default () {
         return []
       }
-    }
+    },
+    dragItems: null
   },
   data () {
     return {
       dragToIndex: -1,
-      confIndex: -1,
-      theLayout: [...this.layout] // 避免字节修改传入的数据
+      confIndex: -1
     }
   },
   computed: {
@@ -50,6 +52,9 @@ export default {
     updateLayout(newLayout = []) {
       this.$emit('update:layout', newLayout)
     },
+    updateDragItems (newVal) {
+      this.$emit('update:dragItems', newVal)
+    },
     dragover (e) {
       // ondragover 事件规定在何处放置被拖动的数据
       // 默认地，无法将数据/元素放置到其他元素中。如果需要设置允许放置，我们必须阻止对元素的默认处理方式
@@ -63,7 +68,7 @@ export default {
       this.addDragData(dragToIndex)
     },
     changePosition (from, to) { // 改变表单组件位置
-      this.dragItems = '' // 处理拖动了控件而又未拖拽进布局区的情况
+      this.updateDragItems('') // 处理拖动了控件而又未拖拽进布局区的情况
       if (from < 0 || from === to) return
       const data = [...this.theLayout]
       const changeItem = data[from]
@@ -81,14 +86,15 @@ export default {
       // data.splice(from + a, 1)
       this.updateLayout(data)
     },
-    setComponentConf (index) { // 修改表单组件配置
+    setComponentConf (data = {}) { // 修改表单组件配置
+      const {index} = data
       this.confIndex = index
       this.showConf = true
+      this.$eventBus.$emit('setComponentConf', data)
     },
     addDragData (dragToIndex, {name, type, tagsDragToIndex = -1} = {}) {
       const items = this.dragItems
-      this.dragItems = ''
-      debugger
+      this.updateDragItems('')
       if (!items) return
       let newDesignData
       if (type === 'tabs') {
@@ -139,7 +145,8 @@ export default {
 
 <style lang="less">
 .form-design-layout{
-
+  width: 100%;
+  height: 100%;
 }
 </style>
 

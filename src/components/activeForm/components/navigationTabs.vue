@@ -1,5 +1,6 @@
 <template>
-  <el-tabs v-model="activeName" type="card" @drop.native='drop'>
+  <el-tabs v-model="activeName" type="card" @drop.native='drop' @click.native='defComonent' style="
+  background-color:red;">
   <!-- <el-tabs v-model="activeName" type="card"> -->
     <!-- <el-tab-pane label="标签页" name="first">标签页内容</el-tab-pane>
     <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
@@ -8,7 +9,7 @@
     <template v-for='item in optionData'>
       <el-tab-pane :label="item.label" :name="item.name" :key='item.name'>
         <template v-if='item.components'>
-          <activeFormLayout
+          <formLayout
             @dragover.native='dragover'
             @drop.self.native='drop'
             class='form-design-content'
@@ -59,7 +60,6 @@ export default {
       handler (data) {
         data = data || []
         this.optionData = [...data]
-        console.log('this.optionData', this.optionData)
         this.setLoading()
       },
       immediate: true
@@ -80,6 +80,17 @@ export default {
             tabsDragToIndex: this.dragToIndex
           })
         }
+      }
+    },
+    defComonent(){
+      if(!this.isDraggable) return
+      const defComponent = this.$listeners.defComponent
+      if (defComponent) {
+        defComponent({
+          type: this.type,
+          name: this.activeName,
+          index: this.keyIndex
+        })
       }
     },
     changePosition(){

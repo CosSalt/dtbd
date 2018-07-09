@@ -9,7 +9,21 @@
       />
     </div>
     <div class='form-design-container'>
-      <activeFormLayout
+      <formDesignLayout
+        :layout.sync='designData'
+        :dragItems.sync='dragItems'
+      >
+        <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
+          <el-button type='primary' size='mini' @click.native='saveDesign(data)'
+            v-loading.fullscreen="loading"
+            element-loading-text="拼命保存中"
+            element-loading-spinner="el-icon-loading">
+              保存
+            </el-button>
+          <el-button type='info' size='mini' @click.native='clearDesign'>清空</el-button>
+        </el-row>
+      </formDesignLayout>
+      <!-- <formLayout
         @dragover.native='dragover'
         @drop.self.native='drop'
         class='form-design-content'
@@ -30,16 +44,16 @@
             </el-button>
           <el-button type='info' size='mini' @click.native='clearDesign'>清空</el-button>
         </el-row>
-      </activeFormLayout>
+      </formLayout> -->
     </div>
     <div class="form-design-conf">
       <div class='form-side-head'> 组件配置区 </div>
       <activeFormConf
         class='active-side-container'
         :show.sync='showConf'
-        :index='confIndex'
+        :index='confInfo.confIndex'
         :allKeys='allKeys'
-        :typeData='designData[confIndex] || {}'
+        :typeData='confData'
         @delComponent='delComponent'
         @saveComponent='saveComponent'
       />
@@ -59,7 +73,12 @@ export default {
       designData: [],
       dragToIndex: -1,
       dragItems: '',
-      confIndex: -1, // 配置信息的组件下标
+      confInfo: { // 配置信息
+        confIndex: -1,
+        name: '',
+        type: '',
+        dragToIndex: -1
+      },
       showConf: false,
       loading: false,
       designIndex: 0,
@@ -69,14 +88,43 @@ export default {
   },
   computed: {
     allKeys () {
-      const data = this.designData
+      const data = this.componentData
       const keysArr = data.filter(item => {
         return !!item.id
       })
       return keysArr.map(item => {
         return item.id
       })
+    },
+    isTabs () {
+      return this.confInfo.type === 'isTabs'
+    },
+    componentConfIndex () {
+      const { confIndex, dragToIndex} = this.confInfo
+      let index
+      if (this.isTabs) {
+        index = dragToIndex
+      } else {
+        index = confIndex
+      }
+      return index
+    },
+    componentData () {
+      const {name} = this.confInfo
+      let res
+      if (this.isTabs) {
+        const tabsConf = this.designData.childConf
+        const tabConf = tabsConf.find(item => item.name === name) || {}
+        res = tabConf.components || []
+      } else {
+        res = this.designData
+      }
+      return res
+    },
+    confData () {
+      this.componentData[this.componentConfIndex] || {}
     }
+    
   },
   methods: {
     dragStart (dragItems) {
@@ -99,7 +147,6 @@ export default {
     addDragData (dragToIndex, {name, type, tagsDragToIndex = -1} = {}) {
       const items = this.dragItems
       this.dragItems = ''
-      debugger
       if (!items) return
       if (type === 'tabs') {
         if(!name) return
@@ -156,13 +203,11 @@ export default {
       // data.splice(to, 0, changeItem)
       // data.splice(from + a, 1)
     },
-    setComponentConf (index) { // 修改表单组件配置
-      // const data = this.designData
-      this.confIndex = index
-      this.showConf = true
+    showTheConf (isShow = false) { // 显示表单配置
+      this.showConf = isShow
     },
     delComponent (index) { // 删除某个组件
-      this.confIndex = -1
+      this.confInfo.confIndex = -1
       const [delData] = this.designData.splice(index, 1)
       this.afterDelConf(delData.id)
     },
@@ -286,6 +331,18 @@ export default {
       ]
       const TblDesignData = demo
       return Promise.resolve(TblDesignData)
+    },
+    handleConf () {
+      this.$eventBus.$on('setComponentConf', (data = {}) => {
+        const {index, type, name, dragToIndex = -1} = data
+        this.confInfo = {
+          confIndex: index,
+          name,
+          type,
+          dragToIndex
+        }
+        this.showTheConf(true)
+      })
     }
   },
   created () {
@@ -310,6 +367,7 @@ export default {
         this.designs.unshift(tableDesign)
       }
     })
+    this.handleConf()
   }
 }
 </script>
