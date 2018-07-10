@@ -193,12 +193,12 @@ export default {
     dropSpecial ({e, ...args} = {}) {
       this.drop(e, args)
     },
-    defComponent (index, type, name) {
+    defComponent (index, type, param = {}) {
       if (!this.isDraggable) return
-      this.$emit('setComponentConf', {index, type, name})
+      this.$emit('setComponentConf', {index, type, ...param})
     },
     defComponentSpecial({index, type, name}) {
-      this.defComponent(index, type, name)
+      this.defComponent(index, type, {name})
     },
     getAction ([actionParam, reqOrg]) {
       // const index = this.confIndex

@@ -83,48 +83,11 @@ export default {
       loading: false,
       designIndex: 0,
       designs: [],
+      confData: {},
+      confId: '',
       isTableDrag: false,
+      allKeys: []
     }
-  },
-  computed: {
-    allKeys () {
-      const data = this.componentData
-      const keysArr = data.filter(item => {
-        return !!item.id
-      })
-      return keysArr.map(item => {
-        return item.id
-      })
-    },
-    isTabs () {
-      return this.confInfo.type === 'isTabs'
-    },
-    componentConfIndex () {
-      const { confIndex, dragToIndex} = this.confInfo
-      let index
-      if (this.isTabs) {
-        index = dragToIndex
-      } else {
-        index = confIndex
-      }
-      return index
-    },
-    componentData () {
-      const {name} = this.confInfo
-      let res
-      if (this.isTabs) {
-        const tabsConf = this.designData.childConf
-        const tabConf = tabsConf.find(item => item.name === name) || {}
-        res = tabConf.components || []
-      } else {
-        res = this.designData
-      }
-      return res
-    },
-    confData () {
-      this.componentData[this.componentConfIndex] || {}
-    }
-    
   },
   methods: {
     dragStart (dragItems) {
@@ -332,17 +295,11 @@ export default {
       const TblDesignData = demo
       return Promise.resolve(TblDesignData)
     },
-    handleConf () {
-      this.$eventBus.$on('setComponentConf', (data = {}) => {
-        const {index, type, name, dragToIndex = -1} = data
-        this.confInfo = {
-          confIndex: index,
-          name,
-          type,
-          dragToIndex
-        }
-        this.showTheConf(true)
-      })
+    handleConf ({confData, confId, allKeys} = {}) {
+      this.confData = confData
+      this.confId = confId
+      this.allKeys = allKeys
+      this.showTheConf(true)
     }
   },
   created () {
@@ -367,7 +324,7 @@ export default {
         this.designs.unshift(tableDesign)
       }
     })
-    this.handleConf()
+    this.$eventBus.$on('beforeComponentConf', this.handleConf)
   }
 }
 </script>

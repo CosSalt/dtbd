@@ -20,6 +20,7 @@
 </template>
 
 <script>
+import {defaultsDeep} from '@/utils'
 export default {
   name: 'formDesignLayout',
   props: {
@@ -30,12 +31,16 @@ export default {
         return []
       }
     },
-    dragItems: null
+    dragItems: null,
   },
   data () {
     return {
       dragToIndex: -1,
-      confIndex: -1
+      confIndex: -1,
+      childrenIndex: -1, // tabs 下选的组件下标
+      name: '', // 配置信息 name(tabs用的)
+      type: '', // 配置信息 type 值
+      confId: Date.now().toString() // 配置 ID
     }
   },
   computed: {
@@ -46,6 +51,36 @@ export default {
       set (newVal) {
         this.updateLayout(newVal)
       }
+    },
+    allKeys () {
+      const data = this.componentData
+      const keysArr = data.filter(item => {
+        return !!item.id
+      })
+      return keysArr.map(item => {
+        return item.id
+      })
+    },
+    isInTabs () {
+      return this.type === 'isTabs' && this.childrenIndex >= 0
+    }, 
+    componentConfIndex () {
+      return this.isInTabs ? this.childrenIndex : this.confIndex
+    },
+    componentData () { 
+      const name = this.name
+      let res
+      if (this.isInTabs) {
+        const tabsConf = this.theLayout[this.confIndex].childConf
+        const tabConf = tabsConf.find(item => item.name === name) || {}
+        res = tabConf.components || []
+      } else {
+        res = this.theLayout
+      }
+      return res
+    },
+    confData () {
+      return this.componentData[this.componentConfIndex] || {}
     }
   },
   methods: {
@@ -89,14 +124,18 @@ export default {
     setComponentConf (data = {}) { // 修改表单组件配置
       const {index} = data
       this.confIndex = index
-      this.showConf = true
-      this.$eventBus.$emit('setComponentConf', data)
+      this.$eventBus.$emit('beforeComponentConf', {
+        confData: this.confData,
+        confId: this.confId,
+        confIndex: index,
+        allKeys: this.allKeys
+      })
     },
     addDragData (dragToIndex, {name, type, tagsDragToIndex = -1} = {}) {
       const items = this.dragItems
       this.updateDragItems('')
       if (!items) return
-      let newDesignData
+      let newData
       if (type === 'tabs') {
         if(!name) return
         const origal = this.theLayout[dragToIndex - 1]
@@ -106,13 +145,13 @@ export default {
         if (confItem) {
           const itemComponents = confItem.components || []
           confItem.components = itemComponents
-          newDesignData = this.handleDragData(items, tagsDragToIndex, itemComponents)
+          newData = this.handleDragData(items, tagsDragToIndex, itemComponents)
         }
       } else {
-        newDesignData = this.handleDragData(items, dragToIndex, this.theLayout)
+        newData = this.handleDragData(items, dragToIndex, this.theLayout)
       }
-      if (newDesignData) {
-        this.updateLayout(newDesignData)
+      if (newData) {
+        this.updateLayout(newData)
       }
     },
     handleDragData (items, dragToIndex, origal = []) {
@@ -138,7 +177,75 @@ export default {
         }
       }
       return origal
+    },
+    handleConf (data, id) { // data 为空表示删除
+      if (id === this.confId) {
+        const index = this.confIndex
+        if(!data) {
+          this.delComponent(index)
+        } else {
+          this.saveComponent(index, data)
+        }
+      }
+    },
+    getSameIndex (id, index) {
+      return this.layout.findIndex((item, i) => item.id === id && i !== index)
+    },
+    saveComponent (index, confData = {}) { // 保存配置数据
+      const id = confData.id
+      const theIndex = this.getSameIndex(id, index)
+      if (theIndex >= 0) {
+        alert('已存在相同的 ID:"'+ id +'",请重新设置ID')
+        return
+      }
+      let newData = defaultsDeep(this.layout[index], confData)
+      const isArray = Array.isArray
+      const assignObj = {}
+      for (let [key, val] of Object.entries(newData)) {
+        if (isArray(val)) {
+          assignObj[key] = confData[key]
+        }
+      }
+      newData = Object.assign(newData, assignObj)
+      const allData = [...this.layout] 
+      const [oldData] = allData.splice(index, 1, newData)
+      this.updateLayout(allData)
+      this.afterSaveConf(oldData.id, newData.id)
+    },
+    afterSaveConf (oldId, newId) { // ID修改后进行替换
+      if(!oldId || !newId) return
+      this.componentData.forEach(item => {
+        const relationIds = item.relationIds
+        if (relationIds && relationIds.length > 0) {
+          const index = relationIds.findIndex(key => key === oldId)
+          if (index >=0) {
+            relationIds[index] = newId
+          }
+        }
+      })
+    },
+    delComponent (index) { // 删除某个组件
+      this.confIndex = -1
+      const allData = [...this.layout]
+      const [delData] = allData.splice(index, 1)
+      this.updateLayout(allData)
+      this.afterDelConf(delData.id)
+    },
+    afterDelConf (id) { // 某个组件被删除后
+      if(!id) return
+      this.layout.forEach(item => {
+        const relationIds = item.relationIds
+        if (relationIds && relationIds.length > 0) {
+          const index = relationIds.findIndex(key => key === id)
+          if (index >=0) {
+            relationIds.splice(index, 1)
+          }
+        }
+      })
     }
+  },
+  created () {
+    this.$eventBus.$on('updateComponentConf:' + this.confId, this.handleConf)
   }
 }
 </script>

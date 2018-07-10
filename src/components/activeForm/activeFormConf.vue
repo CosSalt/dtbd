@@ -38,23 +38,19 @@ export default {
     this.$allData = componentConf
   },
   props: {
-    show: {
-      type: Boolean,
-      required: true,
-      default: false
-    },
-    typeData: {
-      type: Object,
-      required: true
-    },
-    index: {
-      type: Number,
-      required: true
-    },
-    allKeys: {
-      type: Array,
-      required: true
-    }
+    // show: {
+    //   type: Boolean,
+    //   required: true,
+    //   default: false
+    // },
+    // typeData: {
+    //   type: Object,
+    //   required: true
+    // },
+    // index: {
+    //   type: Number,
+    //   required: true
+    // }
   },
   data () {
     return {
@@ -62,7 +58,12 @@ export default {
       componentType: null,
       confModel: {},
       confSaveLoading: false,
-      confDelLoading: false
+      confDelLoading: false,
+      typeData: {},
+      confId: Date.now().toString(),
+      allKeys: [],
+      index: -1,
+      show: false
     }
   },
   computed: {
@@ -105,14 +106,20 @@ export default {
   },
   watch: {
     index () {
-      this.confModel = {}
-      this.initConfModel()
+      this.changConfModel()
+    },
+    confId () {
+      this.changConfModel()
     },
     typeData (newVal = {}) {
       this.componentType = newVal.type
     }
   },
   methods: {
+    changConfModel () {
+      this.confModel = {}
+      this.initConfModel()
+    },
     initConfModel () {
       let res = {}
       const typeData = this.typeData
@@ -138,21 +145,23 @@ export default {
       return defaultsDeep(...args)
     },
     clickShow (show = false) {
-      this.$emit('update:show', show)
+      this.show = show
     },
     saveConf () {
       // this.setSaveLoading(true)
       const allData = this.$allData
-      let err = null
+      let err = []
       const savedConf = {}
       for (let [key, val] of Object.entries(this.confModel)) {
         const theData = allData.find(item => item.key === key) || {}
         const type = theData.type
-        err = this.test(theData.component, val)
-        if (err) {
-          err = theData.component.labelText + err
-          break
+        let errArr = this.test(theData.component, val)
+        if (errArr.length > 0) {
+          const text = theData.component.labelText
+          err.push(...errArr.map(msg => text + msg))
         }
+        if (err.length > 0) continue
+
         if (type) {
           savedConf[type] = Object.assign({}, savedConf[type], {
             [key]: val
@@ -161,8 +170,8 @@ export default {
           savedConf[key] = (theData.parse === true && val) ? JSON.parse(val) : val
         }
       }
-      if (err) {
-        alert(err)
+      if (err.length > 0) {
+        alert(err.join('\n'))
         this.setSaveLoading()
         return
       }
@@ -174,7 +183,7 @@ export default {
         defaultFirstOption: allowCreate
       }
       savedConf.bind = Object.assign({}, savedConf.bind, createObj)
-      this.$emit('saveComponent', this.index, savedConf)
+      this.updateConf(savedConf)
     },
     setSaveLoading(loading = false) {
       this.confSaveLoading = loading
@@ -183,52 +192,62 @@ export default {
       this.confDelLoading = loading
     },
     test (component, val) { // 校验
-      const test = component.rules
-      let err = null
-      if (test) {
-        if (test.required === true) {
+      const rules = component.rules
+      let err = []
+      if (rules) {
+        if (rules.required === true) {
           if (!val) {
-            err = '不能为空'
+            err.push('不能为空')
           }
         }
-        if (!err && test.reg) {
-          if (!test.reg.test(val)) {
-            err = test.err
+        if (rules.reg) {
+          if (!rules.reg.test(val)) {
+            err.push(rules.err)
           }
         }
-        if(!err && test.validator) {
-          err = test.validator(val)
+        if(rules.validator) {
+          const errMsg = rules.validator(val)
+          if (errMsg) err.push(errMsg)
         }
       }
-      // if(!err) {
-      //   err = this.confTest(component, val)
-      // }
       return err
     },
     confTest (component, valArr = []) {
-      let err = null
+      let err = []
       if(component.bind && component.bind.conf) {
         const childrenComponent = component.bind.conf[this.componentType]
         if(!Array.isArray(valArr) || valArr.length <= 0 ) return null
         for (let childComponent of childrenComponent) {
           for(let item of valArr) {
-            err = this.test(childComponent, item[childComponent.key])
-            if(err) break
+            const errArr = this.test(childComponent, item[childComponent.key])
+            if(errArr.length > 0) err.push(...errArr)
           }
-          if(err) break
         }
       }
       return err
     },
     delConf () {
       this.setDelLoading(true)
-      this.$emit('delComponent', this.index)
+      this.updateConf()
       this.clickShow()
       this.setDelLoading()
     },
     getKey (rowIndex , columnIndex) {
       return "row_" + rowIndex + "_column_" + columnIndex
+    },
+    handleConf ({confData = {}, confId, allKeys = [], confIndex} = {}) {
+      this.allKeys = allKeys
+      this.confId = confId
+      this.typeData = confData
+      this.index = confIndex
+      this.clickShow(true)
+    },
+    updateConf(data) { // data 为空代表删除
+      this.$eventBus.$emit('updateComponentConf:' + this.confId, data, this.confId)
     }
+  },
+  created () {
+    this.$eventBus.$on('beforeComponentConf', this.handleConf)
   }
 }
 </script>
