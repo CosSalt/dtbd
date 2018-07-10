@@ -2,7 +2,7 @@
   <div class='form-design-layout'>
     <formLayout
       @dragover.native='dragover'
-      @drop.native='drop'
+      @drop.self.native='drop'
       class='form-design-content'
       :layout.sync = 'theLayout'
       :isDraggable='true'
@@ -40,13 +40,14 @@ export default {
       childrenIndex: -1, // tabs 下选的组件下标
       name: '', // 配置信息 name(tabs用的)
       type: '', // 配置信息 type 值
-      confId: Date.now().toString() // 配置 ID
+      confId: Date.now().toString(), // 配置 ID
+      dragPosition: -1
     }
   },
   computed: {
     theLayout: {
       get () {
-        return [...this.layout] // 避免直接修改传入的数据, 破坏数据的单向流动原则, 避免产生副作用
+        return this.layout.map(item => defaultsDeep({}, item)) // 避免直接修改传入的数据, 破坏数据的单向流动原则, 避免产生副作用
       },
       set (newVal) {
         this.updateLayout(newVal)
@@ -61,8 +62,11 @@ export default {
         return item.id
       })
     },
+    isTabs () {
+      return this.type === 'tabs' && this.confIndex >= 0 && this.dragPosition === this.confIndex // 要选择后才能拖进(处理)tabs里面
+    },
     isInTabs () {
-      return this.type === 'isTabs' && this.childrenIndex >= 0
+      return this.isTabs && this.childrenIndex >= 0
     }, 
     componentConfIndex () {
       return this.isInTabs ? this.childrenIndex : this.confIndex
@@ -132,21 +136,29 @@ export default {
       })
     },
     addDragData (dragToIndex, {name, type, tagsDragToIndex = -1} = {}) {
+      this.type = type
+      this.name = name
+      this.childrenIndex = tagsDragToIndex
+      const dragPosition = dragToIndex - 1
+      this.dragPosition = dragPosition
       const items = this.dragItems
       this.updateDragItems('')
       if (!items) return
       let newData
-      if (type === 'tabs') {
-        if(!name) return
-        const origal = this.theLayout[dragToIndex - 1]
+      let isDragInTabs = this.isTabs && name
+      let confItem
+      let origal
+      if (isDragInTabs) {
+        origal = this.theLayout[dragPosition]
         const childConf = (origal && origal['childConf']) || []
-        origal['childConf'] = childConf
-        const confItem = childConf.find(item => name === item.name)
-        if (confItem) {
-          const itemComponents = confItem.components || []
-          confItem.components = itemComponents
-          newData = this.handleDragData(items, tagsDragToIndex, itemComponents)
-        }
+        confItem = childConf.find(item => name === item.name)
+        isDragInTabs = !!confItem
+      }
+      if (isDragInTabs) {
+        const itemComponents = confItem.components || []
+        newData = this.handleDragData(items, tagsDragToIndex, itemComponents)
+        confItem.components = newData
+        newData = this.theLayout
       } else {
         newData = this.handleDragData(items, dragToIndex, this.theLayout)
       }
@@ -254,6 +266,14 @@ export default {
 .form-design-layout{
   width: 100%;
   height: 100%;
+    .form-design-content{
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    overflow: auto;
+    border: 2px solid grey;
+    padding: 0 10px;
+  }
 }
 </style>
 

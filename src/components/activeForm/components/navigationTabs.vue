@@ -1,6 +1,5 @@
 <template>
-  <el-tabs v-model="activeName" type="card" @drop.native='drop' @click.native='defComonent' style="
-  background-color:red;">
+  <el-tabs v-model="activeName" type="card" @drop.native='drop' @click.native='defComonent'>
   <!-- <el-tabs v-model="activeName" type="card"> -->
     <!-- <el-tab-pane label="标签页" name="first">标签页内容</el-tab-pane>
     <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
@@ -9,7 +8,7 @@
     <template v-for='item in optionData'>
       <el-tab-pane :label="item.label" :name="item.name" :key='item.name'>
         <template v-if='item.components'>
-          <formLayout
+          <!-- <formLayout
             @dragover.native='dragover'
             @drop.self.native='drop'
             class='form-design-content'
@@ -20,7 +19,11 @@
             @changePosition='changePosition'
             @setComponentConf='setComponentConf'
             @addDragData='addDragData'
-          />
+          /> -->
+            <formDesignLayout
+              :layout.sync='item.components'
+              :dragItems.sync='theDragItems'
+            />
         </template>
       </el-tab-pane>
     </template>
@@ -43,7 +46,8 @@ export default {
     keyIndex: {
       type: Number,
       default: -1
-    }
+    },
+    dragItems: null
   },
   data () {
     return {
@@ -55,17 +59,37 @@ export default {
       confIndex: -1,
     }
   },
+  computed: {
+    theDragItems: {
+      get () {
+        return this.dragItems
+      },
+      set (newVal) {
+        this.$emit('update:dragItems', newVal)
+      }
+    }
+  },
   watch: {
     'formData.childConf': {
       handler (data) {
         data = data || []
         this.optionData = [...data]
+        this.setModelName()
         this.setLoading()
       },
       immediate: true
     }
   },
   methods: {
+    setModelName () {
+      const name = this.activeName
+      const index = this.optionData.findIndex(item => name === item.name)
+      if(index < 0) {
+        const defItem = this.optionData[0]
+        const defVal = defItem ? defItem.name : ''
+        this.activeName = defVal
+      }
+    },
     setLoading (res = false) {
       this.loading = res
     },

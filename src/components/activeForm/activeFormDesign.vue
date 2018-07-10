@@ -363,13 +363,6 @@ export default {
     height: 100%;
     overflow: auto;
   }
-  .form-design-content{
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    overflow: auto;
-    border: 2px solid grey;
-  }
   .form-side-head {
     width: 100%;
     height: @formSideHead;
