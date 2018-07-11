@@ -4,7 +4,7 @@
       @dragover.native='dragover'
       @drop.self.native='drop'
       class='form-design-content'
-      :layout.sync = 'theLayout'
+      :layout.sync='theLayout'
       :isDraggable='true'
       :dragToIndex.sync='dragToIndex'
       :confIndex='confIndex'
@@ -89,6 +89,7 @@ export default {
   },
   methods: {
     updateLayout(newLayout = []) {
+      // this.$eventBus.$emit('updateComponent', newLayout)
       this.$emit('update:layout', newLayout)
     },
     updateDragItems (newVal) {
@@ -201,7 +202,7 @@ export default {
       }
     },
     getSameIndex (id, index) {
-      return this.layout.findIndex((item, i) => item.id === id && i !== index)
+      return this.theLayout.findIndex((item, i) => item.id === id && i !== index)
     },
     saveComponent (index, confData = {}) { // 保存配置数据
       const id = confData.id
@@ -210,7 +211,7 @@ export default {
         alert('已存在相同的 ID:"'+ id +'",请重新设置ID')
         return
       }
-      let newData = defaultsDeep(this.layout[index], confData)
+      let newData = defaultsDeep(this.theLayout[index], confData)
       const isArray = Array.isArray
       const assignObj = {}
       for (let [key, val] of Object.entries(newData)) {
@@ -219,7 +220,7 @@ export default {
         }
       }
       newData = Object.assign(newData, assignObj)
-      const allData = [...this.layout] 
+      const allData = [...this.theLayout] 
       const [oldData] = allData.splice(index, 1, newData)
       this.updateLayout(allData)
       this.afterSaveConf(oldData.id, newData.id)
@@ -238,14 +239,14 @@ export default {
     },
     delComponent (index) { // 删除某个组件
       this.confIndex = -1
-      const allData = [...this.layout]
+      const allData = [...this.theLayout]
       const [delData] = allData.splice(index, 1)
       this.updateLayout(allData)
       this.afterDelConf(delData.id)
     },
     afterDelConf (id) { // 某个组件被删除后
       if(!id) return
-      this.layout.forEach(item => {
+      this.theLayout.forEach(item => {
         const relationIds = item.relationIds
         if (relationIds && relationIds.length > 0) {
           const index = relationIds.findIndex(key => key === id)

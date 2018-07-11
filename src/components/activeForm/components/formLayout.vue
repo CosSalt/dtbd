@@ -8,7 +8,7 @@
         >
           <template v-for='(layoutItem, i) in theLayoutData'>
             <el-row :key='"row" + i'>
-              <template v-for='item in layoutItem'>
+              <template v-for='(item, index) in layoutItem'>
                 <template v-if='item.notFormItem'>
                   <el-col
                     class='active-form-row'
@@ -20,7 +20,8 @@
                       <commonIndex
                         class='component-style'
                         v-model='formModel[item.id]'
-                        :formData='item'
+                        :formData.sync='item'
+                        @update:formData='val => updateFormData(layoutItem, index, item.index, val)'
                         :isDraggable='isDraggable'
                         :keyIndex='item.index'
                         :draggable='isDraggable'
@@ -37,12 +38,13 @@
                     :span='item.span'
                     :key='item.id'
                     :draggable='isDraggable'
+                    :style='isDraggable ? {cursor: "pointer"} : {}'
                     @dragstart.native='dragstart(item.index, $event)'
                     @dragover.native='dragover(item.index, $event)'
-                    @click.native='defComponent(item.index, item.type)'
+                    @click.self.stop.native='defComponent(item.index, item.type)'
                     @drop.prevent.native='drop'
                     class='active-form-row'
-                    :class = 'confIndex === item.index ? "component-conf" : ""'
+                    :class='confIndex === item.index ? "component-conf" : ""'
                   >
                     <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' :rules="formRules[item.id]">
                       <formIndex
@@ -145,6 +147,9 @@ export default {
     }
   },
   methods: {
+    updateLayout (val) {
+      this.$emit('update:layout', val)
+    },
     tempId (id, index) {
       return id || getTempId(index, 'layout') // 临时 ID
     },
@@ -226,7 +231,7 @@ export default {
           newLayout[confIndex] = Object.assign({}, newLayout[confIndex], {
             [position]: data
           })
-          this.$emit('update:layout', newLayout)
+          this.updateLayout(newLayout)
         }, 2000)
       })
     },
@@ -236,6 +241,21 @@ export default {
         emptyModel[key] = null
       }
       this.formModel = emptyModel
+    },
+    updateFormData (item, propName, layoutIndex, val = {}) {
+      debugger
+      item[propName] = val
+      const layout = [...this.layout]
+      const id = layout[layoutIndex].id
+      if (!id) {
+        alert("请先设置此 Tabs 的 ID")
+        return
+      }
+      this.updateLayout(newLayout)
+      let newLayout = []
+      this.theLayoutData.forEach(item => newLayout.push(...item)) // 将用于布局的数据展开
+      layout.splice(layoutIndex, 1, newLayout[layoutIndex])
+      this.updateLayout(layout)
     }
   },
   created () {

@@ -1,5 +1,5 @@
 <template>
-  <el-tabs v-model="activeName" type="card" @drop.native='drop' @click.native='defComonent'>
+  <el-tabs v-model="activeName" type="card" @drop.native='drop' @click.native='defComonent' class='navigaton-tabs'>
   <!-- <el-tabs v-model="activeName" type="card"> -->
     <!-- <el-tab-pane label="标签页" name="first">标签页内容</el-tab-pane>
     <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
@@ -20,9 +20,27 @@
             @setComponentConf='setComponentConf'
             @addDragData='addDragData'
           /> -->
-            <formDesignLayout
+            <!-- <formDesignLayout
+              class='tabs-form-design-layout'
               :layout.sync='item.components'
               :dragItems.sync='theDragItems'
+            /> -->
+            <!-- <formDesignLayout
+              class='tabs-form-design-layout'
+              :layout.sync='item.components'
+              :dragItems='theDragItems'
+              @update:layout='val => item.components = val'
+            /> -->
+            <!-- <formDesignLayout
+              class='tabs-form-design-layout'
+              :layout='item.components'
+              :dragItems='theDragItems'
+            /> -->
+            <formDesignLayout
+              class='tabs-form-design-layout'
+              :layout.sync='item.components'
+              :dragItems='theDragItems'
+              @update:layout='val => updateLayout(item, "components", val)'
             />
         </template>
       </el-tab-pane>
@@ -81,6 +99,10 @@ export default {
     }
   },
   methods: {
+    updateLayout (item = {}, propName, newVal = []) {
+      item[propName] = newVal
+      this.$emit('update:formData', this.formData)
+    },
     setModelName () {
       const name = this.activeName
       const index = this.optionData.findIndex(item => name === item.name)
@@ -129,4 +151,14 @@ export default {
   }
 }
 </script>
+
+<style lang="less">
+.navigaton-tabs{
+  .tabs-form-design-layout {
+    .component-conf {
+      background-color: #b0c8e0;
+    }
+  }
+}
+</style>
 

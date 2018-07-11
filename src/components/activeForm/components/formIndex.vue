@@ -3,6 +3,7 @@
     :is="item.component"
     v-model='componentVal'
     :formData='item'
+    @update:formData='updateFormData'
     :componentType='componentType'
     :keyIndex='keyIndex'
     :showLabel='showLabel'
@@ -63,6 +64,9 @@ export default {
   methods: {
     getAction (...args) {
       this.$emit('getAction',...args)
+    },
+    updateFormData (val = {}) {
+      this.$emit('update:formData', val)
     }
   }
 }

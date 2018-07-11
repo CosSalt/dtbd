@@ -300,6 +300,9 @@ export default {
       this.confId = confId
       this.allKeys = allKeys
       this.showTheConf(true)
+    },
+    handleComponent (data = []) {
+      this.designData = data
     }
   },
   created () {
@@ -324,7 +327,8 @@ export default {
         this.designs.unshift(tableDesign)
       }
     })
-    this.$eventBus.$on('beforeComponentConf', this.handleConf)
+    this.$eventBus.$on('beforeComponentConf', this.handleConf) // 更新配置
+    this.$eventBus.$on('updateComponent', this.handleComponent) // 更新数据
   }
 }
 </script>
