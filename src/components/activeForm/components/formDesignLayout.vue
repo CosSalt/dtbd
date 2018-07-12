@@ -8,6 +8,8 @@
       :isDraggable='true'
       :dragToIndex.sync='dragToIndex'
       :confIndex='confIndex'
+      :dragItems='dragItems'
+      @updateDragItems='updateDragItems'
       @changePosition='changePosition'
       @setComponentConf='setComponentConf'
       @addDragData='addDragData'
@@ -90,9 +92,6 @@ export default {
   methods: {
     updateLayout(newLayout = []) {
       this.$emit('updateLayout', newLayout)
-    },
-    updateDragItems (newVal) {
-      this.$emit('update:dragItems', newVal)
     },
     dragover (e) {
       // ondragover 事件规定在何处放置被拖动的数据
@@ -259,6 +258,9 @@ export default {
           }
         }
       })
+    },
+    updateDragItems (val) {
+      this.$emit('updateDragItems', val)
     }
   },
   created () {

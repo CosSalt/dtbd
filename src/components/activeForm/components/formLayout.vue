@@ -25,6 +25,8 @@
                         :isDraggable='isDraggable'
                         :keyIndex='item.index'
                         :draggable='isDraggable'
+                        :dragItems='dragItems'
+                        @updateDragItems='updateDragItems'
                         @drop='dropSpecial'
                         @defComponent='defComponentSpecial'
                         @dragstart.self.stop.native='dragstart(item.index, $event)'
@@ -89,7 +91,8 @@ export default {
     },
     receiveData: {
       type: Object
-    }
+    },
+    dragItems: null
   },
   data () {
     return {
@@ -254,6 +257,9 @@ export default {
       this.theLayoutData.forEach(item => newLayout.push(...item)) // 将用于布局的数据展开
       layout.splice(layoutIndex, 1, newLayout[layoutIndex])
       this.updateLayout(layout)
+    },
+    updateDragItems (val) {
+      this.$emit('updateDragItems', val)
     }
   },
   created () {

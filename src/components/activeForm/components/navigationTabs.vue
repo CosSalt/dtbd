@@ -8,7 +8,8 @@
             <formDesignLayout
               class='tabs-form-design-layout'
               :layout='item.components'
-              :dragItems='theDragItems'
+              :dragItems='dragItems'
+              @updateDragItems='updateDragItems'
               @updateLayout='val => updateFormData(index, "components", val)'
             />
         </template>
@@ -48,14 +49,6 @@ export default {
     }
   },
   computed: {
-    theDragItems: {
-      get () {
-        return this.dragItems
-      },
-      set (newVal) {
-        this.$emit('update:dragItems', newVal)
-      }
-    },
     theFormData () {
       return defaultsDeep({}, this.formData)
     }
@@ -90,28 +83,29 @@ export default {
       this.loading = res
     },
     drop (e) {
-      if (this.isDraggable) {
-        this.executeParentListeners('drop',{
-          e,
-          type: this.type,
-          name: this.activeName,
-          tabsDragToIndex: this.dragToIndex
-        })
-      }
+      this.executeParentListeners('drop',{
+        e,
+        type: this.type,
+        name: this.activeName,
+        tabsDragToIndex: this.dragToIndex
+      })
     },
     executeParentListeners(eventName, ...args) {
+      if(!this.isDraggable) return
       const eventListener = this.$listeners[eventName]
       if (eventListener) {
         eventListener(...args)
       }
     },
     defComonent(){
-      if(!this.isDraggable) return
       this.executeParentListeners('defComponent', {
         type: this.type,
         name: this.activeName,
         index: this.keyIndex
       })
+    },
+    updateDragItems (val) {
+      this.executeParentListeners('updateDragItems', val)
     }
   }
 }

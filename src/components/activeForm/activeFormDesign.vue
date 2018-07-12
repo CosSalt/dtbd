@@ -12,7 +12,8 @@
       <formDesignLayout
         :layout='designData'
         @updateLayout='updateLayout'
-        :dragItems.sync='dragItems'
+        :dragItems='dragItems'
+        @updateDragItems='updateDragItems'
       >
         <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
           <el-button type='primary' size='mini' @click.native='saveDesign(data)'
@@ -138,6 +139,9 @@ export default {
     },
     updateLayout (val) {
       this.designData = val
+    },
+    updateDragItems (val) {
+      this.dragItems = val
     }
   },
   created () {

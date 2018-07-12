@@ -4,6 +4,7 @@
     :is="item.component"
     v-model='componentVal'
     :formData='item'
+    :dragItems.sync='dragItems'
     v-bind='$attrs'
     v-on='$listeners'
   />
@@ -21,7 +22,8 @@ export default {
     formData: {
       required: true,
       type: Object
-    }
+    },
+    dragItems: null
   },
   data () {
     return {
