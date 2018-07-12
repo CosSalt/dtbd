@@ -89,8 +89,7 @@ export default {
   },
   methods: {
     updateLayout(newLayout = []) {
-      // this.$eventBus.$emit('updateComponent', newLayout)
-      this.$emit('update:layout', newLayout)
+      this.$emit('updateLayout', newLayout)
     },
     updateDragItems (newVal) {
       this.$emit('update:dragItems', newVal)
@@ -124,6 +123,7 @@ export default {
       // const a = from > to ? 1 : 0
       // data.splice(to, 0, changeItem)
       // data.splice(from + a, 1)
+      this.hideComponentConf()
       this.updateLayout(data)
     },
     setComponentConf (data = {}) { // 修改表单组件配置
@@ -136,6 +136,9 @@ export default {
         allKeys: this.allKeys
       })
     },
+    hideComponentConf () { // 改变位置,增加组件时隐藏配置项,配置项中的数据过时
+      this.$eventBus.$emit('beforeComponentConf', {isShow: false})
+    },
     addDragData (dragToIndex, {name, type, tagsDragToIndex = -1} = {}) {
       this.type = type
       this.name = name
@@ -147,7 +150,6 @@ export default {
       if (!items) return
       let newData
       let isDragInTabs = this.isTabs && name
-      if(isDragInTabs) debugger
       let confItem
       let origal
       if (isDragInTabs) {
@@ -165,6 +167,7 @@ export default {
         newData = this.handleDragData(items, dragToIndex, this.theLayout)
       }
       if (newData) {
+        this.hideComponentConf()
         this.updateLayout(newData)
       }
     },

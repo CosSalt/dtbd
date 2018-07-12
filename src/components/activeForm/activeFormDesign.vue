@@ -10,7 +10,8 @@
     </div>
     <div class='form-design-container'>
       <formDesignLayout
-        :layout.sync='designData'
+        :layout='designData'
+        @updateLayout='updateLayout'
         :dragItems.sync='dragItems'
       >
         <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
@@ -23,28 +24,6 @@
           <el-button type='info' size='mini' @click.native='clearDesign'>清空</el-button>
         </el-row>
       </formDesignLayout>
-      <!-- <formLayout
-        @dragover.native='dragover'
-        @drop.self.native='drop'
-        class='form-design-content'
-        :layout.sync = 'designData'
-        :isDraggable='true'
-        :dragToIndex.sync='dragToIndex'
-        :confIndex='confIndex'
-        @changePosition='changePosition'
-        @setComponentConf='setComponentConf'
-        @addDragData='addDragData'
-      >
-        <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
-          <el-button type='primary' size='mini' @click.native='saveDesign(data)'
-            v-loading.fullscreen="loading"
-            element-loading-text="拼命保存中"
-            element-loading-spinner="el-icon-loading">
-              保存
-            </el-button>
-          <el-button type='info' size='mini' @click.native='clearDesign'>清空</el-button>
-        </el-row>
-      </formLayout> -->
     </div>
     <div class="form-design-conf">
       <div class='form-side-head'> 组件配置区 </div>
@@ -303,6 +282,9 @@ export default {
     },
     handleComponent (data = []) {
       this.designData = data
+    },
+    updateLayout (val) {
+      this.designData = val
     }
   },
   created () {

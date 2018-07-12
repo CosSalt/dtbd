@@ -1,48 +1,15 @@
 <template>
-  <el-tabs v-model="activeName" type="card" @drop.native='drop' @click.native='defComonent'
+  <el-tabs v-model="activeName" type="card" @drop.stop.native='drop' @click.stop.native='defComonent'
     class='navigaton-tabs'
   >
-  <!-- <el-tabs v-model="activeName" type="card"> -->
-    <!-- <el-tab-pane label="标签页" name="first">标签页内容</el-tab-pane>
-    <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>
-    <el-tab-pane label="角色管理" name="third">角色管理</el-tab-pane>
-    <el-tab-pane label="定时任务补偿" name="fourth">定时任务补偿</el-tab-pane> -->
-    <template v-for='item in optionData'>
+    <template v-for='(item, index) in optionData'>
       <el-tab-pane :label="item.label" :name="item.name" :key='item.name'>
         <template v-if='item.components'>
-          <!-- <formLayout
-            @dragover.native='dragover'
-            @drop.self.native='drop'
-            class='form-design-content'
-            :layout.sync = 'item.components'
-            :isDraggable='isDraggable'
-            :dragToIndex.sync='dragToIndex'
-            :confIndex='confIndex'
-            @changePosition='changePosition'
-            @setComponentConf='setComponentConf'
-            @addDragData='addDragData'
-          /> -->
-            <!-- <formDesignLayout
-              class='tabs-form-design-layout'
-              :layout.sync='item.components'
-              :dragItems.sync='theDragItems'
-            /> -->
-            <!-- <formDesignLayout
-              class='tabs-form-design-layout'
-              :layout.sync='item.components'
-              :dragItems='theDragItems'
-              @update:layout='val => item.components = val'
-            /> -->
-            <!-- <formDesignLayout
+            <formDesignLayout
               class='tabs-form-design-layout'
               :layout='item.components'
               :dragItems='theDragItems'
-            /> -->
-            <formDesignLayout
-              class='tabs-form-design-layout'
-              :layout.sync='item.components'
-              :dragItems='theDragItems'
-              @update:layout='val => updateLayout(item, "components", val)'
+              @updateLayout='val => updateFormData(index, "components", val)'
             />
         </template>
       </el-tab-pane>
@@ -51,6 +18,7 @@
 </template>
 
 <script>
+import {defaultsDeep} from '@/utils'
 export default {
   name: 'navigationTabs',
   props: {
@@ -87,10 +55,13 @@ export default {
       set (newVal) {
         this.$emit('update:dragItems', newVal)
       }
+    },
+    theFormData () {
+      return defaultsDeep({}, this.formData)
     }
   },
   watch: {
-    'formData.childConf': {
+    'theFormData.childConf': {
       handler (data) {
         data = data || []
         this.optionData = [...data]
@@ -100,10 +71,11 @@ export default {
       immediate: true
     }
   },
-  methods: {
-    updateLayout (item = {}, propName, newVal = []) {
-      item[propName] = newVal
-      this.$emit('update:formData', this.formData)
+  methods: { // 与外界关联的主要有两类: 一类是将变更后的 layout 数据传输出去,一类是将要处理的数据信息传出去,放在 formLayout.vue 中处理
+    updateFormData (index, propName, newVal = []) {
+      const newData = defaultsDeep({}, this.theFormData)
+      newData.childConf[index][propName] = newVal
+      this.executeParentListeners('updateFormData', newData)
     },
     setModelName () {
       const name = this.activeName
@@ -119,36 +91,27 @@ export default {
     },
     drop (e) {
       if (this.isDraggable) {
-        const drop = this.$listeners.drop
-        if (drop) {
-          drop({
-            e, 
-            type: this.type,
-            name: this.activeName,
-            tabsDragToIndex: this.dragToIndex
-          })
-        }
+        this.executeParentListeners('drop',{
+          e,
+          type: this.type,
+          name: this.activeName,
+          tabsDragToIndex: this.dragToIndex
+        })
+      }
+    },
+    executeParentListeners(eventName, ...args) {
+      const eventListener = this.$listeners[eventName]
+      if (eventListener) {
+        eventListener(...args)
       }
     },
     defComonent(){
       if(!this.isDraggable) return
-      const defComponent = this.$listeners.defComponent
-      if (defComponent) {
-        defComponent({
-          type: this.type,
-          name: this.activeName,
-          index: this.keyIndex
-        })
-      }
-    },
-    changePosition(){
-
-    },
-    setComponentConf(){
-
-    },
-    addDragData(){
-      
+      this.executeParentListeners('defComponent', {
+        type: this.type,
+        name: this.activeName,
+        index: this.keyIndex
+      })
     }
   }
 }

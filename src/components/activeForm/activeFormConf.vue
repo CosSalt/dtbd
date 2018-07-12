@@ -37,21 +37,6 @@ export default {
   beforeCreate () {
     this.$allData = componentConf
   },
-  props: {
-    // show: {
-    //   type: Boolean,
-    //   required: true,
-    //   default: false
-    // },
-    // typeData: {
-    //   type: Object,
-    //   required: true
-    // },
-    // index: {
-    //   type: Number,
-    //   required: true
-    // }
-  },
   data () {
     return {
       attrConf: [],
@@ -176,7 +161,7 @@ export default {
         return
       }
       const bind = savedConf.bind || {}
-      let allowCreate = bind.allowCreate
+      let allowCreate = !!bind.allowCreate
       const createObj = {
         allowCreate,
         filterable: allowCreate,
@@ -235,7 +220,8 @@ export default {
     getKey (rowIndex , columnIndex) {
       return "row_" + rowIndex + "_column_" + columnIndex
     },
-    handleConf ({confData = {}, confId, allKeys = [], confIndex} = {}) {
+    handleConf ({confData = {}, confId, allKeys = [], confIndex = -1, isShow = true} = {}) {
+      this.clickShow(isShow)
       this.allKeys = allKeys
       this.confId = confId
       this.typeData = confData

@@ -20,15 +20,15 @@
                       <commonIndex
                         class='component-style'
                         v-model='formModel[item.id]'
-                        :formData.sync='item'
-                        @update:formData='val => updateFormData(layoutItem, index, item.index, val)'
+                        :formData='item'
+                        @updateFormData='val => updateFormData(layoutItem, index, item.index, val)'
                         :isDraggable='isDraggable'
                         :keyIndex='item.index'
                         :draggable='isDraggable'
-                        @drop.self='dropSpecial'
+                        @drop='dropSpecial'
                         @defComponent='defComponentSpecial'
-                        @dragstart.native='dragstart(item.index, $event)'
-                        @dragover.native='dragover(item.index, $event)'
+                        @dragstart.self.stop.native='dragstart(item.index, $event)'
+                        @dragover.stop.native='dragover(item.index, $event)'
                       />
                     </div>
                   </el-col>
@@ -39,10 +39,10 @@
                     :key='item.id'
                     :draggable='isDraggable'
                     :style='isDraggable ? {cursor: "pointer"} : {}'
-                    @dragstart.native='dragstart(item.index, $event)'
-                    @dragover.native='dragover(item.index, $event)'
+                    @dragstart.self.stop.native='dragstart(item.index, $event)'
+                    @dragover.self.stop.native='dragover(item.index, $event)'
                     @click.self.stop.native='defComponent(item.index, item.type)'
-                    @drop.prevent.native='drop'
+                    @drop.self.stop.native='drop'
                     class='active-form-row'
                     :class='confIndex === item.index ? "component-conf" : ""'
                   >
@@ -250,7 +250,6 @@ export default {
         alert("请先设置此 Tabs 的 ID")
         return
       }
-      this.updateLayout(newLayout)
       let newLayout = []
       this.theLayoutData.forEach(item => newLayout.push(...item)) // 将用于布局的数据展开
       layout.splice(layoutIndex, 1, newLayout[layoutIndex])
