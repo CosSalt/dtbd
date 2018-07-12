@@ -27,20 +27,14 @@
     </div>
     <div class="form-design-conf">
       <div class='form-side-head'> 组件配置区 </div>
-      <activeFormConf
+      <activeFormConf 
         class='active-side-container'
-        :show.sync='showConf'
-        :index='confInfo.confIndex'
-        :allKeys='allKeys'
-        :typeData='confData'
-        @delComponent='delComponent'
-        @saveComponent='saveComponent'
       />
     </div>
   </div>
 </template>
 <script>
-import {defaultsDeep} from '@/utils'
+// import {defaultsDeep} from '@/utils'
 import componentsConf from './config'
 import activeFormComponents from './activeFormComponents'
 import activeFormConf from './activeFormConf'
@@ -52,18 +46,9 @@ export default {
       designData: [],
       dragToIndex: -1,
       dragItems: '',
-      confInfo: { // 配置信息
-        confIndex: -1,
-        name: '',
-        type: '',
-        dragToIndex: -1
-      },
-      showConf: false,
       loading: false,
       designIndex: 0,
       designs: [],
-      confData: {},
-      confId: '',
       isTableDrag: false,
       allKeys: []
     }
@@ -74,107 +59,8 @@ export default {
       // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
       this.dragItems = dragItems
     },
-    dragover (e) {
-      // ondragover 事件规定在何处放置被拖动的数据
-      // 默认地，无法将数据/元素放置到其他元素中。如果需要设置允许放置，我们必须阻止对元素的默认处理方式
-      // 这要通过调用 ondragover 事件的 event.preventDefault() 方法
-      e.preventDefault()
-    },
-    drop (e) {
-      // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
-      e.preventDefault()
-      const dragToIndex = this.dragToIndex + 1
-      this.addDragData(dragToIndex)
-    },
-    addDragData (dragToIndex, {name, type, tagsDragToIndex = -1} = {}) {
-      const items = this.dragItems
-      this.dragItems = ''
-      if (!items) return
-      if (type === 'tabs') {
-        if(!name) return
-        const origal = this.designData[dragToIndex - 1]
-        const childConf = (origal && origal['childConf']) || []
-        origal['childConf'] = childConf
-        const confItem = childConf.find(item => name === item.name)
-        if (confItem) {
-          const itemComponents = confItem.components || []
-          confItem.components = itemComponents
-          this.handleDragData(items, tagsDragToIndex, itemComponents)
-        }
-      } else {
-        this.handleDragData(items, dragToIndex, this.designData)
-      }
-    },
-    handleDragData (items, dragToIndex, origal = []) {
-      let sameIdMsgs = []
-      items.forEach(item => {
-        const id = item.id
-        if (id) {
-          let sameIndex = origal.findIndex(dataItem => id === dataItem.id) + 1
-          if (sameIndex > 0) {
-            sameIdMsgs.push('已存在相同的ID:"'+ id +'",在第 ' + sameIndex +' 项')
-          }
-        }
-      })
-      if(sameIdMsgs.length > 0) {
-        alert (sameIdMsgs.join('\n'))
-        return
-      } else {
-        if (dragToIndex > 0) {
-          origal.splice(dragToIndex, 0, ...items)
-        } else {
-          origal.push(...items)
-        }
-      }
-    },
-    changePosition (from, to) { // 改变表单组件位置
-      this.dragItems = '' // 处理拖动了控件而又未拖拽进布局区的情况
-      if (from < 0 || from === to) return
-      const data = this.designData
-      const changeItem = data[from]
-      if (from > to) { // 从后往前拖拽
-        // 先删后增
-        data.splice(from, 1)
-        data.splice(to, 0, changeItem)
-      } else { // 从前往后拖拽
-        // 先增后删
-        data.splice(to, 0, changeItem)
-        data.splice(from, 1)
-      }
-      // const a = from > to ? 1 : 0
-      // data.splice(to, 0, changeItem)
-      // data.splice(from + a, 1)
-    },
-    showTheConf (isShow = false) { // 显示表单配置
-      this.showConf = isShow
-    },
-    delComponent (index) { // 删除某个组件
-      this.confInfo.confIndex = -1
-      const [delData] = this.designData.splice(index, 1)
-      this.afterDelConf(delData.id)
-    },
     getSameIndex (id, index) {
       return this.designData.findIndex((item, i) => item.id === id && i !== index)
-    },
-    saveComponent (index, confData = {}) { // 保存配置数据
-      const id = confData.id
-      const theIndex = this.getSameIndex(id, index)
-      if (theIndex >= 0) {
-        alert('已存在相同的 ID:"'+ id +'",请重新设置ID')
-        return
-      }
-      // const newData = Object.assign(this.designData[index], confData)
-      let newData = defaultsDeep(this.designData[index], confData)
-      const isArray = Array.isArray
-      const assignObj = {}
-      for (let [key, val] of Object.entries(newData)) {
-        if (isArray(val)) {
-          assignObj[key] = confData[key]
-        }
-      }
-      newData = Object.assign(newData, assignObj)
-      const [oldData] = this.designData.splice(index, 1, newData)
-      this.afterSaveConf(oldData.id, newData.id)
     },
     saveDesign () { // 保存设计的数据
       this.loading = true
@@ -192,30 +78,6 @@ export default {
           item.relationIds = relationIds.filter(theKey => {
             return allKeys.findIndex(key => key === theKey) >= 0
           })
-        }
-      })
-    },
-    afterDelConf (id) { // 某个组件被删除后
-      if(!id) return
-      this.designData.forEach(item => {
-        const relationIds = item.relationIds
-        if (relationIds && relationIds.length > 0) {
-          const index = relationIds.findIndex(key => key === id)
-          if (index >=0) {
-            relationIds.splice(index, 1)
-          }
-        }
-      })
-    },
-    afterSaveConf (oldId, newId) { // ID修改后进行替换
-      if(!oldId || !newId) return
-      this.designData.forEach(item => {
-        const relationIds = item.relationIds
-        if (relationIds && relationIds.length > 0) {
-          const index = relationIds.findIndex(key => key === oldId)
-          if (index >=0) {
-            relationIds[index] = newId
-          }
         }
       })
     },
@@ -274,15 +136,6 @@ export default {
       const TblDesignData = demo
       return Promise.resolve(TblDesignData)
     },
-    handleConf ({confData, confId, allKeys} = {}) {
-      this.confData = confData
-      this.confId = confId
-      this.allKeys = allKeys
-      this.showTheConf(true)
-    },
-    handleComponent (data = []) {
-      this.designData = data
-    },
     updateLayout (val) {
       this.designData = val
     }
@@ -309,8 +162,6 @@ export default {
         this.designs.unshift(tableDesign)
       }
     })
-    this.$eventBus.$on('beforeComponentConf', this.handleConf) // 更新配置
-    this.$eventBus.$on('updateComponent', this.handleComponent) // 更新数据
   }
 }
 </script>
