@@ -147,6 +147,7 @@ export default {
       if (!items) return
       let newData
       let isDragInTabs = this.isTabs && name
+      if(isDragInTabs) debugger
       let confItem
       let origal
       if (isDragInTabs) {

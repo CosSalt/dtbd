@@ -64,12 +64,16 @@ const showConfItems = {
   ],
   'transfer': [ // 穿梭框
     
+  ],
+  'tabs': [
+    ID, ChildConf
   ]
 }
 
 for (let key of allComponentTypes) {
   let item = showConfItems[key]
   if (item) {
+    if (key === 'tabs') continue
     if (item.findIndex(val => val === ID) < 0){
       item.unshift(ID, LabelText)
     } else {

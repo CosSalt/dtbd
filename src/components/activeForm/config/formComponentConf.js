@@ -156,6 +156,26 @@ const conf = [
                 required: true
               }
             }
+          ],
+          'tabs': [
+            {
+              key: 'label',
+              component: {
+                type: 'input'
+              },
+              rules: {
+                required: true
+              }
+            }, {
+              key: 'name',
+              component: {
+                type: 'input',
+                labelText: 'name'
+              },
+              rules: {
+                required: true
+              }
+            }
           ]
         }
       }

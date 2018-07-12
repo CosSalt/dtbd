@@ -1,5 +1,7 @@
 <template>
-  <el-tabs v-model="activeName" type="card" @drop.native='drop' @click.native='defComonent' class='navigaton-tabs'>
+  <el-tabs v-model="activeName" type="card" @drop.native='drop' @click.native='defComonent'
+    class='navigaton-tabs'
+  >
   <!-- <el-tabs v-model="activeName" type="card"> -->
     <!-- <el-tab-pane label="标签页" name="first">标签页内容</el-tab-pane>
     <el-tab-pane label="配置管理" name="second">配置管理</el-tab-pane>

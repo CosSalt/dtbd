@@ -58,7 +58,15 @@ export default {
           console.error(msg) // eslint-disable-line
         }
       }
-      return defaultsDeep(defaultsDeep(component, componentConf), this.formData)
+      const isArray = Array.isArray
+      const formData = this.formData
+      let newData = defaultsDeep(defaultsDeep(component, componentConf), formData)
+      for (let [key, val] of Object.entries(newData)) {
+        if (isArray(val)) {
+          newData[key] = formData[key] || []
+        }
+      }
+      return newData
     }
   },
   methods: {

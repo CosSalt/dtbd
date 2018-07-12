@@ -243,7 +243,6 @@ export default {
       this.formModel = emptyModel
     },
     updateFormData (item, propName, layoutIndex, val = {}) {
-      debugger
       item[propName] = val
       const layout = [...this.layout]
       const id = layout[layoutIndex].id
