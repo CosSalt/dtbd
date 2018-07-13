@@ -60,8 +60,8 @@ export default {
       // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
       this.dragItems = dragItems
     },
-    getSameIndex (id, index) {
-      return this.designData.findIndex((item, i) => item.id === id && i !== index)
+    getSameIndex (id, index, data = this.designData) {
+      return data.findIndex((item, i) => item.id === id && i !== index)
     },
     saveDesign () { // 保存设计的数据
       this.loading = true
@@ -87,18 +87,42 @@ export default {
         this.designData = []
       }
     },
-    checkDesignData (data = []) {
+    getErrMsg (componentConfName, index, errMsg = '') {
+      componentConfName = componentConfName ? '('+ componentConfName +')' : ''
+      return '第' + index + '个配置' + componentConfName + errMsg
+    },
+    checkDesignData (data = [], theIndex, theMsg, errMsg) {
       const err = []
+      const getErrMsg = this.getErrMsg
+      const theIndexStr = theIndex ? theIndex + '_' : ''
       if (data.length <= 0) {
-        err.push("设计配置项为空,不能保存")
+        let confErrMsg = "设计配置项为空,不能保存"
+        if (theIndex != undefined && theIndex !== '') {
+          confErrMsg = getErrMsg(theMsg, theIndex, errMsg) 
+        }
+        err.push(confErrMsg)
       } else {
-        const errMsg = (msg, index) => (msg || "第" + (index + 1) + "个配置")
-        for(let [index, {labelText, id}] of data.entries()){
+        for(let [index, item] of data.entries()){
+          const nextIndex = index + 1
+          const nextIndexStr = theIndexStr + nextIndex
+          const {labelText, id, type} = item
           if (!id) {
-            err.push(errMsg(labelText, index) + ": ID值为空")
+            err.push(getErrMsg(labelText, nextIndexStr, ': ID 值为空'))
           } else {
-            const sameIndex = this.getSameIndex(id, index)
-            if(sameIndex > index) err.push('"' + errMsg(labelText, index) + '"与"' + errMsg(data[sameIndex].labelText, sameIndex) + '"具有相同的ID值,请修改')
+            const sameIndex = this.getSameIndex(id, index, data)
+            if(sameIndex > index) err.push('"' + getErrMsg(labelText, nextIndexStr) + '"与"' + getErrMsg(data[sameIndex].labelText, theIndexStr + sameIndex) + '"具有相同的ID值,请修改')
+          }
+          if (type === 'tabs') {
+            const {childConf = []} = item
+            childConf.forEach(childItem => {
+              let label = childItem.label
+              label = label ? '_' + label : ''
+              const childData = childItem.components || []
+              const childErr = this.checkDesignData(childData, nextIndexStr, ' Tabs配置项' + label, ': 为空')
+              if(childErr.length > 0) {
+                err.push(...childErr)
+              }
+            })
           }
         }
       }
