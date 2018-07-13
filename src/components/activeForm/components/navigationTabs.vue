@@ -6,16 +6,23 @@
       <el-tab-pane :label="item.label" :name="item.name" :key='item.name'>
         <template v-if='item.components'>
             <formDesignLayout
+              v-if='isDraggable'
               class='tabs-form-design-layout'
               :layout='item.components'
               :dragItems='dragItems'
               @updateDragItems='updateDragItems'
               @updateLayout='val => updateFormData(index, "components", val)'
+            />
+            <formLayout
+              v-else
+              :layout='item.components'
+              :isDraggable='isDraggable'
+              :receiveData='navigationModel[item.name]'
             >
               <template slot='footer' slot-scope="{ data }" v-if='item.name' >
                 {{relevanceModel(navigationModel, item.name, data)}}
               </template>
-            </formDesignLayout>
+            </formLayout>
         </template>
       </el-tab-pane>
     </template>
@@ -49,13 +56,22 @@ export default {
       loading: false,
       type: 'tabs',
       dragToIndex: -1,
-      confIndex: -1,
-      navigationModel: {}
+      confIndex: -1
     }
   },
   computed: {
     theFormData () {
       return defaultsDeep({}, this.formData)
+    },
+    navigationModel: {
+      get () {
+        console.log('navigationModel', this.value)
+        return this.value || {}
+      },
+      set (data) {
+        console.log('reset navigationModel', data)
+        this.$emit('input', data)
+      }
     }
   },
   watch: {
@@ -65,31 +81,17 @@ export default {
         this.optionData = [...data]
         this.setModelName()
         this.setLoading()
-        this.handleModel()
+        // this.handleModel()
       },
       immediate: true
-    },
-    navigationModel : {
-      handler (data) {
-        this.$emit('input', data)
-      },
-      deep: true
     }
   },
   methods: { // 与外界关联的主要有两类: 一类是将变更后的 layout 数据传输出去,一类是将要处理的数据信息传出去,放在 formLayout.vue 中处理
-    handleModel() {
-      // console.log('黑科技')
-      const newModel = {}
-      this.optionData.forEach((item, index) => {
-        const id= item.name
-        if (id) {
-          newModel[id] = {}
-        }
-      })
-      this.navigationModel = newModel
-    },
     relevanceModel(orginal, propName, data) {
+      // 同一对象修改,不触发修改
+      if(orginal[propName] === data) return
       orginal[propName] = data
+      this.navigationModel = orginal
     },
     updateFormData (index, propName, newVal = []) {
       const newData = defaultsDeep({}, this.theFormData)

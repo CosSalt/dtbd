@@ -2,9 +2,9 @@
   <div>
     <div class='form-demo-container'>
       <formLayout
-        :layout = 'layout'
+        :layout='layout'
         :isDraggable='false'
-        :receiveData = 'formData'
+        :receiveData='formData'
         ref='form'
       >
         <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
