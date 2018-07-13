@@ -11,7 +11,11 @@
               :dragItems='dragItems'
               @updateDragItems='updateDragItems'
               @updateLayout='val => updateFormData(index, "components", val)'
-            />
+            >
+              <template slot='footer' slot-scope="{ data }" v-if='item.name' >
+                {{relevanceModel(navigationModel, item.name, data)}}
+              </template>
+            </formDesignLayout>
         </template>
       </el-tab-pane>
     </template>
@@ -46,6 +50,7 @@ export default {
       type: 'tabs',
       dragToIndex: -1,
       confIndex: -1,
+      navigationModel: {}
     }
   },
   computed: {
@@ -60,11 +65,32 @@ export default {
         this.optionData = [...data]
         this.setModelName()
         this.setLoading()
+        this.handleModel()
       },
       immediate: true
+    },
+    navigationModel : {
+      handler (data) {
+        this.$emit('input', data)
+      },
+      deep: true
     }
   },
   methods: { // 与外界关联的主要有两类: 一类是将变更后的 layout 数据传输出去,一类是将要处理的数据信息传出去,放在 formLayout.vue 中处理
+    handleModel() {
+      // console.log('黑科技')
+      const newModel = {}
+      this.optionData.forEach((item, index) => {
+        const id= item.name
+        if (id) {
+          newModel[id] = {}
+        }
+      })
+      this.navigationModel = newModel
+    },
+    relevanceModel(orginal, propName, data) {
+      orginal[propName] = data
+    },
     updateFormData (index, propName, newVal = []) {
       const newData = defaultsDeep({}, this.theFormData)
       newData.childConf[index][propName] = newVal
