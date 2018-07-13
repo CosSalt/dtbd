@@ -65,11 +65,9 @@ export default {
     },
     navigationModel: {
       get () {
-        console.log('navigationModel', this.value)
         return this.value || {}
       },
       set (data) {
-        console.log('reset navigationModel', data)
         this.$emit('input', data)
       }
     }
@@ -81,7 +79,6 @@ export default {
         this.optionData = [...data]
         this.setModelName()
         this.setLoading()
-        // this.handleModel()
       },
       immediate: true
     }

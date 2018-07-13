@@ -146,7 +146,6 @@ export default {
           err.push(...errArr.map(msg => text + msg))
         }
         if (err.length > 0) continue
-
         if (type) {
           savedConf[type] = Object.assign({}, savedConf[type], {
             [key]: val
@@ -233,6 +232,8 @@ export default {
     }
   },
   created () {
+    debugger
+    this.$listeners
     this.$eventBus.$on('beforeComponentConf', this.handleConf)
   }
 }

@@ -101,7 +101,7 @@ export default {
   watch: {
     modelData:{
       handler () {
-        let data = defaultsDeep(this.modelData, this.predictData)
+        let data = defaultsDeep(this.predictData, this.modelData)
         data.length = this.predictData.length
         data = Array.from(data)
         const requiredConf = this.requiredConf

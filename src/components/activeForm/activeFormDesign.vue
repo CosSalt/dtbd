@@ -29,6 +29,8 @@
     <div class="form-design-conf">
       <div class='form-side-head'> 组件配置区 </div>
       <activeFormConf 
+        @a='(aa)=>{console.log(aa)}'
+        @b='(aa)=>{console.log(aa)}'
         class='active-side-container'
       />
     </div>
