@@ -30,6 +30,15 @@
         class='active-side-container'
       />
     </div>
+    <div class="show-design">
+      <div v-show='isShowDesignData'>
+        <input type="textarea" :value='showDesignData' />
+        <button>加载</button>
+      </div>
+      <div>
+        <button @click='showTheDesignData'>显示数据</button>
+      </div>
+    </div>
   </div>
 </template>
 <script>
@@ -49,7 +58,10 @@ export default {
       designIndex: 0,
       designs: [],
       isTableDrag: false,
-      allKeys: []
+      allKeys: [],
+      showDesignData: '',
+      historyDesignData: '',
+      isShowDesignData: false
     }
   },
   methods: {
@@ -194,6 +206,36 @@ export default {
       parentItem[propName] = newData // designData数据已发生变化
       // 三种处理方式: 不处理(引用类型,数据本质上已经改变了);浅复制,产生一个新对象;深复制,产生一个新对象
       this.designData = this.designData.slice()
+    },
+    getDesignData () {
+      const data = this.designData
+      let showData = ''
+      if (Array.isArray(data) && data.length > 0  ) {
+        showData = JSON.stringify(data)
+      }
+      this.showDesignData = showData
+    },
+    loadDesign (str) {
+      let data = []
+      let isError = false
+      if(!str) {
+        alert('数据为空')
+        return
+      }
+      try {
+        data = JSON.parse(str)
+      } catch (e){
+        console.log(e)
+        isError = true
+      }
+      if(!isError && Array.isArray(data)) {
+        this.historyDesignData = this.designData
+        this.designData = data
+      }
+    },
+    showTheDesignData () {
+      this.isShowDesignData=true
+      this.getDesignData()
     }
   },
   created () {
@@ -267,6 +309,14 @@ export default {
   .active-side-container {
     height: calc(100% - @formSideHead);
     overflow: auto;
+  }
+  .show-design{
+    position: absolute;
+    top: 0;
+    right: 0;
+    >div{
+      display: inline-block;
+    }
   }
 }
 </style>
