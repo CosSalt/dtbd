@@ -8,7 +8,7 @@
         >
           <template v-for='(layoutItem, i) in theLayoutData'>
             <el-row :key='"row" + i'>
-              <template v-for='(item, index) in layoutItem'>
+              <template v-for='item in layoutItem'>
                 <template v-if='item.notFormItem'>
                   <el-col
                     class='active-form-row'
@@ -21,12 +21,10 @@
                         class='component-style'
                         v-model='formModel[item.id]'
                         :formData='item'
-                        @updateFormData='val => updateFormData(layoutItem, index, item.index, val)'
                         :isDraggable='isDraggable'
                         :keyIndex='item.index'
                         :draggable='isDraggable'
                         :dragItems='dragItems'
-                        @updateDragItems='updateDragItems'
                         @drop='dropSpecial'
                         @defComponent='defComponentSpecial'
                         @dragstart.self.stop.native='dragstart(item.index, $event)'
@@ -110,6 +108,7 @@ export default {
     theLayoutData () {
       const DefSpan = this.span
       const getId = this.tempId
+      if(!this.layout || !this.layout.map) debugger
       let data = this.layout.map((item, index) => {
         return Object.assign({
           id: getId(item.id, index),
@@ -244,22 +243,6 @@ export default {
         emptyModel[key] = null
       }
       this.formModel = emptyModel
-    },
-    updateFormData (item, propName, layoutIndex, val = {}) {
-      item[propName] = val
-      const layout = [...this.layout]
-      const id = layout[layoutIndex].id
-      if (!id) {
-        alert("请先设置此 Tabs 的 ID")
-        return
-      }
-      let newLayout = []
-      this.theLayoutData.forEach(item => newLayout.push(...item)) // 将用于布局的数据展开
-      layout.splice(layoutIndex, 1, newLayout[layoutIndex])
-      this.updateLayout(layout)
-    },
-    updateDragItems (val) {
-      this.$emit('updateDragItems', val)
     }
   },
   created () {

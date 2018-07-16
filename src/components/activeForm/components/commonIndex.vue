@@ -4,7 +4,7 @@
     :is="item.component"
     v-model='componentVal'
     :formData='item'
-    :dragItems.sync='dragItems'
+    :dragItems='dragItems'
     v-bind='$attrs'
     v-on='$listeners'
   />

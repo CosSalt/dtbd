@@ -1,5 +1,5 @@
 <template>
-  <div class="active-form-conf" v-if='show'>
+  <div class="active-form-conf" v-if='isShow'>
     <ul>
       <li v-for='item in confData' :key='item.key' class='form-conf-li'>
         <formIndex
@@ -87,6 +87,9 @@ export default {
           value: key
         }
       })
+    },
+    isShow() {
+      return this.show && this.confData.length > 0
     }
   },
   watch: {
@@ -232,8 +235,6 @@ export default {
     }
   },
   created () {
-    debugger
-    this.$listeners
     this.$eventBus.$on('beforeComponentConf', this.handleConf)
   }
 }

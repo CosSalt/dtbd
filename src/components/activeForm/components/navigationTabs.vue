@@ -2,7 +2,7 @@
   <el-tabs v-model="activeName" type="card" @drop.stop.native='drop' @click.stop.native='defComonent'
     class='navigaton-tabs'
   >
-    <template v-for='(item, index) in optionData'>
+    <template v-for='item in optionData'>
       <el-tab-pane :label="item.label" :name="item.name" :key='item.name'>
         <template v-if='item.components'>
             <formDesignLayout
@@ -10,8 +10,8 @@
               class='tabs-form-design-layout'
               :layout='item.components'
               :dragItems='dragItems'
-              @updateDragItems='updateDragItems'
-              @updateLayout='val => updateFormData(index, "components", val)'
+              :parentData='item'
+              propName='components'
             />
             <formLayout
               v-else
@@ -60,9 +60,6 @@ export default {
     }
   },
   computed: {
-    theFormData () {
-      return defaultsDeep({}, this.formData)
-    },
     navigationModel: {
       get () {
         return this.value || {}
@@ -73,10 +70,11 @@ export default {
     }
   },
   watch: {
-    'theFormData.childConf': {
+    'formData.childConf': {
       handler (data) {
         data = data || []
-        this.optionData = [...data]
+        // this.optionData = [...data]
+        this.optionData = data
         this.setModelName()
         this.setLoading()
       },
@@ -89,11 +87,6 @@ export default {
       if(orginal[propName] === data) return
       orginal[propName] = data
       this.navigationModel = orginal
-    },
-    updateFormData (index, propName, newVal = []) {
-      const newData = defaultsDeep({}, this.theFormData)
-      newData.childConf[index][propName] = newVal
-      this.executeParentListeners('updateFormData', newData)
     },
     setModelName () {
       const name = this.activeName
@@ -128,9 +121,6 @@ export default {
         name: this.activeName,
         index: this.keyIndex
       })
-    },
-    updateDragItems (val) {
-      this.executeParentListeners('updateDragItems', val)
     }
   }
 }

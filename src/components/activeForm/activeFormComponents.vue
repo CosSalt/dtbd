@@ -85,7 +85,7 @@ export default {
           return dragComponentsArr
         },
         'base': (dragComponent) => {
-          return [dragComponent]
+          return [this.getNewItem(dragComponent)]
         }
       }
     }

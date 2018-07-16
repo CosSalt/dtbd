@@ -11,9 +11,7 @@
     <div class='form-design-container'>
       <formDesignLayout
         :layout='designData'
-        @updateLayout='updateLayout'
         :dragItems='dragItems'
-        @updateDragItems='updateDragItems'
       >
         <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
           <el-button type='primary' size='mini' @click.native='saveDesign(data)'
@@ -29,15 +27,13 @@
     <div class="form-design-conf">
       <div class='form-side-head'> 组件配置区 </div>
       <activeFormConf 
-        @a='(aa)=>{console.log(aa)}'
-        @b='(aa)=>{console.log(aa)}'
         class='active-side-container'
       />
     </div>
   </div>
 </template>
 <script>
-// import {defaultsDeep} from '@/utils'
+import {isNullOrEmpty} from '@/utils'
 import componentsConf from './config'
 import activeFormComponents from './activeFormComponents'
 import activeFormConf from './activeFormConf'
@@ -85,8 +81,8 @@ export default {
       })
     },
     clearDesign () { // 清空数据
-      if(window.confirm("确定要清空设计数据")){
-        this.designData = []
+      if (window.confirm("确定要清空设计数据")) {
+        this.updateOriginal(null, null, [], true)
       }
     },
     getErrMsg (componentConfName, index, errMsg = '') {
@@ -163,11 +159,41 @@ export default {
       const TblDesignData = demo
       return Promise.resolve(TblDesignData)
     },
-    updateLayout (val) {
-      this.designData = val
+    handleTopEvent (action, ...args) {
+      let fn
+      const actions = ['dragItems', 'original']
+      switch (action) {
+        case actions[0]:
+          fn = this.updateDragItems
+          break
+        case actions[1]:
+        default:
+          fn = this.updateOriginal
+          break
+      }
+      const isDev = process.env.NODE_ENV === 'production'
+      if (isDev){
+        if(actions.indexOf(action) < 0 && !!action) {
+          alert('not the action: ' + action)
+        }
+      }
+      if (fn) {
+        fn(...args)
+      }
     },
     updateDragItems (val) {
       this.dragItems = val
+    },
+    updateOriginal (parentItem, propName, newData, isOriginal = false) {
+      if (isOriginal) {
+        this.designData = newData
+        return
+      } else if (isNullOrEmpty(parentItem) || isNullOrEmpty(propName)) {
+        return
+      }
+      parentItem[propName] = newData // designData数据已发生变化
+      // 三种处理方式: 不处理(引用类型,数据本质上已经改变了);浅复制,产生一个新对象;深复制,产生一个新对象
+      this.designData = this.designData.slice()
     }
   },
   created () {
@@ -192,6 +218,7 @@ export default {
         this.designs.unshift(tableDesign)
       }
     })
+    this.$eventBus.$on('handleTopEvent', this.handleTopEvent)
   }
 }
 </script>

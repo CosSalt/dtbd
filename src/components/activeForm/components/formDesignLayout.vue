@@ -1,15 +1,14 @@
 <template>
   <div class='form-design-layout'>
     <formLayout
-      @dragover.native='dragover'
-      @drop.self.native='drop'
       class='form-design-content'
       :layout.sync='theLayout'
       :isDraggable='true'
-      :dragToIndex.sync='dragToIndex'
       :confIndex='confIndex'
       :dragItems='dragItems'
-      @updateDragItems='updateDragItems'
+      :dragToIndex.sync='dragToIndex'
+      @dragover.native='dragover'
+      @drop.self.native='drop'
       @changePosition='changePosition'
       @setComponentConf='setComponentConf'
       @addDragData='addDragData'
@@ -22,7 +21,7 @@
 </template>
 
 <script>
-import {defaultsDeep} from '@/utils'
+import {defaultsDeep, isNullOrEmpty} from '@/utils'
 export default {
   name: 'formDesignLayout',
   props: {
@@ -34,6 +33,8 @@ export default {
       }
     },
     dragItems: null,
+    parentData: null, //数据的父节点
+    propName: null // 数据对应的属性
   },
   data () {
     return {
@@ -49,7 +50,10 @@ export default {
   computed: {
     theLayout: {
       get () {
-        return this.layout.map(item => defaultsDeep({}, item)) // 避免直接修改传入的数据, 破坏数据的单向流动原则, 避免产生副作用
+        const layout = this.layout
+        if(!layout) debugger
+        return layout
+        // return this.layout.map(item => defaultsDeep({}, item)) // 避免直接修改传入的数据, 破坏数据的单向流动原则, 避免产生副作用
       },
       set (newVal) {
         this.updateLayout(newVal)
@@ -91,19 +95,17 @@ export default {
   },
   methods: {
     updateLayout(newLayout = []) {
-      this.$emit('updateLayout', newLayout)
+      const parentData = this.parentData, propName = this.propName
+      const notParent = isNullOrEmpty(parentData) && isNullOrEmpty(propName)
+      this.$eventBus.$emit('handleTopEvent', null, parentData, propName, newLayout, notParent)
     },
     dragover (e) {
-      // ondragover 事件规定在何处放置被拖动的数据
-      // 默认地，无法将数据/元素放置到其他元素中。如果需要设置允许放置，我们必须阻止对元素的默认处理方式
-      // 这要通过调用 ondragover 事件的 event.preventDefault() 方法
       e.preventDefault()
     },
     drop (e) {
-      // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
       e.preventDefault()
-      const dragToIndex = this.dragToIndex + 1
-      this.addDragData(dragToIndex)
+      this.dragToIndex = -1
+      this.addDragData(this.dragToIndex + 1)
     },
     changePosition (from, to) { // 改变表单组件位置
       this.updateDragItems('') // 处理拖动了控件而又未拖拽进布局区的情况
@@ -119,9 +121,6 @@ export default {
         data.splice(to, 0, changeItem)
         data.splice(from, 1)
       }
-      // const a = from > to ? 1 : 0
-      // data.splice(to, 0, changeItem)
-      // data.splice(from + a, 1)
       this.hideComponentConf()
       this.updateLayout(data)
     },
@@ -138,7 +137,7 @@ export default {
     hideComponentConf () { // 改变位置,增加组件时隐藏配置项,配置项中的数据过时
       this.$eventBus.$emit('beforeComponentConf', {isShow: false})
     },
-    addDragData (dragToIndex, {name, type, tagsDragToIndex = -1} = {}) {
+    addDragData (dragToIndex, {name, type, tagsDragToIndex = -1} = {}) {      
       this.type = type
       this.name = name
       this.childrenIndex = tagsDragToIndex
@@ -260,8 +259,8 @@ export default {
       })
     },
     updateDragItems (val) {
-      this.$emit('updateDragItems', val)
-    }
+      this.$eventBus.$emit('handleTopEvent', 'dragItems', val)
+    },
   },
   created () {
     this.$eventBus.$on('updateComponentConf:' + this.confId, this.handleConf)
