@@ -108,7 +108,6 @@ export default {
     theLayoutData () {
       const DefSpan = this.span
       const getId = this.tempId
-      if(!this.layout || !this.layout.map) debugger
       let data = this.layout.map((item, index) => {
         return Object.assign({
           id: getId(item.id, index),

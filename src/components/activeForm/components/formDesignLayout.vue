@@ -50,10 +50,7 @@ export default {
   computed: {
     theLayout: {
       get () {
-        const layout = this.layout
-        if(!layout) debugger
-        return layout
-        // return this.layout.map(item => defaultsDeep({}, item)) // 避免直接修改传入的数据, 破坏数据的单向流动原则, 避免产生副作用
+        return this.layout
       },
       set (newVal) {
         this.updateLayout(newVal)

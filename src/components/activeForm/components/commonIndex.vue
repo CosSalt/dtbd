@@ -1,6 +1,5 @@
 <template>
-  <component 
-    class='testest'
+  <component
     :is="item.component"
     v-model='componentVal'
     :formData='item'
