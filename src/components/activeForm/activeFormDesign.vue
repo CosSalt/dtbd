@@ -314,7 +314,9 @@ export default {
     position: absolute;
     top: 0;
     right: 0;
+    height: 100px;
     >div{
+      height: 100%;
       display: inline-block;
     }
   }

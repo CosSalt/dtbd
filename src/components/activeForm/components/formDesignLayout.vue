@@ -199,6 +199,7 @@ export default {
           this.saveComponent(index, data)
         }
       }
+      console.log('componentHasUpdated')
     },
     getSameIndex (id, index) {
       return this.theLayout.findIndex((item, i) => item.id === id && i !== index)

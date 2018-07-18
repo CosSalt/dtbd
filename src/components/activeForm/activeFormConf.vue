@@ -71,6 +71,7 @@ export default {
           data.push(item)
         }
       })
+      
       return data
     },
     selfId () {
@@ -231,7 +232,9 @@ export default {
       this.clickShow(true)
     },
     updateConf(data) { // data 为空代表删除
+      console.log('componentWillUpdata')
       this.$eventBus.$emit('updateComponentConf:' + this.confId, data, this.confId)
+      console.log('isComponentUpdated?')
     }
   },
   created () {
