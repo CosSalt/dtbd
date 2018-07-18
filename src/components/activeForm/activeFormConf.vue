@@ -29,7 +29,6 @@
 </template>
 
 <script>
-import {defaultsDeep} from '@/utils'
 import componentConf from './config/formComponentConf'
 import typeShowConf from './config/typeShowConf'
 export default {
@@ -130,9 +129,6 @@ export default {
       })
       this.confModel = res
     },
-    defDeep (...args){
-      return defaultsDeep(...args)
-    },
     clickShow (show = false) {
       this.show = show
     },
@@ -232,9 +228,7 @@ export default {
       this.clickShow(true)
     },
     updateConf(data) { // data 为空代表删除
-      console.log('componentWillUpdata')
       this.$eventBus.$emit('updateComponentConf:' + this.confId, data, this.confId)
-      console.log('isComponentUpdated?')
     }
   },
   created () {

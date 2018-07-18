@@ -222,7 +222,7 @@ export default {
         data = data || []
         return data
       }).catch(err => {
-        console.log('err', err) // eslint-disable-line
+        console.log('error', err) // eslint-disable-line
         const data = []
         return data
       }).then(data => {

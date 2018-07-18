@@ -174,10 +174,6 @@ export default {
     removeRow (index) {
       this.predictData.splice(index ,1)
       this.handleModle(index, false)
-    },
-    test (a) {
-      // console.log('a', a)
-      return a
     }
   }
 }

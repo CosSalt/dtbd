@@ -30,7 +30,6 @@
 </template>
 
 <script>
-import {defaultsDeep} from '@/utils'
 export default {
   name: 'navigationTabs',
   props: {
