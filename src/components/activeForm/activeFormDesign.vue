@@ -30,8 +30,8 @@
     </div>
     <div class="show-design">
       <div v-show='isShowDesignData'>
-        <input type="textarea" :value='showDesignData' />
-        <button>加载</button>
+        <input type="textarea" v-model='showDesignData' />
+        <button @click='loadDesign'>加载</button>
       </div>
       <div>
         <button @click='showTheDesignData'>显示数据</button>
@@ -149,7 +149,8 @@ export default {
       }
       this.showDesignData = showData
     },
-    loadDesign (str) {
+    loadDesign () {
+      const str = this.showDesignData
       let data = []
       let isError = false
       if(!str) {
@@ -159,7 +160,7 @@ export default {
       try {
         data = JSON.parse(str)
       } catch (e){
-        console.log(e) // eslint-disable-line
+        console.error(e) // eslint-disable-line
         isError = true
       }
       if(!isError && Array.isArray(data)) {
