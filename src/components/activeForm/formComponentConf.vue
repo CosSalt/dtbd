@@ -29,16 +29,21 @@
 </template>
 
 <script>
+
+// 不对外暴露任何API,也不接受参数
+// 通过下面的方法(eventBus的事件机制)接受数据和返还数据
+// this.$eventBus.$on('beforeComponentConf', this.handleConf)
+// this.$eventBus.$emit('updateComponentConf:' + this.confId, data, this.confId)
+
 import componentConf from './config/formComponentConf'
 import typeShowConf from './config/typeShowConf'
 export default {
-  name: 'activeFormConf',
+  name: 'formComponentConf',
   beforeCreate () {
     this.$allData = componentConf
   },
   data () {
     return {
-      attrConf: [],
       componentType: null,
       confModel: {},
       confSaveLoading: false,
@@ -133,7 +138,6 @@ export default {
       this.show = show
     },
     saveConf () {
-      // this.setSaveLoading(true)
       const allData = this.$allData
       let err = []
       const savedConf = {}
@@ -215,9 +219,6 @@ export default {
       this.updateConf()
       this.clickShow()
       this.setDelLoading()
-    },
-    getKey (rowIndex , columnIndex) {
-      return "row_" + rowIndex + "_column_" + columnIndex
     },
     handleConf ({confData = {}, confId, allKeys = [], confIndex = -1, isShow = true} = {}) {
       this.clickShow(isShow)

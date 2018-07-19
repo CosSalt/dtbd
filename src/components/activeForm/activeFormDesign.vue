@@ -2,9 +2,8 @@
   <div class='active-form-design'>
     <div class='form-components'>
       <div class='form-side-head'>控件区</div>
-      <activeFormComponents 
-        :designs ='designs'
-        @dragStart = 'dragStart'
+      <activeFormOriginal 
+        @dragStart='dragStart'
         class='active-side-container'
       />
     </div>
@@ -14,19 +13,19 @@
         :dragItems='dragItems'
       >
         <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
-          <el-button type='primary' size='mini' @click.native='saveDesign(data)'
+          <el-button type='primary' size='mini' @click='saveDesign(data)'
             v-loading.fullscreen="loading"
             element-loading-text="拼命保存中"
             element-loading-spinner="el-icon-loading">
               保存
             </el-button>
-          <el-button type='info' size='mini' @click.native='clearDesign'>清空</el-button>
+          <el-button type='info' size='mini' @click='clearDesign'>清空</el-button>
         </el-row>
       </formDesignLayout>
     </div>
     <div class="form-design-conf">
       <div class='form-side-head'> 组件配置区 </div>
-      <activeFormConf 
+      <formComponentConf 
         class='active-side-container'
       />
     </div>
@@ -43,12 +42,11 @@
 </template>
 <script>
 import {isNullOrEmpty} from '@/utils'
-import componentsConf from './config'
-import activeFormComponents from './activeFormComponents'
-import activeFormConf from './activeFormConf'
+import activeFormOriginal from './activeFormOriginal'
+import formComponentConf from './formComponentConf'
 export default {
   name: 'activeFormDesign',
-  components: {activeFormConf, activeFormComponents},
+  components: {formComponentConf, activeFormOriginal},
   data () {
     return {
       designData: [],
@@ -56,7 +54,6 @@ export default {
       dragItems: '',
       loading: false,
       designIndex: 0,
-      designs: [],
       isTableDrag: false,
       allKeys: [],
       showDesignData: '',
@@ -146,31 +143,6 @@ export default {
       }
       localStorage.setItem('designComponent', JSON.stringify(data))
     },
-    initTblDesign (){
-      const demo = [
-        {
-          name: '测试',
-          id: 'test',
-          data: [
-            {type:'input', id: 'a', labelText:'1'},
-            {type:'select', id: 'b', labelText:'2'},
-            {type:'inputArea', id: 'c', labelText:'3'},
-            {type:'input', id: 'd', labelText:'4'}
-          ]
-        }, {
-          name: '测试ddd',
-          id: 'testddd',
-          data: [
-            {type:'input', id: 'ad', labelText:'1d'},
-            {type:'select', id: 'bd', labelText:'2d'},
-            {type:'inputArea', id: 'cd', labelText:'3d'},
-            {type:'input', id: 'dd', labelText:'4d'}
-          ]
-        }
-      ]
-      const TblDesignData = demo
-      return Promise.resolve(TblDesignData)
-    },
     handleTopEvent (action, ...args) {
       let fn
       const actions = ['dragItems', 'original']
@@ -239,27 +211,6 @@ export default {
     }
   },
   created () {
-    this.$formItemTypes = componentsConf
-    const baseDesign = {
-      components: componentsConf,
-      id: 'baseDesign',
-      type: 'base',
-      name: '基础控件区',
-      className: 'form-components-orgin'
-    }
-    this.designs.push(baseDesign)
-    this.initTblDesign().then(data => {
-      if(data) {
-        const tableDesign = {
-          components: data,
-          id: 'tableDesign',
-          type: 'table',
-          name: '表格控件区',
-          className: 'form-components-orgin'
-        }
-        this.designs.unshift(tableDesign)
-      }
-    })
     this.$eventBus.$on('handleTopEvent', this.handleTopEvent)
   }
 }

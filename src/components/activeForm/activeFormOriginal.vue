@@ -45,53 +45,95 @@
 </template>
 
 <script>
+// 对外接口:dragStart(传出触发dragstart的事件后获取到的数据))
 import {defaultsDeep} from '@/utils'
-// import componentsConf from './config'
+import componentsConf from './config'
 export default {
-  name: 'activeFormComponents',
-  props: {
-    designs: {
-      type: Array,
-      required: true
-    }
-  },
+  name: 'activeFormOriginal',
   data () {
     return {
-      designIndex: 0
+      designIndex: 0,
+      designs: []
     }
   },
   methods: {
     dragStart (componentItem, type) {
-      // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
       const handleFn = this.$dragTypeHandle[type]
       if (!handleFn) {
         console.error('无法处理 type 为"'+ type + '"的类型') // eslint-disable-line
       } else {
         const dragComponentArr = handleFn(componentItem)
-        this.$emit('dragStart', dragComponentArr)
+        this.$emit('dragStart', dragComponentArr) // 对外暴露方法
       }
     },
-    getNewItem (oldItem) {
-      return defaultsDeep({}, oldItem)
+    initGetNewObj () { // 获取一个深度复制后的对象方法, 返回一个函数
+      return defaultsDeep({})
     },
-    dragHandle () {
+    initTblDesign (){ // 获取tbl格式的数据,这里是模拟的
+      const demo = [
+        {
+          name: '测试',
+          id: 'test',
+          data: [
+            {type:'input', id: 'a', labelText:'1'},
+            {type:'select', id: 'b', labelText:'2'},
+            {type:'inputArea', id: 'c', labelText:'3'},
+            {type:'input', id: 'd', labelText:'4'}
+          ]
+        }, {
+          name: '测试ddd',
+          id: 'testddd',
+          data: [
+            {type:'input', id: 'ad', labelText:'1d'},
+            {type:'select', id: 'bd', labelText:'2d'},
+            {type:'inputArea', id: 'cd', labelText:'3d'},
+            {type:'input', id: 'dd', labelText:'4d'}
+          ]
+        }
+      ]
+      const TblDesignData = demo
+      return Promise.resolve(TblDesignData)
+    },
+    initDragHandle () {
       return {
         'table': (dragItem) => {
           const dragComponents = dragItem.data
           const dragComponentsArr = []
+          const getNewObj = this.$getNewObj
           for(let tblItem of dragComponents.values()) {
-            dragComponentsArr.push(this.getNewItem(tblItem))
+            dragComponentsArr.push(getNewObj(tblItem))
           }
           return dragComponentsArr
         },
         'base': (dragComponent) => {
-          return [this.getNewItem(dragComponent)]
+          return [this.$getNewObj(dragComponent)]
         }
       }
     }
   },
   created () {
-    this.$dragTypeHandle = this.dragHandle()
+    const baseDesign = {
+      components: componentsConf,
+      id: 'baseDesign',
+      type: 'base',
+      name: '基础控件区',
+      className: 'form-components-orgin'
+    }
+    this.designs.push(baseDesign)
+    this.initTblDesign().then(data => {
+      if(data) {
+        const tableDesign = {
+          components: data,
+          id: 'tableDesign',
+          type: 'table',
+          name: '表格控件区',
+          className: 'form-components-orgin'
+        }
+        this.designs.unshift(tableDesign)
+      }
+    })
+    this.$getNewObj = this.initGetNewObj()
+    this.$dragTypeHandle = this.initDragHandle()
   }
 }
 </script>
@@ -149,5 +191,3 @@ export default {
   }
 }
 </style>
-
-
