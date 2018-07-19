@@ -24,7 +24,6 @@
                         :isDraggable='isDraggable'
                         :keyIndex='item.index'
                         :draggable='isDraggable'
-                        :dragItems='dragItems'
                         @drop='dropSpecial'
                         @defComponent='defComponentSpecial'
                         @dragstart.self.stop.native='dragstart(item.index, $event)'
@@ -89,8 +88,7 @@ export default {
     },
     receiveData: {
       type: Object
-    },
-    dragItems: null
+    }
   },
   data () {
     return {

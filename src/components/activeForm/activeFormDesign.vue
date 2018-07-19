@@ -10,7 +10,6 @@
     <div class='form-design-container'>
       <formDesignLayout
         :layout='designData'
-        :dragItems='dragItems'
       >
         <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
           <el-button type='primary' size='mini' @click='saveDesign(data)'
@@ -51,7 +50,6 @@ export default {
     return {
       designData: [],
       dragToIndex: -1,
-      dragItems: '',
       loading: false,
       designIndex: 0,
       isTableDrag: false,
@@ -62,10 +60,9 @@ export default {
     }
   },
   methods: {
-    dragStart (dragItems) {
+    dragStart (val) {
       this.dragToIndex = -1
-      // e.dataTransfer.setData('type', type) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
-      this.dragItems = dragItems
+      this.updateDragItems(val)
     },
     getSameIndex (id, index, data = this.designData) {
       return data.findIndex((item, i) => item.id === id && i !== index)
@@ -143,42 +140,7 @@ export default {
       }
       localStorage.setItem('designComponent', JSON.stringify(data))
     },
-    handleTopEvent (action, ...args) {
-      let fn
-      const actions = ['dragItems', 'original']
-      switch (action) {
-        case actions[0]:
-          fn = this.updateDragItems
-          break
-        case actions[1]:
-        default:
-          fn = this.updateOriginal
-          break
-      }
-      const isDev = process.env.NODE_ENV === 'production'
-      if (isDev){
-        if(actions.indexOf(action) < 0 && !!action) {
-          alert('not the action: ' + action)
-        }
-      }
-      if (fn) {
-        fn(...args)
-      }
-    },
-    updateDragItems (val) {
-      this.dragItems = val
-    },
-    updateOriginal (parentItem, propName, newData, isOriginal = false) {
-      if (isOriginal) {
-        this.designData = newData
-        return
-      } else if (isNullOrEmpty(parentItem) || isNullOrEmpty(propName)) {
-        return
-      }
-      parentItem[propName] = newData // designData数据已发生变化
-      // 三种处理方式: 不处理(引用类型,数据本质上已经改变了);浅复制,产生一个新对象;深复制,产生一个新对象
-      this.designData = this.designData.slice()
-    },
+    // 显示加载JSON数据
     getDesignData () {
       const data = this.designData
       let showData = ''
@@ -208,6 +170,44 @@ export default {
     showTheDesignData () {
       this.isShowDesignData=true
       this.getDesignData()
+    },
+    // 通过 eventBus 事件机制处理数据,数据通过 eventBus 事件机制传播, 避免 props 传递时多子组件的臃肿
+    // 不能响应式触发,只能是通过事件触发机制获取修改数据
+    handleTopEvent (action, ...args) {
+      let fn
+      const actions = ['dragItems', 'original']
+      switch (action) {
+        case actions[0]:
+          fn = this.updateDragItems
+          break
+        case actions[1]:
+        default:
+          fn = this.updateOriginal
+          break
+      }
+      const isDev = process.env.NODE_ENV === 'production'
+      if (isDev){
+        if(actions.indexOf(action) < 0 && !!action) {
+          alert('not the action: ' + action)
+        }
+      }
+      if (fn) {
+        fn(...args)
+      }
+    },
+    updateDragItems (val) {
+      this.$eventBus.$dragItems = val
+    },
+    updateOriginal (parentItem, propName, newData, isOriginal = false) {
+      if (isOriginal) {
+        this.designData = newData
+        return
+      } else if (isNullOrEmpty(parentItem) || isNullOrEmpty(propName)) {
+        return
+      }
+      parentItem[propName] = newData // designData数据已发生变化
+      // 三种处理方式: 不处理(引用类型,数据本质上已经改变了);浅复制,产生一个新对象;深复制,产生一个新对象
+      this.designData = this.designData.slice()
     }
   },
   created () {

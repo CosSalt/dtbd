@@ -5,7 +5,6 @@
       :layout.sync='theLayout'
       :isDraggable='true'
       :confIndex='confIndex'
-      :dragItems='dragItems'
       :dragToIndex.sync='dragToIndex'
       @dragover.native='dragover'
       @drop.self.native='drop'
@@ -32,7 +31,6 @@ export default {
         return []
       }
     },
-    dragItems: null,
     parentData: null, //数据的父节点
     propName: null // 数据对应的属性
   },
@@ -140,9 +138,9 @@ export default {
       this.childrenIndex = tagsDragToIndex
       const dragPosition = dragToIndex - 1
       this.dragPosition = dragPosition
-      const items = this.dragItems
+      const items = this.getDragItems()
       this.updateDragItems('')
-      if (!items) return
+      if (!items || items.length <= 0) return
       let newData
       let isDragInTabs = this.isTabs && name
       let confItem
@@ -258,6 +256,9 @@ export default {
     updateDragItems (val) {
       this.$eventBus.$emit('handleTopEvent', 'dragItems', val)
     },
+    getDragItems (val) {
+      return this.$eventBus.$dragItems
+    }
   },
   created () {
     this.$eventBus.$on('updateComponentConf:' + this.confId, this.handleConf)

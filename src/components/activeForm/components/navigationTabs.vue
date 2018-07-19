@@ -9,7 +9,6 @@
               v-if='isDraggable'
               class='tabs-form-design-layout'
               :layout='item.components'
-              :dragItems='dragItems'
               :parentData='item'
               propName='components'
             />
@@ -45,8 +44,7 @@ export default {
     keyIndex: {
       type: Number,
       default: -1
-    },
-    dragItems: null
+    }
   },
   data () {
     return {
