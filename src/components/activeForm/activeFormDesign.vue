@@ -12,7 +12,7 @@
         :layout='designData'
       >
         <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
-          <el-button type='primary' size='mini' @click='saveDesign(data)'
+          <el-button type='primary' size='mini' @click='willSaveDesign(data)'
             v-loading.fullscreen="loading"
             element-loading-text="拼命保存中"
             element-loading-spinner="el-icon-loading">
@@ -67,7 +67,7 @@ export default {
     getSameIndex (id, index, data = this.designData) {
       return data.findIndex((item, i) => item.id === id && i !== index)
     },
-    saveDesign () { // 保存设计的数据
+    willSaveDesign () { // 保存设计的数据
       this.loading = true
       this.beforeSaveDesign()
       setTimeout(()=>{
@@ -85,6 +85,14 @@ export default {
           })
         }
       })
+    },
+    saveData (data = []) { // 存储保存的数据
+      const err = this.checkDesignData(data)
+      if (err.length > 0) {
+        alert(err.join('\n'))
+        return
+      }
+      localStorage.setItem('designComponent', JSON.stringify(data))
     },
     clearDesign () { // 清空数据
       if (window.confirm("确定要清空设计数据")) {
@@ -132,14 +140,6 @@ export default {
       }
       return err
     },
-    saveData (data = []) {
-      const err = this.checkDesignData(data)
-      if (err.length > 0) {
-        alert(err.join('\n'))
-        return
-      }
-      localStorage.setItem('designComponent', JSON.stringify(data))
-    },
     // 显示加载JSON数据
     getDesignData () {
       const data = this.designData
@@ -159,7 +159,7 @@ export default {
       try {
         data = JSON.parse(str)
       } catch (e){
-        console.log(e)
+        console.log(e) // eslint-disable-line
         isError = true
       }
       if(!isError && Array.isArray(data)) {
@@ -212,6 +212,9 @@ export default {
   },
   created () {
     this.$eventBus.$on('handleTopEvent', this.handleTopEvent)
+  },
+  beforeDestroy () {
+    this.$eventBus.$off('handleTopEvent', this.handleTopEvent)
   }
 }
 </script>

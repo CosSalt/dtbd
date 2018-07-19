@@ -234,6 +234,9 @@ export default {
   },
   created () {
     this.$eventBus.$on('beforeComponentConf', this.handleConf)
+  },
+  beforeDestroy () {
+    this.$eventBus.$off('beforeComponentConf', this.handleConf)
   }
 }
 </script>

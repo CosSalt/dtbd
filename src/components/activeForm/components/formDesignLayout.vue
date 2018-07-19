@@ -256,12 +256,15 @@ export default {
     updateDragItems (val) {
       this.$eventBus.$emit('handleTopEvent', 'dragItems', val)
     },
-    getDragItems (val) {
+    getDragItems () {
       return this.$eventBus.$dragItems
     }
   },
   created () {
     this.$eventBus.$on('updateComponentConf:' + this.confId, this.handleConf)
+  },
+  beforeDestroy () {
+    this.$eventBus.$off('updateComponentConf:' + this.confId, this.handleConf)
   }
 }
 </script>
