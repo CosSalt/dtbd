@@ -52,7 +52,6 @@ export default {
       optionData: [],
       loading: false,
       type: 'tabs',
-      dragToIndex: -1,
       confIndex: -1
     }
   },
@@ -101,8 +100,7 @@ export default {
       this.executeParentListeners('drop',{
         e,
         type: this.type,
-        name: this.activeName,
-        tabsDragToIndex: this.dragToIndex
+        name: this.activeName
       })
     },
     executeParentListeners(eventName, ...args) {

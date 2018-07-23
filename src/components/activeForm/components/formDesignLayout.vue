@@ -38,7 +38,6 @@ export default {
     return {
       dragToIndex: -1, // 拖拽到的位置, -1表示在最后
       confIndex: -1,
-      childrenIndex: -1, // tabs 下选的组件下标
       name: '', // 配置信息 name(tabs用的)
       type: '', // 配置信息 type 值
       confId: Date.now().toString(), // 配置 ID
@@ -55,7 +54,7 @@ export default {
       }
     },
     allKeys () {
-      const data = this.componentData
+      const data = this.theLayout
       const keysArr = data.filter(item => {
         return !!item.id
       })
@@ -66,26 +65,8 @@ export default {
     isTabs () {
       return this.type === 'tabs' && this.confIndex >= 0 && this.dragPosition === this.confIndex // 要选择后才能拖进(处理)tabs里面
     },
-    isInTabs () {
-      return this.isTabs && this.childrenIndex >= 0
-    }, 
-    componentConfIndex () {
-      return this.isInTabs ? this.childrenIndex : this.confIndex
-    },
-    componentData () { 
-      const name = this.name
-      let res
-      if (this.isInTabs) {
-        const tabsConf = this.theLayout[this.confIndex].childConf
-        const tabConf = tabsConf.find(item => item.name === name) || {}
-        res = tabConf.components || []
-      } else {
-        res = this.theLayout
-      }
-      return res
-    },
     confData () {
-      return this.componentData[this.componentConfIndex] || {}
+      return this.theLayout[this.confIndex] || {}
     }
   },
   methods: {
@@ -132,10 +113,9 @@ export default {
     hideComponentConf () { // 改变位置,增加组件时隐藏配置项,配置项中的数据过时
       this.$eventBus.$emit('beforeComponentConf', {isShow: false})
     },
-    addDragData (dragToIndex, {name, type, tagsDragToIndex = -1} = {}) {      
+    addDragData (dragToIndex, {name, type} = {}) {      
       this.type = type
       this.name = name
-      this.childrenIndex = tagsDragToIndex
       const dragPosition = dragToIndex - 1
       this.dragPosition = dragPosition
       const items = this.getDragItems()
@@ -153,7 +133,7 @@ export default {
       }
       if (isDragInTabs) {
         const itemComponents = confItem.components || []
-        newData = this.handleDragData(items, tagsDragToIndex, itemComponents)
+        newData = this.handleDragData(items, -1, itemComponents)
         confItem.components = newData
         newData = this.theLayout
       } else {
@@ -224,7 +204,7 @@ export default {
     },
     afterSaveConf (oldId, newId) { // ID修改后进行替换
       if(!oldId || !newId) return
-      this.componentData.forEach(item => {
+      this.theLayout.forEach(item => {
         const relationIds = item.relationIds
         if (relationIds && relationIds.length > 0) {
           const index = relationIds.findIndex(key => key === oldId)

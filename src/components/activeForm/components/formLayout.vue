@@ -67,7 +67,6 @@
   </div>
 </template>
 <script>
-import componentsConf from '../config'
 import { getTempId } from '@/utils'
 export default {
   name: 'formLayout',
@@ -95,7 +94,6 @@ export default {
   data () {
     return {
       dragStartIndex: -1,
-      formItemTypes: componentsConf,
       formModel: {},
       span: 12,
       // formItemSpan: 2,
@@ -111,7 +109,7 @@ export default {
       const getId = this.tempId
       let data = this.layout.map((item, index) => {
         return Object.assign({
-          id: getId(item.id, index),
+          id: item.id || getId(index),
           span: item.span || DefSpan,
           index
         }, item)
@@ -121,7 +119,6 @@ export default {
       const MaxSpan = 24
       let spanSum = 24
       const res = []
-      if(data.length > 10) debugger
       data.forEach(item => {
         const span = item.span
         spanSum += span
@@ -154,8 +151,8 @@ export default {
     updateLayout (val) {
       this.$emit('update:layout', val)
     },
-    tempId (id, index) {
-      return id || getTempId(index, 'layout') // 临时 ID
+    tempId (index) {
+      return getTempId(index, 'layout') // 临时 ID
     },
     //init receiveData
     initformModel(data = {}) {
@@ -261,7 +258,7 @@ export default {
     if(receiveData && typeof receiveData === 'object') {
       this.initformModel(receiveData)
     }
-    this.$eventBus.$on('validateForm', this.validateForm)
+    this.$eventBus.$on('validateForm', this.validateForm) // 监听触发表单事件方法
   }
 }
 </script>
