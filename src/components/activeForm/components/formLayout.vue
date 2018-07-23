@@ -38,10 +38,9 @@
                     :span='item.span'
                     :key='item.id'
                     :draggable='isDraggable'
-                    :style='isDraggable ? {cursor: "pointer"} : null'
                     @dragstart.self.stop.native='dragstart(item.index, $event)'
                     @dragover.stop.native='dragover(item.index, $event)'
-                    @click.self.stop.native='defComponent(item.index, item.type)'
+                    @click.stop.native='defComponent(item.index, item.type)'
                     @drop.stop.native='drop'
                     class='active-form-row'
                     :class='confIndex === item.index ? "component-conf" : ""'
@@ -122,18 +121,17 @@ export default {
       const MaxSpan = 24
       let spanSum = 24
       const res = []
+      if(data.length > 10) debugger
       data.forEach(item => {
         const span = item.span
         spanSum += span
-        let ResMaxIndex = res.length - 1
-        if (spanSum > MaxSpan) {
-          spanSum -= 24
-          ResMaxIndex += 1
+        let len = res.length
+        if (spanSum <= MaxSpan) {
+          res[len - 1].push(item)
+        } else {
+          spanSum = span
+          res[len] = [item]
         }
-        if (!res[ResMaxIndex]) {
-          res[ResMaxIndex] = []
-        }
-        res[ResMaxIndex].push(item)
       })
       return res
     },

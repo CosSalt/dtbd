@@ -36,7 +36,7 @@ export default {
   },
   data () {
     return {
-      dragToIndex: -1,
+      dragToIndex: -1, // 拖拽到的位置, -1表示在最后
       confIndex: -1,
       childrenIndex: -1, // tabs 下选的组件下标
       name: '', // 配置信息 name(tabs用的)

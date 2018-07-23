@@ -5,7 +5,6 @@
         :layout='layout'
         :isDraggable='false'
         :receiveData='formData'
-        ref='form'
       >
         <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
           <el-button type='primary' size='mini' @click.native='willSaveModelData(data)'

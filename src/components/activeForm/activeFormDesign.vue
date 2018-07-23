@@ -48,12 +48,8 @@ export default {
   components: {formComponentConf, activeFormOriginal},
   data () {
     return {
-      designData: [],
-      dragToIndex: -1,
+      designData: [], // 设计数据
       loading: false,
-      designIndex: 0,
-      isTableDrag: false,
-      allKeys: [],
       showDesignData: '',
       historyDesignData: '',
       isShowDesignData: false
@@ -61,7 +57,6 @@ export default {
   },
   methods: {
     dragStart (val) {
-      this.dragToIndex = -1
       this.updateDragItems(val)
     },
     getSameIndex (id, index, data = this.designData) {
@@ -69,22 +64,10 @@ export default {
     },
     willSaveDesign () { // 保存设计的数据
       this.loading = true
-      this.beforeSaveDesign()
       setTimeout(()=>{
         this.saveData(this.designData)
         this.loading = false
       }, 2000)
-    },
-    beforeSaveDesign () { // 删除无效的关联ID
-      const allKeys = this.allKeys
-      this.designData.forEach(item => {
-        const relationIds = item.relationIds
-        if (relationIds && relationIds.length > 0) {
-          item.relationIds = relationIds.filter(theKey => {
-            return allKeys.findIndex(key => key === theKey) >= 0
-          })
-        }
-      })
     },
     saveData (data = []) { // 存储保存的数据
       const err = this.checkDesignData(data)
