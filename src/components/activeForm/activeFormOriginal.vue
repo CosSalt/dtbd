@@ -32,7 +32,7 @@
             <ul :class='designItem.className'>
               <template v-for='item in designItem.components'>
                 <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragStart(item, designItem.type)'>
-                  <formIndex :formData='item' class='component-design-style' />
+                  <commonIndex :formData='item' class='component-design-style' />
                 </li>
               </template>
             </ul>

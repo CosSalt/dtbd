@@ -21,7 +21,7 @@
         <template v-for='(item, index) in predictData'>
           <el-row :key='"row" + index' class='attrs-conf-row'>
             <el-col :span="24" v-for='(rowItem, i) in conf' :key='"column" + i' class='attrs-conf-col'>
-              <formIndex v-model='modelData[index][rowItem.key]' :formData='rowItem.component'/>
+              <commonIndex v-model='modelData[index][rowItem.key]' :formData='rowItem.component'/>
             </el-col>
             <el-col :span="spanHandle" class='attrs-conf-col'>
               <div class='spanHandle'>

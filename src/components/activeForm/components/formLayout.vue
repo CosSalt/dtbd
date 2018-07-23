@@ -48,7 +48,7 @@
                     <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' 
                       :rules="formRules[item.id]"
                     >
-                      <formIndex
+                      <commonIndex
                         v-model='formModel[item.id]'
                         :formData='item'
                         class='component-style'

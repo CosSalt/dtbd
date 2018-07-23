@@ -2,7 +2,7 @@
   <div class="active-form-conf" v-if='isShow'>
     <ul>
       <li v-for='item in confData' :key='item.key' class='form-conf-li'>
-        <formIndex
+        <commonIndex
           class='component-conf-style'
           v-model.trim='confModel[item.key]'
           :formData='item.component'
