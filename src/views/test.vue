@@ -8,7 +8,7 @@
         ref='form'
       >
         <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
-          <el-button type='primary' size='mini' @click.native='saveModelData(data)'
+          <el-button type='primary' size='mini' @click.native='willSaveModelData(data)'
             v-loading.fullscreen="loading"
             element-loading-text="拼命保存中"
             element-loading-spinner="el-icon-loading">
@@ -27,20 +27,35 @@ export default {
     return {
       layout: [],
       formData: {},
-      loading: false
+      loading: false,
+      validatePromise: []
     }
   },
   methods: {
-    saveModelData (data = {}) {
+    handleForm (action, ...args) {
+      return this.$eventBus.$emit('validateForm', action, ...args)
+    },
+    willSaveModelData (data = {}) {
+      this.handleForm('validate', this.validateForm)
+      Promise.all(this.validatePromise).then(() => {
+        this.savingModelData(data)
+      }).catch(() => {}).finally(() => {
+        this.validatePromise = []
+      })
+    },
+    savingModelData (data) {
       localStorage.setItem('formData', JSON.stringify(data))
+      alert('保存成功')
     },
     initForm () {
       this.layout = JSON.parse(localStorage.getItem('designComponent') || '[]')
       this.formData = JSON.parse(localStorage.getItem('formData') || '{}')
     },
     clearFormData () {
-      this.$refs.form.clearModel()
-      this.saveModelData()
+      this.handleForm('resetFields') // 清空(重置)数据
+    },
+    validateForm (res) {
+      this.validatePromise.push(res)
     }
   },
   created () {

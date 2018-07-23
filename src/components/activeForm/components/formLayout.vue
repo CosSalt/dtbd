@@ -1,7 +1,8 @@
 <template>
   <div class='active-form-layout'>
     <div class='form-content'>
-        <el-form ref="formLayout"
+        <el-form 
+          :ref="refId"
           :model="formModel"
           :inline="true"
           :labelPosition='labelPosition'
@@ -99,7 +100,8 @@ export default {
       // formItemSpan: 2,
       showLabel: false,
       labelWidth: '120px',
-      labelPosition: 'left'
+      labelPosition: 'left',
+      componentId: Date.now().toString(), // 组件 ID,用于唯一标识某个组件,用于校验组件
     }
   },
   computed: {
@@ -143,6 +145,9 @@ export default {
         }
       })
       return rules
+    },
+    refId () {
+      return 'layout_' + this.componentId
     }
   },
   methods: {
@@ -234,12 +239,26 @@ export default {
         }, 2000)
       })
     },
-    clearModel () {
-      const emptyModel = {}
-      for (let key of Object.keys(this.formModel)) {
-        emptyModel[key] = null
+    validateForm (action, ...args) {
+      let fn
+      switch (action) {
+        case 'validate':
+          fn = this.validate
+          break
+        case 'resetFields':
+          fn = this.resetForm
+          break
       }
-      this.formModel = emptyModel
+      if(fn) fn(this.refId, ...args)
+    },
+    validate (refName, callBack) { // 校验
+      const checkRes = this.$refs[refName].validate()
+      if (callBack && typeof callBack === 'function') {
+        callBack(checkRes)
+      }
+    },
+    resetForm(refName) { // 重置
+      this.$refs[refName].resetFields();
     }
   },
   created () {
@@ -247,6 +266,7 @@ export default {
     if(receiveData && typeof receiveData === 'object') {
       this.initformModel(receiveData)
     }
+    this.$eventBus.$on('validateForm', this.validateForm)
   }
 }
 </script>

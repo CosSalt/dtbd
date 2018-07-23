@@ -26,7 +26,7 @@ const conf = [
         required: true
       }
     }
-  },{
+  }, {
     key: 'text',
     component: {
       labelText: 'text: ',
