@@ -38,15 +38,17 @@
                     :span='item.span'
                     :key='item.id'
                     :draggable='isDraggable'
-                    :style='isDraggable ? {cursor: "pointer"} : {}'
+                    :style='isDraggable ? {cursor: "pointer"} : null'
                     @dragstart.self.stop.native='dragstart(item.index, $event)'
-                    @dragover.self.stop.native='dragover(item.index, $event)'
+                    @dragover.stop.native='dragover(item.index, $event)'
                     @click.self.stop.native='defComponent(item.index, item.type)'
-                    @drop.self.stop.native='drop'
+                    @drop.stop.native='drop'
                     class='active-form-row'
                     :class='confIndex === item.index ? "component-conf" : ""'
                   >
-                    <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' :rules="formRules[item.id]">
+                    <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' 
+                      :rules="formRules[item.id]"
+                    >
                       <formIndex
                         v-model='formModel[item.id]'
                         :formData='item'
@@ -176,19 +178,14 @@ export default {
     },
     dragstart (index) {
       this.dragStartIndex = index
-      // e.dataTransfer.setData('index', index) // dataTransfer.setData() 方法设置被拖数据的数据类型和值
     },
     dragover (index, e) {
-      // ondragover 事件规定在何处放置被拖动的数据
-      // 默认地，无法将数据/元素放置到其他元素中。如果需要设置允许放置，我们必须阻止对元素的默认处理方式
-      // 这要通过调用 ondragover 事件的 event.preventDefault() 方法
       if (this.isDraggable) {
         this.$emit('update:dragToIndex', index)
         e.preventDefault()
       }
     },
     drop (e, ...args) {
-      // 调用 preventDefault() 来避免浏览器对数据的默认处理（drop 事件的默认行为是以链接形式打开）
       e.preventDefault()
       const fromIndex = this.dragStartIndex
       const toIndex = this.dragToIndex + 1
