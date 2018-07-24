@@ -189,7 +189,37 @@ export default {
       } else {
         this.$emit('changePosition', fromIndex, toIndex)
       }
+      this.handlePositionChangeModel(fromIndex, toIndex)
       this.dragStartIndex = -1
+    },
+    handlePositionChangeModel(fromIndex, toIndex) { // 处理交换位置或者新增组件时, 使用临时ID导致的数据格式不正确报错
+      const data = this.layout
+      const len = data.length
+      let startIndex = fromIndex
+      let endIndex = toIndex
+      if (fromIndex > 0) { // 交换位置(可能需要考虑从前往后移动还是从后往前移动)
+        if(fromIndex > toIndex) { // 从后往前拖拽
+          startIndex = toIndex
+          endIndex = fromIndex + 1
+        } else if(fromIndex === toIndex) { // 处理无效移动
+          return
+        }
+      } else { // 新增
+        if(toIndex <= 0 || toIndex >= len ) return // 加在最后的忽略
+        startIndex = toIndex // 从拖拽到的位置至末尾
+        endIndex = len
+      }
+      this.emptyModel(data, startIndex, endIndex)
+    },
+    emptyModel (data = [], startIndex, endIndex) {
+      const getId = this.tempId
+      for (let i=startIndex; i < endIndex; i++) {
+        if(!data[i]) debugger
+        if(!data[i].id) { // 不存在 ID
+          let tempId = getId(i)
+          this.formModel[tempId] = null
+        }
+      }
     },
     dropSpecial ({e, ...args} = {}) {
       this.drop(e, args)
