@@ -164,6 +164,7 @@ let componentsConf = [
     type: 'rate',
     name: '评分',
     labelText: '评分',
+    disabled: true,
     bind: {
       colors: ['#99A9BF', '#F7BA2A', '#FF9900']
     }
@@ -178,6 +179,7 @@ const defProps = {
 }
 
 componentsConf = componentsConf.map(item => {
+  delete item.name
   return defaultsDeep(defProps, item)
 })
 
