@@ -198,7 +198,7 @@ export default {
       for (let i=startIndex; i < endIndex; i++) {
         if(!data[i].id) { // 不存在 ID
           let tempId = getId(i)
-          this.formModel[tempId] = null
+          this.formModel[tempId] = undefined
         }
       }
     },
