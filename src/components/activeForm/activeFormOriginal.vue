@@ -1,21 +1,21 @@
 <template>
-<div class='active-form-components'>
+<div class='active-form-original'>
   <template v-for='(designItem, index) in designs'>
-    <div class='form-design-class' :key='designItem.id' v-if='designItem.components && designItem.components.length > 0'>
-      <el-row class='form-design-title'>
+    <div class='form-original-class' :key='designItem.id' v-if='designItem.components && designItem.components.length > 0'>
+      <el-row class='form-original-title'>
         <el-col :span='20'>
           <span v-text='designItem.name'></span>
         </el-col>
         <el-col :span='4'>
           <i
-            :class = '{"design-show": designIndex === index}'
+            :class='{"original-show": designIndex === index}'
             class='el-icon-arrow-left'
             @click='designIndex = designIndex === index ? -1 : index'
           />
         </el-col>
       </el-row>
       <transition name="block">
-        <div v-if='designItem.type === "table"' class='form-design-table' v-show='designIndex === index'>
+        <div v-if='designItem.type === "table"' class='form-original-table' v-show='designIndex === index'>
           <template>
             <template v-for='tblItem in designItem.components'>
               <formDesignTable 
@@ -28,11 +28,11 @@
           </template>
         </div>
         <template v-else>
-          <div class='form-design-base' v-if='designIndex === index'>
+          <div class='form-original-base' v-if='designIndex === index'>
             <ul :class='designItem.className'>
               <template v-for='item in designItem.components'>
                 <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragStart(item, designItem.type)'>
-                  <commonIndex :formData='item' class='component-design-style' />
+                  <commonIndex :formData='item' class='component-original-style' />
                 </li>
               </template>
             </ul>
@@ -139,22 +139,23 @@ export default {
 </script>
 
 <style lang="less">
-.active-form-components {
+.active-form-original {
   width: 100%;
   height: 100%;
-  .active-form-components-orgin{
+  .active-form-original-orgin{
     height: 100%;
     overflow-y: auto;
   }
-  .form-tble-orgin, .active-form-components-orgin {
+  .form-tble-orgin, .active-form-original-orgin {
     border: 1px solid grey;
   }
-  .form-design-class {
+  .form-original-class {
     i{
+      padding-top: 3px; 
       cursor: pointer;
       transition: all .5s;
     }
-    .design-show{
+    .original-show{
       transform: rotate(-90deg);
     }
     .block-enter-active, .block-leave-active {
@@ -164,7 +165,12 @@ export default {
       opacity: 0;
     }
   }
-  .form-design-hide {
+  .form-original-title {
+    // background: #8ea5bd;
+    font-weight: 500;
+    padding: 5px;
+  }
+  .form-original-hide {
     display: none;
   }
     .form-block {
@@ -174,7 +180,7 @@ export default {
     margin: 0;
     padding: 5px 0;
   }
-  .component-design-style{
+  .component-original-style{
     width: 100%;
     .component-label {
       width:49%;

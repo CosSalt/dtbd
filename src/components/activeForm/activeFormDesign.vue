@@ -34,7 +34,7 @@
         <button @click='loadDesign'>加载</button>
       </div>
       <div>
-        <button @click='showTheDesignData'>显示数据</button>
+        <button @click='showTheDesignData(!isShowDesignData)'>{{showLabel}}数据</button>
       </div>
     </div>
   </div>
@@ -52,7 +52,8 @@ export default {
       loading: false,
       showDesignData: '',
       historyDesignData: '',
-      isShowDesignData: false
+      isShowDesignData: false,
+      showLabel: '显示'
     }
   },
   methods: {
@@ -151,9 +152,12 @@ export default {
         this.designData = data
       }
     },
-    showTheDesignData () {
-      this.isShowDesignData=true
-      this.getDesignData()
+    showTheDesignData (res) {
+      this.isShowDesignData = res
+      if (res === true) {
+        this.getDesignData()
+      }
+      this.showLabel = res ? '隐藏' : '显示'
     },
     // 通过 eventBus 事件机制处理数据,数据通过 eventBus 事件机制传播, 避免 props 传递时多子组件的臃肿
     // 不能响应式触发,只能是通过事件触发机制获取修改数据
@@ -242,7 +246,10 @@ export default {
     height: @formSideHead;
     line-height: @formSideHead;
     text-align: center;
-    background-color: #e6cccc;
+    font-size: 20px;
+    font-weight: 500;
+    letter-spacing: 2px;
+    background-color: #8ea5bd;
   }
   .active-side-container {
     height: calc(100% - @formSideHead);

@@ -16,10 +16,9 @@ const isNullOrEmpty = (str, trim = true) => {
   let res = str == null
   if (!res && typeof str === 'string') {
     if (trim) {
-      res = str.trim() === ''
-    } else {
-      res = str === ''
+      str = str.trim() === ''
     }
+    res = str === ''
   }
   return res
 }
