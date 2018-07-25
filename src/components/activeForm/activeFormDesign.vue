@@ -11,8 +11,8 @@
       <formDesignLayout
         :layout='designData'
       >
-        <el-row slot='footer' style='text-align:center;' slot-scope="{ data }">
-          <el-button type='primary' size='mini' @click='willSaveDesign(data)'
+        <el-row slot='footer' style='text-align:center;'>
+          <el-button type='primary' size='mini' @click='willSaveDesign'
             v-loading.fullscreen="loading"
             element-loading-text="拼命保存中"
             element-loading-spinner="el-icon-loading">

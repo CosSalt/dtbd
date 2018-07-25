@@ -12,9 +12,7 @@
       @setComponentConf='setComponentConf'
       @addDragData='addDragData'
     >
-      <template slot='footer' slot-scope="{ data }">
-        <slot name='footer' :data='data' />
-      </template>
+      <slot name='footer' />
     </formLayout>
   </div>
 </template>

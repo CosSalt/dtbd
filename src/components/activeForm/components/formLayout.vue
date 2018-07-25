@@ -1,69 +1,69 @@
 <template>
   <div class='active-form-layout'>
     <div class='form-content'>
-        <el-form 
-          :ref="refId"
-          :model="formModel"
-          :inline="true"
-          :labelPosition='labelPosition'
-        >
-          <template v-for='(layoutItem, i) in theLayoutData'>
-            <el-row :key='"row" + i'>
-              <template v-for='item in layoutItem'>
-                <template v-if='item.notFormItem'>
-                  <el-col
-                    class='active-form-row'
-                    :class = 'confIndex === item.index ? "component-conf" : ""'
-                    :span='item.span'
-                    :key='item.id'
-                  >
-                    <div>
-                      <commonIndex
-                        class='component-style'
-                        v-model='formModel[item.id]'
-                        :formData='item'
-                        :isDraggable='isDraggable'
-                        :keyIndex='item.index'
-                        :draggable='isDraggable'
-                        @drop='dropSpecial'
-                        @defComponent='defComponentSpecial'
-                        @dragstart.self.stop.native='dragstart(item.index, $event)'
-                        @dragover.stop.native='dragover(item.index, $event)'
-                      />
-                    </div>
-                  </el-col>
-                </template>
-                <template v-else>
-                  <el-col
-                    :span='item.span'
-                    :key='item.id'
-                    :draggable='isDraggable'
-                    @dragstart.self.stop.native='dragstart(item.index, $event)'
-                    @dragover.stop.native='dragover(item.index, $event)'
-                    @click.stop.native='defComponent(item.index, item.type)'
-                    @drop.stop.native='drop'
-                    class='active-form-row'
-                    :class='confIndex === item.index ? "component-conf" : ""'
-                  >
-                    <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' 
-                      :rules="formRules[item.id]"
-                    >
-                      <commonIndex
-                        v-model='formModel[item.id]'
-                        :formData='item'
-                        class='component-style'
-                        :showLabel='showLabel'
-                        @getAction='getAction'
-                      />
-                    </el-form-item>
-                  </el-col>
-                </template>
+      <el-form 
+        :ref="refId"
+        :model="formModel"
+        :inline="true"
+        :labelPosition='labelPosition'
+      >
+        <template v-for='(layoutItem, i) in theLayoutData'>
+          <el-row :key='"row" + i'>
+            <template v-for='item in layoutItem'>
+              <template v-if='item.notFormItem'>
+                <el-col
+                  class='active-form-row'
+                  :class = 'confIndex === item.index ? "component-conf" : ""'
+                  :span='item.span'
+                  :key='item.id'
+                >
+                  <div>
+                    <commonIndex
+                      class='component-style'
+                      v-model='formModel[item.id]'
+                      :formData='item'
+                      :isDraggable='isDraggable'
+                      :keyIndex='item.index'
+                      :draggable='isDraggable'
+                      @drop='dropSpecial'
+                      @defComponent='defComponentSpecial'
+                      @dragstart.self.stop.native='dragstart(item.index, $event)'
+                      @dragover.stop.native='dragover(item.index, $event)'
+                    />
+                  </div>
+                </el-col>
               </template>
-            </el-row>
-          </template>
-        </el-form>
+              <template v-else>
+                <el-col
+                  :span='item.span'
+                  :key='item.id'
+                  :draggable='isDraggable'
+                  @dragstart.self.stop.native='dragstart(item.index, $event)'
+                  @dragover.stop.native='dragover(item.index, $event)'
+                  @click.stop.native='defComponent(item.index, item.type)'
+                  @drop.stop.native='drop'
+                  class='active-form-row'
+                  :class='confIndex === item.index ? "component-conf" : ""'
+                >
+                  <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' 
+                    :rules="formRules[item.id]"
+                  >
+                    <commonIndex
+                      v-model='formModel[item.id]'
+                      :formData='item'
+                      class='component-style'
+                      :showLabel='showLabel'
+                      @getAction='getAction'
+                    />
+                  </el-form-item>
+                </el-col>
+              </template>
+            </template>
+          </el-row>
+        </template>
+      </el-form>
     </div>
-    <slot name='footer' :data='formModel'/>
+    <slot />
   </div>
 </template>
 <script>
@@ -114,7 +114,6 @@ export default {
           index
         }, item)
       })
-      this.handleformModel(data)
       // 处理布局
       const MaxSpan = 24
       let spanSum = 24
@@ -153,23 +152,6 @@ export default {
     },
     tempId (index) {
       return getTempId(index, 'layout') // 临时 ID
-    },
-    //init receiveData
-    initformModel(data = {}) {
-      const formRes = {}
-      for(let [key, val] of Object.entries(data)) {
-        formRes[key] = val
-      }
-      this.formModel = formRes
-    },
-    handleformModel (data) {
-      const formRes = {}
-      const formModel = this.formModel || {}
-      data.forEach(item => {
-        let id = item.id
-        formRes[id] = formModel[id] || null
-      })
-      this.formModel = formRes
     },
     dragstart (index) {
       this.dragStartIndex = index
@@ -287,10 +269,6 @@ export default {
     }
   },
   created () {
-    const receiveData = this.receiveData
-    if(receiveData && typeof receiveData === 'object') {
-      this.initformModel(receiveData)
-    }
     this.$eventBus.$on('validateForm', this.validateForm) // 监听触发表单事件方法
   }
 }
