@@ -273,13 +273,17 @@ export default {
       if(fn) fn(this.refId, ...args)
     },
     validate (refName, callBack) { // 校验
-      const checkRes = this.$refs[refName].validate()
+      // const checkRes = this.$refs[refName].validate()
+      var a = this.$refs[refName]
+      var checkRes = a.validate()
       if (callBack && typeof callBack === 'function') {
         callBack(checkRes)
       }
     },
     resetForm(refName) { // 重置
-      this.$refs[refName].resetFields();
+      var a = this.$refs[refName]
+      a.resetFields();
+      // this.$refs[refName].resetFields();
     }
   },
   created () {

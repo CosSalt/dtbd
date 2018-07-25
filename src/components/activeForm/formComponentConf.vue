@@ -75,7 +75,6 @@ export default {
           data.push(item)
         }
       })
-      
       return data
     },
     selfId () {

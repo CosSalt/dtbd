@@ -12,16 +12,15 @@
               :parentData='item'
               propName='components'
             />
-            <formLayout
+            <formPureLayout
               v-else
               :layout='item.components'
-              :isDraggable='isDraggable'
               :receiveData='navigationModel[item.name]'
             >
               <template slot='footer' slot-scope="{ data }" v-if='item.name' >
                 {{relevanceModel(navigationModel, item.name, data)}}
               </template>
-            </formLayout>
+            </formPureLayout>
         </template>
       </el-tab-pane>
     </template>

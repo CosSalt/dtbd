@@ -64,31 +64,22 @@ export default {
       type: Boolean,
       default: false
     },
-    dragToIndex: {
-      type: Number,
-      default: -1
-    },
     layout: {
       type: Array,
       required: true
     },
-    confIndex: {
-      type: Number,
-      default: -1
-    },
     receiveData: {
-      type: Object
+      type: Object,
+      default: () => ({})
     }
   },
   data () {
     return {
       formModel: {},
       span: 12,
-      // formItemSpan: 2,
       showLabel: false,
       labelWidth: '120px',
-      labelPosition: 'left',
-      componentId: Date.now().toString(), // 组件 ID,用于唯一标识某个组件,用于校验组件
+      labelPosition: 'left'
     }
   },
   computed: {
@@ -123,14 +114,19 @@ export default {
       this.layout.forEach(item => {
         let id = item.id
         let itemRules = item.rules
-        if(id && Array.isArray(itemRules) && itemRules.length > 0) {
+        if (id && Array.isArray(itemRules) && itemRules.length > 0) {
           rules[id] = itemRules
         }
       })
       return rules
     },
     refId () {
-      return 'layout_' + this.componentId
+      return 'layout_' + this.$componentId
+    }
+  },
+  watch: {
+    receiveData (val = {}) {
+      this.resetFormModel(val)
     }
   },
   methods: {
@@ -140,22 +136,29 @@ export default {
     //init receiveData
     initformModel(data = {}) {
       const formRes = {}
-      for(let [key, val] of Object.entries(data)) {
+      for (let [key, val] of Object.entries(data)) {
         formRes[key] = val
       }
       this.formModel = formRes
+    },
+    resetFormModel(data = {}) {
+      if(data === this.formModel) return
+      const res = {}
+      for (let key of Object.keys(this.formModel)) {
+        res[key] = data[key]
+      }
+      this.formModel = Object.assign(res, data)
     },
     handleformModel (data) {
       const formRes = {}
       const formModel = this.formModel || {}
       data.forEach(item => {
         let id = item.id
-        formRes[id] = formModel[id] || null
+        formRes[id] = formModel[id] || undefined
       })
       this.formModel = formRes
     },
-    getAction ([actionParam, reqOrg]) {
-      // const index = this.confIndex
+    getAction ([actionParam, reqOrg, index]) { // index 待处理
       const reqId = reqOrg.id
       const {action, position} = actionParam
       let relationIds = reqOrg.relationIds || []
@@ -176,8 +179,7 @@ export default {
       }).then(data => {
         setTimeout(() => {
           const newLayout = [...this.layout]
-          const confIndex = this.confIndex
-          newLayout[confIndex] = Object.assign({}, newLayout[confIndex], {
+          newLayout[index] = Object.assign({}, newLayout[index], {
             [position]: data
           })
           this.updateLayout(newLayout)
@@ -205,6 +207,9 @@ export default {
     resetForm(refName) { // 重置
       this.$refs[refName].resetFields();
     }
+  },
+  beforeCreate() {
+    this.$componentId = Date.now().toString() // 组件 ID,用于唯一标识某个组件,用于校验组件
   },
   created () {
     const receiveData = this.receiveData

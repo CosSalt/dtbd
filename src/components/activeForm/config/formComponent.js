@@ -17,10 +17,13 @@ import formDesignTable from '../designComponents/formDesignTable'
 import formLayout from '../components/formLayout'
 
 // 表单显示组件
+import showActiveForm from '../showForm/showActiveForm'
+import formPureLayout from '../components/formPureLayout'
 
 export {
   navigationTabs,
   commonIndex,
   formRadio, formCheckbox, formCommon, formSelect, specialAttrsConf, formCascader, formDesignTable, formLayout,
+  formPureLayout, showActiveForm,
   formDesignLayout
 }

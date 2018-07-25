@@ -179,7 +179,7 @@ const defProps = {
 }
 
 componentsConf = componentsConf.map(item => {
-  delete item.name
+  delete item.name // 不需要 name 属性
   return defaultsDeep(defProps, item)
 })
 
