@@ -269,30 +269,6 @@ const conf = [
         }
       }
     }
-  }, {
-    key: 'validator',
-    component: {
-      type: 'inputArea',
-      labelText: '自定义校验',
-      rules: {
-        validator: (val) => {
-          let err = null
-          if(!val) return val
-          // 校验时使用空函数
-          // const [callback, hideFields, showFields] = Array.from({lenght: 3}, () => {
-          //   return () => {}
-          // })
-          try {
-            eval(val)
-            // const userValidator = eval(val)
-          } catch (e) {
-            err = '自定义函数错误'
-            console.error(e) // eslint-disable-line
-          }
-          return err
-        }
-      }
-    }
   }
 ]
 const defConf = {

@@ -23,6 +23,8 @@ const isNullOrEmpty = (str, trim = true) => {
   return res
 }
 
+const getNewObj = defaultsDeep({})
+
 export {
-  defaultsDeep, getTempId, isNullOrEmpty
+  defaultsDeep, getTempId, isNullOrEmpty, getNewObj
 }

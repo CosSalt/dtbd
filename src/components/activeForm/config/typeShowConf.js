@@ -15,7 +15,7 @@ const LabelText = 'labelText'
 const Action = 'action' // 异步获取数据 Api
 const RelationIds = 'relationIds' // 异步获取数据关联ID
 const Rules = 'rules' // 校验规则
-const Validator = 'validator' // 自定义校验
+// const Validator = 'validator' // 自定义校验
 // const Type = 'type'
 const showConfItems = {
   'radio': [ // 单选框
@@ -71,7 +71,7 @@ const showConfItems = {
   ]
 }
 
-const baseTypes = [Validator]
+// const baseTypes = [Validator]
 
 for (let key of allComponentTypes) {
   let item = showConfItems[key]
@@ -91,7 +91,7 @@ for (let key of allComponentTypes) {
   } else {
     showConfItems[key] = [ID, LabelText, Disabled, Rules]
   }
-  showConfItems[key].push(...baseTypes)
+  // showConfItems[key].push(...baseTypes)
 }
 
 export default showConfItems

@@ -64,6 +64,37 @@ const type = (defVal) => ({
   ]
 })
 
+// 自定义校验
+const validator = () =>({
+  key: 'validator',
+  component: {
+    type: 'inputArea',
+    labelText: '自定义校验',
+    bind: {
+      placeholder: '只允许定义函数(勿使用 ES6 语法) function(){}'
+    },
+    rules: {
+      validator: (val) => {
+        let err = null
+        if(!val) return val
+        // 校验时使用空函数
+        // const [callback, hideField, showField] = Array.from({lenght: 3}, () => {
+        //   return () => {}
+        // })
+        try {
+          const userValidator = eval(val)
+          if (typeof userValidator !== 'function') {
+            err = '只允许定义函数'
+          }
+        } catch (e) {
+          err = '自定义函数错误'
+          console.error(e) // eslint-disable-line
+        }
+        return err
+      }
+    }
+  }
+})
 
 let componentsRules = {
   radio: [ // 单选框
@@ -118,7 +149,7 @@ let componentsRules = {
 
 const defRulesSet = () => {
   return [
-    message(), required(), trigger()
+    message(), required(), trigger(), validator()
   ]
 }
 

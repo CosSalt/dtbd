@@ -57,6 +57,7 @@
   </div>
 </template>
 <script>
+import {getNewObj} from '@/utils'
 export default {
   name: 'formPureLayout',
   props: {
@@ -79,13 +80,23 @@ export default {
       span: 12,
       showLabel: false,
       labelWidth: '120px',
-      labelPosition: 'left'
+      labelPosition: 'left',
+      formRules: {}, // 校验
+      hideFieldIds: [], // 需要隐藏的字段 ID
     }
   },
   computed: {
     theLayoutData () {
       const DefSpan = this.span
-      let data = this.layout.map((item, index) => {
+      const hideFieldIds = this.hideFieldIds
+      let data = this.layout
+      if(hideFieldIds.length > 0) {
+        data = data.filter(item => {
+          return hideFieldIds.indexOf(item.id) < 0
+        })
+      }
+
+      data = data.map((item, index) => {
         return Object.assign({
           span: item.span || DefSpan,
           index
@@ -109,17 +120,6 @@ export default {
       })
       return res
     },
-    formRules () {
-      const rules = {}
-      this.layout.forEach(item => {
-        let id = item.id
-        let itemRules = item.rules
-        if (id && Array.isArray(itemRules) && itemRules.length > 0) {
-          rules[id] = itemRules
-        }
-      })
-      return rules
-    },
     refId () {
       return 'layout_' + this.$componentId
     }
@@ -127,11 +127,73 @@ export default {
   watch: {
     receiveData (val = {}) {
       this.resetFormModel(val)
+    },
+    layout: {
+      handler () {
+        this.formRules = this.initFormRules()
+      },
+      immediate: true
     }
   },
   methods: {
     updateLayout (val) {
       this.$emit('update:layout', val)
+    },
+    initFormRules () {
+      const rules = {}
+      const handleValidator = this.handleFormSelfValidator
+      this.layout.forEach(item => {
+        let id = item.id
+        let itemRules = item.rules
+        const needEvalConversion = ['validator'] // 将部分类型由字符串转化为函数或其他类型
+        if (id && Array.isArray(itemRules) && itemRules.length > 0) {
+          let items = itemRules.map(item => {
+            let newItem = getNewObj(item)
+            needEvalConversion.forEach(key => {
+              if (newItem[key]) {
+                try {
+                  newItem[key] = handleValidator(newItem[key])
+                } catch (e) {
+                  // eslint-disable-next-line
+                  console.error(e)
+                }
+              }
+            })
+            return newItem
+          })
+          rules[id] = items
+        }
+      })
+      return rules
+    },
+    // 根据ID隐藏显示字段
+    showField (ids = []) {
+      if(!Array.isArray(ids) || ids.length <= 0) return
+      const hideIds = this.hideFieldIds
+      ids.forEach(key => {
+        let index = hideIds.indexOf(key)
+        if (index >=0) {
+          this.hideFieldIds.splice(index, 1) // 删除已隐藏的ID
+        }
+      })
+    },
+    hideField (ids = []) {
+      if(!Array.isArray(ids) || ids.length <= 0) return
+      const hideIds = this.hideFieldIds
+      ids = ids.filter(key => { // 获取不重复的需要隐藏的ID
+        return hideIds.indexOf(key) < 0
+      })
+      this.hideFieldIds.push(...ids)
+    },
+    handleFormSelfValidator (str) {
+      const hideField = this.hideField
+      const showField = this.showField
+      const fn = eval(str)
+      if(typeof fn !== 'function') throw('必须为函数')
+      return (...args) => {
+        // value, callback, hideField, showField
+        fn(args[1], args[2], hideField, showField, args)
+      }
     },
     //init receiveData
     initformModel(data = {}) {
