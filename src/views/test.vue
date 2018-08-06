@@ -1,7 +1,7 @@
 <template>
   <div>
     <showActiveForm
-      :layout='layout'
+      :layout.sync='layout'
       :formData='formData'
     >
       <el-row slot='footer' style='text-align:center;' slot-scope="{ saveData, resetData }">

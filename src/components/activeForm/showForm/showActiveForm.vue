@@ -15,6 +15,7 @@
 <script>
 // slot='footer' 暴露saveData 与 clearData 方法
 // 接受 layout(组件数据)与 formData(表单值数据)
+import {isNullOrEmpty} from '@/utils'
 export default {
   name: 'showActiveForm',
   data () {
@@ -33,7 +34,43 @@ export default {
       default: () => ({})
     }
   },
+  provide() {
+    return {
+      handleTopEvent: (...args) => {
+        this.handleTheTopEvent(...args)
+      }
+    }
+  },
   methods: {
+    updateLayout(val){
+      this.$emit('update:layout', val)
+    },
+    handleTheTopEvent (action, ...args) {
+      let fn
+      const actions = ['original']
+      switch (action) {
+        case actions[0]:
+        default:
+          fn = this.updateOriginal
+          break
+      }
+      const isDev = process.env.NODE_ENV === 'production'
+      if (isDev){
+        if(actions.indexOf(action) < 0 && !!action) {
+          alert('not the action: ' + action)
+        }
+      }
+      if (fn) {
+        fn(...args)
+      }
+    },
+    updateOriginal (parentItem, propName, newData) {
+      if (isNullOrEmpty(parentItem) || isNullOrEmpty(propName)) {
+        return
+      }
+      parentItem[propName] = newData // 数据已发生变化
+      this.updateLayout(this.layout)
+    },
     handleForm (action, ...args) {
       return this.$eventBus.$emit('validateForm', action, ...args)
     },

@@ -11,7 +11,7 @@ const routes = [
 ]
 
 const router = new Router({
-  mode: 'history',
+  // mode: 'history',
   scrollBehavior: (to, from, savedPosition) => {
     if (savedPosition) {
       return savedPosition

@@ -25,7 +25,8 @@
       showLabel: {
         type: Boolean,
         default: true
-      }
+      },
+      keyIndex: Number
     },
     data () {
       return  {
@@ -73,13 +74,22 @@
     },
     methods:{
       selectFocus () {
+        if (!this.actionTimer) {
+          this.actionTimer = setTimeout(this.handleSelectFocus(() => {
+              clearTimeout(this.actionTimer)
+            }), 500
+          )
+        }
+      },
+      handleSelectFocus (callback) {
         const url = this.formAction
         if (url) {
           this.setLoading(true)
           this.$emit('getAction', [{
             action: url,
-            position: 'childConf'
-          }, this.formData])
+            position: 'childConf',
+            index: this.keyIndex
+          }, this.formData], callback)
         }
       },
       setLoading (res = false) {
@@ -89,6 +99,9 @@
         const {required = false} = rules
         return required
       }
+    },
+    beforeCreate() {
+      this.actionTimer = null
     }
   }
 </script>

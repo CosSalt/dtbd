@@ -43,6 +43,7 @@
                         :formData='item'
                         class='component-style'
                         :showLabel='showLabel'
+                        :keyIndex='item.index'
                         @getAction='getAction'
                       />
                     </el-form-item>
@@ -60,6 +61,13 @@
 import {getNewObj} from '@/utils'
 export default {
   name: 'formPureLayout',
+  inject: {
+    handleTopEvent: {
+      default: (callback) => {
+        if(callback) callback()
+      }
+    }
+  },
   props: {
     isDraggable: {
       type: Boolean,
@@ -72,7 +80,7 @@ export default {
     receiveData: {
       type: Object,
       default: () => ({})
-    }
+    },
   },
   data () {
     return {
@@ -136,8 +144,8 @@ export default {
     }
   },
   methods: {
-    updateLayout (val) {
-      this.$emit('update:layout', val)
+    updateLayout (val, parent, propName) { // 值, 父节点, 属性
+      this.handleTopEvent('original', val, parent, propName)
     },
     initFormRules () {
       const rules = {}
@@ -220,9 +228,9 @@ export default {
       })
       this.formModel = formRes
     },
-    getAction ([actionParam, reqOrg, index]) { // index 待处理
+    getAction ([actionParam, reqOrg], callback) {
       const reqId = reqOrg.id
-      const {action, position} = actionParam
+      const {action, position, index} = actionParam
       let relationIds = reqOrg.relationIds || []
       relationIds = [...relationIds]
       relationIds.push(reqId)
@@ -239,12 +247,10 @@ export default {
         const data = []
         return data
       }).then(data => {
+        if(callback) callback()
         setTimeout(() => {
-          const newLayout = [...this.layout]
-          newLayout[index] = Object.assign({}, newLayout[index], {
-            [position]: data
-          })
-          this.updateLayout(newLayout)
+          // data = [{label: "选项1 action test", value: "双皮奶"}, {label: "选项2 action test", value: "红烧肉"}] // 测试用
+          this.updateLayout(this.layout[index], position, data)
         }, 2000)
       })
     },

@@ -67,7 +67,7 @@ const showConfItems = {
     
   ],
   'tabs': [
-    ChildConf
+    ID, ChildConf
   ]
 }
 
