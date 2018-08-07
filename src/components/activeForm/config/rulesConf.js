@@ -1,3 +1,5 @@
+import {patternList} from './rulesPattern'
+
 const required = () => ({ // 是否必填
   key: 'required',
   default: false,
@@ -54,14 +56,14 @@ const type = (defVal) => ({
   key: 'type',
   default: defVal,
   component: {
-    type: 'select'
-  },
-  childConf: [
-    { label:'选择数据类型', value: 'null', disabled: true},
-    { label:'number', value: 'number'},
-    { label:'date', value: 'date'},
-    { label:'array', value: 'array'}
-  ]
+    type: 'select',
+    childConf: [
+      { label:'选择数据类型', value: 'null', disabled: true},
+      { label:'number', value: 'number'},
+      { label:'date', value: 'date'},
+      { label:'array', value: 'array'}
+    ]
+  }
 })
 
 // 自定义校验
@@ -93,6 +95,15 @@ const validator = () =>({
         return err
       }
     }
+  }
+})
+
+// 增强正则校验
+const pattern = () => ({
+  key: 'pattern',
+  component: {
+    type: 'select',
+    childConf: patternList
   }
 })
 
@@ -149,7 +160,7 @@ let componentsRules = {
 
 const defRulesSet = () => {
   return [
-    message(), required(), trigger(), validator()
+    message(), required(), type(), pattern(), trigger(), validator()
   ]
 }
 

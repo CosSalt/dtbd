@@ -59,6 +59,7 @@
 </template>
 <script>
 import {getNewObj} from '@/utils'
+import {patternCheck} from '../config/rulesPattern'
 export default {
   name: 'formPureLayout',
   inject: {
@@ -153,17 +154,27 @@ export default {
       this.layout.forEach(item => {
         let id = item.id
         let itemRules = item.rules
-        const needEvalConversion = ['validator'] // 将部分类型由字符串转化为函数或其他类型
+        const needConversion = ['validator', 'pattern'] // 将部分类型由字符串转化为函数或其他类型
         if (id && Array.isArray(itemRules) && itemRules.length > 0) {
           let items = itemRules.map(item => {
             let newItem = getNewObj(item)
-            needEvalConversion.forEach(key => {
+            needConversion.forEach(key => {
               if (newItem[key]) {
-                try {
-                  newItem[key] = handleValidator(newItem[key])
-                } catch (e) {
-                  // eslint-disable-next-line
-                  console.error(e)
+                debugger
+                if (key === needConversion[1]) { // pattern 部分
+                  const checkItem = patternCheck.find(item => item.value === newItem[key])
+                  if(checkItem) {
+                    newItem[key] = checkItem['reg']
+                  } else {
+                    newItem[key] = undefined
+                  } 
+                } else {
+                  try {
+                    newItem[key] = handleValidator(newItem[key])
+                  } catch (e) {
+                    // eslint-disable-next-line
+                    console.error(e)
+                  }
                 }
               }
             })
@@ -172,6 +183,7 @@ export default {
           rules[id] = items
         }
       })
+      console.dir(rules)
       return rules
     },
     // 根据ID隐藏显示字段
