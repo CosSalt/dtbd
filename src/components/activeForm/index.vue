@@ -1,9 +1,9 @@
 <template>
-  <div class='form-design-index'>
-    <div class='form-design-index-title'>
-      <h1 style='text-align:center;margin:0;'>表单设计器</h1>
+  <div class='active-form-index'>
+    <div class='form-index-title'>
+      <div class='title-content left-bar'> 表单设计器</div>
     </div>
-    <div class='form-design-index-container'>
+    <div class='form-index-container'>
       <activeFormDesign />
     </div>
   </div>
@@ -11,6 +11,7 @@
 
 <script>
 import activeFormDesign from './activeFormDesign.vue'
+import './style/index.less'
 export default {
   name: 'activeForm',
   components: {activeFormDesign}
@@ -18,14 +19,23 @@ export default {
 </script>
 
 <style lang="less">
-@titleHeight: 80px;
-.form-design-index{
+@titleHeight: 50px;
+.active-form-index{
   height: 100%;
-  .form-design-index-title{
+  .form-index-title{
     height: @titleHeight;
     overflow: hidden;
+    background-color: #347fe8;
+    .title-content{
+      background-color:#135fd1;
+      color: #fff;
+      font-size: 24px;
+      height: @titleHeight;
+      line-height: @titleHeight;
+      text-align: center;
+    }
   }
-  .form-design-index-container{
+  .form-index-container{
     height: calc(100% - @titleHeight);
   }
 }

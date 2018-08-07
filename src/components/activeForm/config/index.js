@@ -7,28 +7,28 @@ let componentsConf = [
     bind: { // 使用v-bind的属性
       label: 'a'
     },
-    text: '备选项',
-    labelText: '单选: ',
-    multiConf: [{label: 'b', text:'备选项2'}] // 同一级多行配置
+    text: '单1',
+    labelText: '单选框',
+    multiConf: [{label: 'b', text:'单2'}] // 同一级多行配置
   }, {
     type: 'checkbox',
     name: '多选框',
-    labelText: '多选: ',
+    labelText: '多选框',
     bind: {
-      label: '多选框'
+      label: '多1'
     },
-    multiConf: [{label: '多选框二'}]
+    multiConf: [{label: '多2'}]
   }, {
     type: 'input',
     name: '输入框',
-    labelText: '输入框：',
+    labelText: '输入框',
     bind: {
       placeholder: '请输入内容'
     }
   }, {
     type: 'inputArea',
     name: '文本框',
-    labelText: '文本框：',
+    labelText: '文本框',
     bind: {
       type: 'textarea',
       placeholder: '请输入文本内容'
@@ -36,7 +36,7 @@ let componentsConf = [
   }, {
     type: 'inputNumber',
     name: '计数器',
-    labelText: '计数器：'
+    labelText: '计数器'
   }, {
     type: 'select',
     name: '选择器',
@@ -149,15 +149,16 @@ let componentsConf = [
   }, {
     type: 'tabs',
     name: '标签页',
+    labelText: '选项卡',
     span: 24,
     notFormItem: true,
     bind: {
       
     },
     childConf: [{
-        label:'选项1', name: 'id1', components: []
+        label:'卡1', name: 'id1', components: []
       }, {
-        label:'选项2', name: 'id2', components: []
+        label:'卡2', name: 'id2', components: []
       }
     ]
   }, {

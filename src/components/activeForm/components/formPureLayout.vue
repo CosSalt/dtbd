@@ -160,7 +160,6 @@ export default {
             let newItem = getNewObj(item)
             needConversion.forEach(key => {
               if (newItem[key]) {
-                debugger
                 if (key === needConversion[1]) { // pattern 部分
                   const checkItem = patternCheck.find(item => item.value === newItem[key])
                   if(checkItem) {
@@ -183,7 +182,6 @@ export default {
           rules[id] = items
         }
       })
-      console.dir(rules)
       return rules
     },
     // 根据ID隐藏显示字段

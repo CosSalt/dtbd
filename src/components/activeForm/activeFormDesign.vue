@@ -1,7 +1,6 @@
 <template>
   <div class='active-form-design'>
-    <div class='form-components'>
-      <div class='form-side-head'>控件区</div>
+    <div class='form-components left-bar'>
       <activeFormOriginal 
         @dragStart='dragStart'
         class='active-side-container'
@@ -23,7 +22,6 @@
       </formDesignLayout>
     </div>
     <div class="form-design-conf">
-      <div class='form-side-head'> 组件配置区 </div>
       <formComponentConf 
         class='active-side-container'
       />
@@ -218,15 +216,7 @@ export default {
     position: absolute;
     top: 0;
     left: 0;
-    width: @componentsWidth;
     height: 100%;
-    .form-components-orgin{
-      height: 100%;
-      overflow-y: auto;
-    }
-    .form-tble-orgin, .form-components-orgin {
-      border: 1px solid grey;
-    }
   }
   .form-design-container{
     margin: 0 @componentsWidth;
@@ -241,19 +231,11 @@ export default {
     height: 100%;
     overflow: auto;
   }
-  .form-side-head {
-    width: 100%;
-    height: @formSideHead;
-    line-height: @formSideHead;
-    text-align: center;
-    font-size: 20px;
-    font-weight: 500;
-    letter-spacing: 2px;
-    background-color: #8ea5bd;
-  }
   .active-side-container {
-    height: calc(100% - @formSideHead);
+    height: 100%;
+    padding-top: 30px;
     overflow: auto;
+    background-color: #DAE9F7;
   }
   .show-design{
     position: absolute;

@@ -1,10 +1,10 @@
 <template>
   <div class='form-design-table'>
     <div class='design-table-cell'>
-      <div class='design-table-title' @click='showDetail=!showDetail' title='点击显示/隐藏详情'>
+      <div class='design-table-title' v-if='!showDetail' @click='showDetail=!showDetail' title='点击显示/隐藏详情'>
         {{theData.name}}
       </div>
-      <div class='design-table-container' v-show='showDetail'>
+      <div class='table-container' v-else  @click='showDetail=!showDetail' :title='theData.name'>
         <table>
           <thead>
             <tr>
@@ -58,28 +58,41 @@ export default {
 </script>
 <style lang="less">
 .form-design-table {
+  box-sizing: border-box;
+  padding:1px 10px;
+  margin: 10px 0;
   width: 100%;
   .design-table-cell {
     user-select: none;
-    border: 1px solid #e6e6e6;
-    margin: 15px 4px 0 20px;
-    box-shadow: 0 0 2px 2px #e6e6e6;
   }
   .design-table-title{
     text-align: center;
     cursor: pointer;
     background-color: #e6e6e6;
   }
-  .design-table-container {
+  .table-container {
+    cursor: pointer;
+    font-size: 14px;
     table {
+      border: 1px solid #96BCE4;
+      box-shadow: 1px 1px 1px 0px #96BCE4;
       width: 100%;
+      box-shadow: 2px;
+      thead{
+        background-color: #EFEFEF;
+        th{
+          font-weight: 500;
+          font-size: 15px;
+        }
+      }
+      tbody{
+        background-color: #fff;
+      }
       th,td{
+        color: 666666;
         text-align: center;
       }
     }
   }
 }
 </style>
-
-
-

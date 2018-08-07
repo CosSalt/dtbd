@@ -98,12 +98,19 @@ const validator = () =>({
   }
 })
 
-// 增强正则校验
+// 自定义正则模式校验
 const pattern = () => ({
   key: 'pattern',
   component: {
     type: 'select',
-    childConf: patternList
+    childConf: patternList,
+    rules: {
+      validator: (val) => {
+        // debugger
+        // console.log(val)
+        // 此校验无用,未处理
+      }
+    }
   }
 })
 

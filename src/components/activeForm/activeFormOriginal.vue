@@ -2,18 +2,20 @@
 <div class='active-form-original'>
   <template v-for='(designItem, index) in designs'>
     <div class='form-original-class' :key='designItem.id' v-if='designItem.components && designItem.components.length > 0'>
-      <el-row class='form-original-title'>
-        <el-col :span='20'>
-          <span v-text='designItem.name'></span>
-        </el-col>
-        <el-col :span='4'>
-          <i
-            :class='{"original-show": designIndex === index}'
-            class='el-icon-arrow-left'
-            @click='designIndex = designIndex === index ? -1 : index'
-          />
-        </el-col>
-      </el-row>
+      <div class="form-original-container">
+        <el-row class='form-original-title'>
+          <el-col :span='20'>
+            <span v-text='designItem.name'></span>
+          </el-col>
+          <el-col :span='4'>
+            <i
+              :class='{"original-show": designIndex === index}'
+              class='el-icon-arrow-left'
+              @click='designIndex = designIndex === index ? -1 : index'
+            />
+          </el-col>
+        </el-row>
+      </div>
       <transition name="block">
         <div v-if='designItem.type === "table"' class='form-original-table' v-show='designIndex === index'>
           <template>
@@ -31,8 +33,15 @@
           <div class='form-original-base' v-if='designIndex === index'>
             <ul :class='designItem.className'>
               <template v-for='item in designItem.components'>
-                <li :key='item.type' class='active-form-row component-row' draggable='true' @dragstart='dragStart(item, designItem.type)'>
-                  <commonIndex :formData='item' class='component-original-style' />
+                <li :key='item.type' class='active-form-row component-row' draggable='true' 
+                  @dragstart='dragStart(item, designItem.type)'
+                  :title='item.labelText'
+                >
+                  <div class='original-label'>
+                    <div v-text='item.labelText' class='original-text' />
+                    <div class='cloumn-split'/>
+                  </div>
+                  <commonIndex :formData='item' class='original-style' :showLabel='false'/>
                 </li>
               </template>
             </ul>
@@ -46,7 +55,7 @@
 
 <script>
 // 对外接口:dragStart(传出触发dragstart的事件后获取到的数据))
-import {defaultsDeep} from '@/utils'
+import {defaultsDeep, getNewObj} from '@/utils'
 import componentsConf from './config'
 export default {
   name: 'activeFormOriginal',
@@ -65,9 +74,6 @@ export default {
         const dragComponentArr = handleFn(componentItem)
         this.$emit('dragStart', dragComponentArr) // 对外暴露方法
       }
-    },
-    initGetNewObj () { // 获取一个深度复制后的对象方法, 返回一个函数
-      return defaultsDeep({})
     },
     initTblDesign (){ // 获取tbl格式的数据,这里是模拟的
       const demo = [
@@ -117,7 +123,7 @@ export default {
       id: 'baseDesign',
       type: 'base',
       name: '基础控件区',
-      className: 'form-components-orgin'
+      className: 'components-orgin'
     }
     this.designs.push(baseDesign)
     this.initTblDesign().then(data => {
@@ -127,12 +133,12 @@ export default {
           id: 'tableDesign',
           type: 'table',
           name: '表格控件区',
-          className: 'form-components-orgin'
+          className: 'components-orgin'
         }
         this.designs.unshift(tableDesign)
       }
     })
-    this.$getNewObj = this.initGetNewObj()
+    this.$getNewObj = getNewObj
     this.$dragTypeHandle = this.initDragHandle()
   }
 }
@@ -150,6 +156,10 @@ export default {
     border: 1px solid grey;
   }
   .form-original-class {
+    .form-original-container{
+      background-color: #105dcd;
+      padding: 1px 2px;
+    }
     i{
       padding-top: 3px; 
       cursor: pointer;
@@ -167,8 +177,13 @@ export default {
   }
   .form-original-title {
     // background: #8ea5bd;
-    font-weight: 500;
-    padding: 5px;
+    background-color: #3175db;
+    color: #fff;
+    height: 46px;
+    line-height: 46px;
+    font-size: 18px;
+    border-bottom: 1px solid #4e87dd;
+    padding-left: 20px;
   }
   .form-original-hide {
     display: none;
@@ -180,19 +195,54 @@ export default {
     margin: 0;
     padding: 5px 0;
   }
-  .component-original-style{
-    width: 100%;
-    .component-label {
-      width:49%;
+  .original-style,.original-label{
+    display: inline-block;
+  }
+  .original-label{
+    width: 90px;
+    height: 100%;
+    font-size: 14px;
+    vertical-align: top;
+    >div{
+      display: inline-block;
     }
-    .component-content{
-      width: 50%;
+    .cloumn-split{
+      padding-left: 1px;
+      vertical-align: top;
+      box-sizing: border-box;
+      border-top: 10px solid transparent;
+      border-bottom: 10px solid transparent;
+      border-left: 1px solid #fcfdfe;
+      border-right: 1px solid #bed8f0;
+      transform: translate(0, 14px);
+    }
+    .original-text{
+      box-sizing: border-box;
+      width: 80px;
+      padding-left: 20px;
+      text-overflow: ellipsis;
+      overflow: hidden;
+      white-space: nowrap;
     }
   }
+  .original-style{
+    width: calc(100% - 90px - 1px);
+    overflow: hidden;
+    // .component-label {
+    //   width:49%;
+    // }
+    // .component-content{
+    //   width: 50%;
+    // }
+  }
   .component-row{
+    height: 48px;
+    line-height: 48px;
+    padding: 0;
+    overflow: hidden;
     &:hover{
-      background-color: #409eff;
-      color: #fff;
+      background-color: #B7D1F2;
+      cursor: pointer;
     }
   }
 }
