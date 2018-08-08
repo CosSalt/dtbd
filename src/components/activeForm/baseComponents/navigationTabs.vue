@@ -1,13 +1,12 @@
 <template>
-  <el-tabs v-model="activeName" type="card" @drop.stop.native='drop' @click.stop.native='defComonent'
+  <el-tabs v-model="activeName" type="border-card" @drop.stop.native='drop' @click.stop.native='defComonent'
     class='navigaton-tabs'
   >
     <template v-for='item in optionData'>
-      <el-tab-pane :label="item.label" :name="item.name" :key='item.name'>
+      <el-tab-pane :label="item.label" :name="item.name" :key='item.name' class='tabs-form-design-layout'>
         <template v-if='item.components'>
             <formDesignLayout
               v-if='isDraggable'
-              class='tabs-form-design-layout'
               :layout='item.components'
               :parentData='item'
               propName='components'
@@ -122,10 +121,7 @@ export default {
 
 <style lang="less">
 .navigaton-tabs{
-  .tabs-form-design-layout {
-    .component-conf {
-      background-color: #b0c8e0;
-    }
-  }
+  margin-top: 10px;
+  margin-bottom: 10px;
 }
 </style>

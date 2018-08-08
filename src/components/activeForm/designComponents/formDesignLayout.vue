@@ -248,16 +248,5 @@ export default {
 </script>
 
 <style lang="less">
-.form-design-layout{
-  width: 100%;
-  height: 100%;
-    .form-design-content{
-    width: 100%;
-    height: 100%;
-    box-sizing: border-box;
-    overflow: auto;
-    border: 2px solid grey;
-    padding: 0 10px;
-  }
-}
+
 </style>

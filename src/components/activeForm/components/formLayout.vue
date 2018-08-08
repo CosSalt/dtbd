@@ -278,6 +278,7 @@ export default {
 .active-form-layout {
   width: 100%;
   height: 100%;
+  background-color: #fff;
   .form-content{
     .active-form-row {
       padding: 0;
@@ -295,7 +296,7 @@ export default {
     }
   }
   .component-conf {
-    background-color: grey;
+    background-color: #D9F0F8;
   }
 }
 </style>

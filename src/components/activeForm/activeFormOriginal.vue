@@ -55,7 +55,7 @@
 
 <script>
 // 对外接口:dragStart(传出触发dragstart的事件后获取到的数据))
-import {defaultsDeep, getNewObj} from '@/utils'
+import {getNewObj} from '@/utils'
 import componentsConf from './config'
 export default {
   name: 'activeFormOriginal',
@@ -226,7 +226,7 @@ export default {
     }
   }
   .original-style{
-    width: calc(100% - 90px - 1px);
+    width: calc(100% - 90px - 21px);
     overflow: hidden;
     // .component-label {
     //   width:49%;

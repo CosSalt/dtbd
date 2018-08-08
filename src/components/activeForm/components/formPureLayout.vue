@@ -319,8 +319,5 @@ export default {
       width: 200px;
     }
   }
-  .component-conf {
-    background-color: grey;
-  }
 }
 </style>
