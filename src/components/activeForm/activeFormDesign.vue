@@ -1,12 +1,12 @@
 <template>
   <div class='active-form-design'>
-    <div class='form-components left-bar'>
+    <div class='design-original left-bar'>
       <activeFormOriginal 
         @dragStart='dragStart'
-        class='active-side-container'
+        class='left-side-container'
       />
     </div>
-    <div class='form-design-container'>
+    <div class='design-container'>
       <formDesignLayout
         :layout='designData'
       >
@@ -21,9 +21,9 @@
         </el-row>
       </formDesignLayout>
     </div>
-    <div class="form-design-conf">
+    <div class="design-conf">
       <formComponentConf 
-        class='active-side-container'
+        class='right-side-container'
       />
     </div>
     <div class="show-design">
@@ -209,34 +209,6 @@ export default {
 @componentsWidth:250px;
 @formSideHead: 30px;
 .active-form-design {
-  width: 100%;
-  height: 100%;
-  position: relative;
-  .form-components {
-    position: absolute;
-    top: 0;
-    left: 0;
-    height: 100%;
-  }
-  .form-design-container{
-    margin: 0 @componentsWidth;
-    height: 100%;
-    overflow: auto;
-  }
-  .form-design-conf{
-    position: absolute;
-    top: 0;
-    right: 0;
-    width: @componentsWidth;
-    height: 100%;
-    overflow: auto;
-  }
-  .active-side-container {
-    height: 100%;
-    padding-top: 30px;
-    overflow: auto;
-    background-color: #DAE9F7;
-  }
   .show-design{
     position: absolute;
     top: 0;
