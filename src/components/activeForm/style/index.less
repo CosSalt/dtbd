@@ -1,11 +1,13 @@
 @leftBarWidth: 260px;
+@rightBarWidth: 260px;
+@barTop: 30px;
+@base-border-color: #abbad4;
 .left-bar{
   width: @leftBarWidth;
-  border-right: 1px solid #abbad4;
+  border-right: 1px solid @base-border-color;
 }
-@rightBarWidth: 250px;
 .right-bar(){
-  border-left: 1px solid #abbad4;
+  border-left: 1px solid @base-border-color;
 }
 .border-box(){
   box-sizing: border-box;
@@ -30,6 +32,7 @@
   box-sizing: border-box;
   .design-original { // 左侧
     .base-design-layout();
+    background-color: #DAE9F7;
     width: @leftBarWidth;
   }
   .design-container{ // 中间
@@ -42,8 +45,11 @@
   }
 }
 
-.design-other{
+.design-footer{
   height: calc(100% - @designHeight);
+  .border-box();
+  overflow: auto;
+  border-top: 1px solid @base-border-color;
   width: 100%;
 }
 
@@ -51,27 +57,48 @@
 .left-side-container {
   .border-box();
   height: 100%;
-  padding-top: 30px;
-  background-color: #DAE9F7;
+  padding-top: @barTop;
+  // background-color: #DAE9F7;
   // .form-original-base{
   //   overflow: auto;
   // }
 }
 
 // 右侧样式
+.base-conf(){
+  background-color: #E5E5E5;
+}
 .right-side-container {
   .border-box();
   height: 100%;
-  // padding-top: 30px;
   overflow: auto;
-  background-color: #E5E5E5;
+  background-color: #fff;
+  padding-left: 2px;
   .right-bar();
+  .conf-title{
+    .border-box();
+    .base-conf();
+    height: @barTop;
+    line-height: @barTop;
+    text-align: center;
+    border-bottom: 1px solid #f3f3f3;
+  }
+  .conf-ul{
+    .base-conf();
+    border-top: 1px solid #c7c7c7;
+    margin: 0;
+    font-size: 14px;
+  }
+  .conf-button{
+    .base-conf();
+    text-align:center;
+  }
 }
 
 // 中间内容区样式
 .form-design-layout{
   .border-box();
-  margin: 30px;
+  margin: @barTop;
   width: calc(100% - 60px);
   height: calc(100% - 60px);
   border: 1px solid #d8d8d8;

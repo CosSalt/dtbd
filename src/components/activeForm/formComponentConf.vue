@@ -1,6 +1,7 @@
 <template>
-  <div class="active-form-conf" v-if='isShow'>
-    <ul>
+  <div class="active-form-conf">
+    <div class='conf-title' v-text='titleName' v-if='isShow'/>
+    <ul class='conf-ul'>
       <li v-for='item in confData' :key='item.key' class='form-conf-li'>
         <commonIndex
           class='component-conf-style'
@@ -11,7 +12,7 @@
         />
       </li>
     </ul>
-    <el-row style='text-align:center;'>
+    <el-row class='conf-button' v-if='isShow'>
       <el-button type="primary" size="mini" @click='saveConf'
         :loading="confSaveLoading"
         element-loading-spinner="el-icon-loading"
@@ -37,6 +38,7 @@
 
 import componentConf from './config/formComponentConf'
 import typeShowConf from './config/typeShowConf'
+import {componentsName} from './config/index'
 export default {
   name: 'formComponentConf',
   beforeCreate () {
@@ -52,7 +54,7 @@ export default {
       confId: Date.now().toString(),
       allKeys: [],
       index: -1,
-      show: false
+      show: false,
     }
   },
   computed: {
@@ -94,6 +96,12 @@ export default {
     },
     isShow() {
       return this.show && this.confData.length > 0
+    },
+    titleName () {
+      const type = this.typeData.type
+      const nameItem = componentsName.find(item => item.type === type) || {}
+      const {name=''} = nameItem
+      return name + '参数配置'
     }
   },
   watch: {

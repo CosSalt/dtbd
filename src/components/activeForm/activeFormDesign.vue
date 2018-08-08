@@ -28,7 +28,7 @@
         />
       </div>
     </div>
-    <div class='design-other div-scroll'>
+    <div class='design-footer div-scroll'>
       <div class='other-global-conf'>
 
       </div>

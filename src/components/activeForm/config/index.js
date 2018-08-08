@@ -148,7 +148,7 @@ let componentsConf = [
     disabled: true
   }, {
     type: 'tabs',
-    name: '标签页',
+    name: '选项卡',
     labelText: '选项卡',
     span: 24,
     notFormItem: true,
@@ -178,10 +178,17 @@ const defProps = {
     size: 'mini'
   }
 }
-
+const componentsName = []
 componentsConf = componentsConf.map(item => {
+  componentsName.push({
+    name: item.name,
+    type: item.type
+  })
   delete item.name // 不需要 name 属性
   return defaultsDeep(defProps, item)
 })
 
 export default componentsConf.filter(item => item.disabled !== true)
+export {
+  componentsName
+}
