@@ -1,38 +1,45 @@
 <template>
   <div class='active-form-design'>
-    <div class='design-original left-bar'>
-      <activeFormOriginal 
-        @dragStart='dragStart'
-        class='left-side-container'
-      />
-    </div>
-    <div class='design-container'>
-      <formDesignLayout
-        :layout='designData'
-      >
-        <el-row slot='footer' style='text-align:center;'>
-          <el-button type='primary' size='mini' @click='willSaveDesign'
-            v-loading.fullscreen="loading"
-            element-loading-text="拼命保存中"
-            element-loading-spinner="el-icon-loading">
-              保存
-            </el-button>
-          <el-button type='info' size='mini' @click='clearDesign'>清空</el-button>
-        </el-row>
-      </formDesignLayout>
-    </div>
-    <div class="design-conf">
-      <formComponentConf 
-        class='right-side-container'
-      />
-    </div>
-    <div class="show-design">
-      <div v-show='isShowDesignData'>
-        <input type="textarea" v-model='showDesignData' />
-        <button @click='loadDesign'>加载</button>
+    <div class='form-design-container'>
+      <div class='design-original left-bar div-scroll'>
+        <activeFormOriginal 
+          @dragStart='dragStart'
+          class='left-side-container'
+        />
       </div>
-      <div>
-        <button @click='showTheDesignData(!isShowDesignData)'>{{showLabel}}数据</button>
+      <div class='design-container'>
+        <formDesignLayout
+          :layout='designData'
+        >
+          <el-row slot='footer' style='text-align:center;'>
+            <el-button type='primary' size='mini' @click='willSaveDesign'
+              v-loading.fullscreen="loading"
+              element-loading-text="拼命保存中"
+              element-loading-spinner="el-icon-loading">
+                保存
+              </el-button>
+            <el-button type='info' size='mini' @click='clearDesign'>清空</el-button>
+          </el-row>
+        </formDesignLayout>
+      </div>
+      <div class="design-conf">
+        <formComponentConf 
+          class='right-side-container div-scroll'
+        />
+      </div>
+    </div>
+    <div class='design-other div-scroll'>
+      <div class='other-global-conf'>
+
+      </div>
+      <div class='other-show-data'>
+        <div v-show='isShowDesignData'>
+          <input type="textarea" v-model='showDesignData' />
+          <button @click='loadDesign'>加载</button>
+        </div>
+        <div>
+          <button @click='showTheDesignData(!isShowDesignData)'>{{showLabel}}数据</button>
+        </div>
       </div>
     </div>
   </div>
@@ -206,10 +213,8 @@ export default {
 </script>
 
 <style lang="less">
-@componentsWidth:250px;
-@formSideHead: 30px;
 .active-form-design {
-  .show-design{
+  .other-global-conf{
     position: absolute;
     top: 0;
     right: 0;

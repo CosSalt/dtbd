@@ -1,5 +1,5 @@
 <template>
-  <div class='active-form-layout'>
+  <div class='active-form-layout div-scroll'>
     <div class='form-content'>
         <el-form 
           :ref="refId"
