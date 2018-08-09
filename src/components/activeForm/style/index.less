@@ -1,6 +1,7 @@
 @leftBarWidth: 260px;
 @rightBarWidth: 260px;
 @barTop: 30px;
+@buttonHeight: 28px;
 @base-border-color: #abbad4;
 .left-bar{
   width: @leftBarWidth;
@@ -20,7 +21,7 @@
 }
 
 // 表单设计区布局设置
-@designHeight: 70%;
+@designHeight: 99%;
 .active-form-design{
   width: 100%;
   height: 100%;
@@ -87,11 +88,13 @@
     .base-conf();
     border-top: 1px solid #c7c7c7;
     margin: 0;
+    // height: calc(100% - @barTop - @buttonHeight);
     font-size: 14px;
   }
   .conf-button{
     .base-conf();
-    text-align:center;
+    // height: @buttonHeight;
+    text-align: center;
   }
 }
 

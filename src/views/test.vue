@@ -3,6 +3,7 @@
     <showActiveForm
       :layout.sync='layout'
       :formData='formData'
+      class='form-demo-container'
     >
       <el-row slot='footer' style='text-align:center;' slot-scope="{ saveData, resetData }">
         <el-button type='primary' size='mini' @click='theSaveData(saveData)'
@@ -62,7 +63,11 @@ export default {
 
 <style lang="less">
 .form-demo-container {
-  width: 50%;
+  width: 80%;
   border: 1px solid grey;
+  transform: translate(10%);
+  box-sizing: border-box;
+  padding: 20px;
+  margin-top: 10px;
 }
 </style>

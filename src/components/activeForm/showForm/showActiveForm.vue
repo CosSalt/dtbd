@@ -1,6 +1,6 @@
 <template>
   <div>
-    <div class='form-demo-container'>
+    <div class='form-show-container'>
       <formPureLayout
         :layout='layout'
         :receiveData='formData'
@@ -96,8 +96,4 @@ export default {
 </script>
 
 <style lang="less">
-.form-demo-container {
-  width: 50%;
-  border: 1px solid grey;
-}
 </style>

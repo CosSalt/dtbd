@@ -6,6 +6,7 @@
           :model="formModel"
           :inline="true"
           :labelPosition='labelPosition'
+          :rules="formRules"
         >
           <template v-for='(layoutItem, i) in theLayoutData'>
             <el-row :key='"row" + i'>
@@ -35,9 +36,7 @@
                     :draggable='isDraggable'
                     class='active-form-row'
                   >
-                    <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id' 
-                      :rules="formRules[item.id]"
-                    >
+                    <el-form-item :label="item.labelText" size='mini' :labelWidth='labelWidth' :prop='item.id'>
                       <commonIndex
                         v-model='formModel[item.id]'
                         :formData='item'
@@ -156,12 +155,19 @@ export default {
         let itemRules = item.rules
         const needConversion = ['validator', 'pattern'] // 将部分类型由字符串转化为函数或其他类型
         if (id && Array.isArray(itemRules) && itemRules.length > 0) {
-          let items = itemRules.map(item => {
-            let newItem = getNewObj(item)
+          // itemRules = itemRules.map(ruleObj => {
+          //   const res = {}
+          //   for(let [key, val] of Object.entries(ruleObj)) {
+          //     if(val) res[key] = val
+          //   }
+          //   return res
+          // })
+          let items = itemRules.map(ruleItem => {
+            let newItem = getNewObj(ruleItem)
             needConversion.forEach(key => {
               if (newItem[key]) {
                 if (key === needConversion[1]) { // pattern 部分
-                  const checkItem = patternCheck.find(item => item.value === newItem[key])
+                  const checkItem = patternCheck.find(patternItem => patternItem.value === newItem[key])
                   if(checkItem) {
                     newItem[key] = checkItem['reg']
                   } else {
@@ -277,13 +283,21 @@ export default {
       if(fn) fn(this.refId, ...args)
     },
     validate (refName, callBack) { // 校验
-      const checkRes = this.$refs[refName].validate()
+      const theRef = this.$refs[refName]
+      if(!theRef) {
+        return
+      }
+      const checkRes = theRef.validate()
       if (callBack && typeof callBack === 'function') {
         callBack(checkRes)
       }
     },
     resetForm(refName) { // 重置
-      this.$refs[refName].resetFields();
+      const theRef = this.$refs[refName]
+      if(!theRef){
+        return
+      }
+      theRef.resetFields()
     }
   },
   beforeCreate() {

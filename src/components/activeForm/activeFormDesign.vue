@@ -32,7 +32,7 @@
       <div class='other-global-conf'>
 
       </div>
-      <div class='other-show-data'>
+      <div class='other-show-data' v-if='false'>
         <div v-show='isShowDesignData'>
           <input type="textarea" v-model='showDesignData' />
           <button @click='loadDesign'>加载</button>

@@ -256,15 +256,17 @@ export default {
     },
     validate (refName, callBack) { // 校验
       // const checkRes = this.$refs[refName].validate()
-      var a = this.$refs[refName]
-      var checkRes = a.validate()
+      var refObj = this.$refs[refName]
+      if(!refObj) return
+      var checkRes = refObj.validate()
       if (callBack && typeof callBack === 'function') {
         callBack(checkRes)
       }
     },
     resetForm(refName) { // 重置
-      var a = this.$refs[refName]
-      a.resetFields();
+      var refObj = this.$refs[refName]
+      if(!refObj) return
+      refObj.resetFields();
       // this.$refs[refName].resetFields();
     }
   },
