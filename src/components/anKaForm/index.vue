@@ -1,18 +1,18 @@
 <template>
   <div class='anka-form'>
     <AnKaList
-      class='anka-form-anka-list line-row'
+      class='anka-form-anka-list line-row div-scroll'
       v-if='hasAnKaListData'
       :data='anKaListData'
       @click='anKaClick'
     />
     <div class='anka-form-container line-row'>
       <div class='anka-form-container-title'>
-        审查起诉受理情况
+        {{ankaTitle}}
       </div>
       <div class='anka-form-content'>
         <FormList
-          class='anka-form-form-list line-row'
+          class='anka-form-form-list line-row div-scroll'
           v-if='hasFormListData' 
           :data='theFormListData'
           @click='formListClick'
@@ -72,6 +72,10 @@ export default {
         anKaId = id
       }
       return anKaId
+    },
+    ankaTitle () {
+      const selectedItem = this.anKaListData.find(item => item.id === this.anKaListId) || {}
+      return selectedItem.title
     },
     formListDataParse () {
       const selectedId = this.anKaListId
@@ -180,7 +184,8 @@ export default {
   box-sizing: border-box;
 }
 .anka-form {
-  margin: @margin-width;
+  height: 100%;
+  // margin: @margin-width;
   .anka-form-container {
     height: 100%;
     margin-left: @margin-width;
@@ -205,19 +210,23 @@ export default {
   }
   .anka-form-anka-list {
     width: @anka-list-width;
+    overflow-y: auto;
   }
   .anka-form-form-info, .anka-form-form-list, .anka-form-anka-list {
     vertical-align: top;
     .border-box();
   }
   .anka-form-form-list {
+    padding-top: 10px;
     width: @form-list-width;
     border-left: @border-style;
     border-bottom: @border-style;
     border-right: @border-style-Light;
+    overflow-y: auto;
     // margin-left: @margin-width;
   }
   .anka-form-form-info {
+    padding-top: 10px;
     width: calc(100% - @form-list-width);
     padding-left: @margin-width;
     border-bottom: @border-style;

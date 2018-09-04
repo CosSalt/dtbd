@@ -49,8 +49,8 @@ export default {
       return this.data
     },
     isSelected () {
-      const selectedIds = this.selectedIds
-      const hasIds = selectedIds == undefined || selectedIds.length < 0
+      const selectedIds = this.selectedIds || []
+      const hasIds = selectedIds.length <= 0
       return (index, parentId = index, i, id = i) => {
         if (hasIds) {
           return index === 0

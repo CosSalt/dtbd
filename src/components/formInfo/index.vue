@@ -8,7 +8,7 @@
     <FormPureLayout
       :layout='layout'
       :receiveData='formData'
-      class='form-info-layout'
+      class='form-info-layout div-scroll'
     >
       <template slot='footer' slot-scope="{ data }">
         <slot name='footer' v-bind='{saveData: () => willSaveModelData(data), resetData}' />
@@ -17,6 +17,7 @@
   </div>
 </template>
 <script>
+import '@/assets/style/index.less'
 // slot='footer' 暴露saveData 与 clearData 方法
 // 接受 layout(组件数据)与 formData(表单值数据)
 import FormPureLayout from '../activeForm/showForm/showActiveForm.vue'
@@ -112,9 +113,7 @@ export default {
 
 <style lang="less">
 @title-height: 30px;
-@padding-num: 5px;
 .form-info-container{
-  padding-top: @padding-num;
   height: 100%;
   .form-info-title{
     height: @title-height;
@@ -133,7 +132,8 @@ export default {
   .form-info-layout{
     padding-top: 20px;
     box-sizing: border-box;
-    height: calc(100% - @padding-num - @title-height);
+    height: calc(100% - @title-height);
+    overflow: auto;
   }
 }
 </style>

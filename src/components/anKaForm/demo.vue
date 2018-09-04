@@ -1,8 +1,9 @@
 <template>
-  <AnKaForm
-    class='anka-form-demo'
-    :data='anKaData'
-  />
+  <div class='anka-form-demo'>
+    <AnKaForm
+      :data='anKaData'
+    />
+  </div>
 </template>
 
 <script>
@@ -20,15 +21,16 @@ export default {
   },
   methods: {
     initForm () { // 初始化获取数据
-      GetAKXX(100000231).then(({data, res}) => {
+      // GetAKXX(100000231).then(({data, res}) => {
+      GetAKXX(100000231).then(({data}) => {
         // eslint-disable-next-line
         // debugger
         // eslint-disable-next-line
-        console.dir(res)
+        // console.dir(res)
         this.anKaData = [data]
       }).catch(err => {
         // eslint-disable-next-line
-        debugger
+        // debugger
         // eslint-disable-next-line
         console.error(err)
       })
@@ -41,8 +43,10 @@ export default {
 </script>
 
 <style lang="less">
+@padding-width: 15px;
 .anka-form-demo {
-  height: 500px;
+  padding: @padding-width;
+  height: calc(100% - 2 * @padding-width);
 }
 </style>
 
