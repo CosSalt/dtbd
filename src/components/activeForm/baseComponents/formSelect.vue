@@ -36,7 +36,8 @@
     },
     computed: {
       theValue () {
-        const {bind:{multiple}} = this.formData
+        const {bind = {}} = this.formData
+        const {multiple} = bind
         const val = this.value
         let newVal
         if(multiple) {

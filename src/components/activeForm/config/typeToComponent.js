@@ -62,7 +62,34 @@ for (let [key, item] of Object.entries(components)) {
     item.component = 'formCommon'
   }
 }
+
+const anKaType = [
+  {val:"01", type: "Input", to: 'input'},
+  {val:"02", type: "Date", to: 'datePicker'},
+  {val:"03", type: "Time", to: 'timePicker'},
+  {val:"04", type: "Number", to: 'inputNumber'},
+  {val:"05", type: "Bool", to: ''},
+  {val:"06", type: "Image", to: 'upload'},
+  {val:"12", type: "File", to: 'upload'},
+  {val:"13", type: "Blob", to: ''},
+  {val:"31", type: "Code", to: ''},
+  {val:"32", type: "Codes", to: ''},
+  {val:"33", type: "AYcode", to: ''},
+  {val:"34", type: "AYcodes", to: ''},
+  {val:"35", type: "DWCode", to: ''},
+  {val:"36", type: "DWCodes", to: ''}
+]
+
+const anKaTypeToComponent = (type, defaultType = 'input') => {
+  const typeItem = anKaType.find(item => item.type === type)
+  if (typeItem) {
+    type = typeItem['to'] || defaultType
+  }
+  return components[type] || components['select']
+}
+
 export {
-  allTypes as allComponentTypes
+  allTypes as allComponentTypes,
+  anKaTypeToComponent
 }
 export default components

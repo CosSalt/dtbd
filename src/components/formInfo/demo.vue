@@ -1,9 +1,10 @@
 <template>
   <div>
-    <showActiveForm
+    <FormInfo
       :layout.sync='layout'
       :formData='formData'
-      class='form-demo-container'
+      class='form-info-demo-container'
+      :title="'基本情况'"
     >
       <el-row slot='footer' style='text-align:center;' slot-scope="{ saveData, resetData }">
         <el-button type='primary' size='mini' @click='theSaveData(saveData)'
@@ -15,14 +16,16 @@
         <el-button type='info' size='mini' @click='theclearData'>清除</el-button>
         <el-button type='info' size='mini' @click='theResetData(resetData)'>重置</el-button>
       </el-row>
-    </showActiveForm>
+    </FormInfo>
   </div>
 </template>
 <script>
-import {GetAKXX} from '../api'
-import {data} from './test.js'
+import FormInfo from './index'
+import {GetAKXX} from '../../api'
+import {data} from './demoData.js'
 export default {
-  name: 'test',
+  name: 'formInfoDemo',
+  components: {FormInfo},
   data () {
     return {
       layout: [],
@@ -34,7 +37,7 @@ export default {
     initForm () { // 初始化获取数据
       GetAKXX(100000231).then(({data, res}) => {
         // eslint-disable-next-line
-        debugger
+        // debugger
         // eslint-disable-next-line
         console.dir(res)
       }).catch(err => {
@@ -76,7 +79,7 @@ export default {
 </script>
 
 <style lang="less">
-.form-demo-container {
+.form-info-demo-container {
   width: 80%;
   border: 1px solid grey;
   transform: translate(10%);

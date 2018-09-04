@@ -10,7 +10,8 @@
 
 <script>
 import {defaultsDeep} from '@/utils'
-import typeToComponent from '../config/typeToComponent.js'
+// import typeToComponent from '../config/typeToComponent.js'
+import {anKaTypeToComponent} from '../config/typeToComponent.js'
 import componentsConf from '../config'
 export default {
   inheritAttrs: false,
@@ -38,8 +39,7 @@ export default {
     },
     item () {
       const type = this.formData.type
-      const component = typeToComponent[type]
-      const componentConf = componentsConf.find(item => type === item.type)
+      const component = anKaTypeToComponent(type)
       if (!component) {
         const msg = type + '组件错误, 请检查'
         if (this.hasAlert) {
@@ -48,6 +48,7 @@ export default {
           console.error(msg) // eslint-disable-line
         }
       }
+      const componentConf = componentsConf.find(item => type === item.type)
       const formData = this.formData
       const isArray = Array.isArray
       let newData = defaultsDeep(defaultsDeep(component, componentConf), formData)

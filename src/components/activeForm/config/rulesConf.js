@@ -105,6 +105,7 @@ const pattern = () => ({
     type: 'select',
     childConf: patternList,
     rules: {
+      // eslint-disable-next-line
       validator: (val) => {
         // debugger
         // console.log(val)
